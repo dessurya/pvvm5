@@ -1,8 +1,8 @@
 <script type="text/javascript">
 	$(function(){
 		callSidebarMenu();
+		
 		checkNotivication();
-
 		setInterval(function(){
 			checkNotivication();
 		}, 30000); // 30 second

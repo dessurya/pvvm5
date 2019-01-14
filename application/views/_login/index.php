@@ -89,7 +89,7 @@
 						$('form span.error').hide();
 					},
 					error: function(data){
-						location.reload();
+						// location.reload();
 					},
 					success: function(data) {
 						var msg = data.msg;

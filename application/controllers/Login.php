@@ -23,16 +23,10 @@ class Login extends CI_Controller {
 		}
 		$result = array();
 		$result['response'] = false;
-		$result['msg'] = "Fail to sign in, Please check your username and password...";
-
+		$result['msg'] = "must post request";
 		if (strtolower($_SERVER['REQUEST_METHOD'])=="post") {
 			$this->load->model('m_login');
-			$resultofsignin = $this->m_login->signin($this->input->post('username'), md5($this->input->post('password')));
-
-			$result['response'] = $resultofsignin;
-			if ($resultofsignin == true) {
-				$result['msg'] = "Success to sign in";
-			}
+			$result = $this->m_login->signin($this->input->post('username'), md5($this->input->post('password')));
 		}
 		header('Content-Type: application/json');
 		echo json_encode($result);
