@@ -21,7 +21,17 @@
                         </a>
                     </div>
                     <div class="btn-group">
-                        <a class="delete btn btn-success btn-sm" href="">
+                        <a class="actived tools btn btn-success btn-sm" href="">
+                            <i class="fa fa-check"></i> Actived
+                        </a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="deactived tools btn btn-success btn-sm" href="">
+                            <i class="fa fa-ban"></i> Deactived
+                        </a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="delete tools btn btn-success btn-sm" href="">
                             <i class="fa fa-trash-o"></i> Delete
                         </a>
                     </div>
@@ -58,6 +68,7 @@
 															<th>Name</th>
 															<th>Email</th>
 															<th>Phone</th>
+															<th>Status</th>
 														</tr>
 													</thead>
 													<tbody></tbody>
@@ -69,6 +80,7 @@
 															<th class="search">Name</th>
 															<th class="search">Email</th>
 															<th class="search">Phone</th>
+															<th class="search autoComplete">Status</th>
 														</tr>
 													</tfoot>
 												</table>

@@ -7,13 +7,14 @@ class M_vendor extends CI_Model{
 	}
 
 	public function getdata($roll_id){
-		$this->datatables->select('
+		$this->datatables->select("
 			ATV.ID AS ID, 
 			UPPER(NAME) AS NAME, 
 			UPPER(USERNAME) AS USERNAME, 
 			UPPER(EMAIL) AS EMAIL, 
-			PHONE
-		');
+			PHONE,
+			CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
+		");
         $this->datatables->from('APWMS_TX_VENDOR ATV');
         $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATV.AUTH_ID', 'left');
         $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
@@ -78,11 +79,21 @@ class M_vendor extends CI_Model{
 		return $result;
 	}
 
-	public function delete($roll_id, $id){
-		$result = array();
+
+	public function tools($roll_id, $id, $action){
 		$arrid = explode('^', $id);
+		if ($action == 'delete') {
+			$result = $this->delete($roll_id, $arrid);
+		}else if($action == 'deactived' or $action == 'actived'){
+			$result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
+		}
+		return $result;
+	}
+	
+	private function delete($roll_id, $id){
+		$result = array();
 		$vendor = "";
-		foreach ($arrid as $idr) {
+		foreach ($id as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
 			$vendor .= $finddata['NAME'].', ';
@@ -98,6 +109,5 @@ class M_vendor extends CI_Model{
 		$result['msg'] = "Success, delete vendor ".substr($vendor, 0, -2);
 		return $result;
 	}
-	
 }
 ?>

@@ -99,9 +99,9 @@ class Vendor extends CI_Controller {
 		);
 	}
 
-	public function delete($data = null){
+	public function tools($data = null){
 		$this->load->model('m_vendor');
-		$response = $this->m_vendor->delete($this->session->userdata('ROLL_ID'), $_GET['id']);
+		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET['id'], $_GET['action']);
 		header('Content-Type: application/json');
 		echo json_encode(
 			array(
