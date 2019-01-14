@@ -34,6 +34,7 @@ class Login extends CI_Controller {
 				$result['msg'] = "Success to sign in";
 			}
 		}
+		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
@@ -49,6 +50,7 @@ class Login extends CI_Controller {
 			$result['response'] = true;
 			$result['msg'] = "Success to sign out";
 		}
+		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
@@ -62,6 +64,19 @@ class Login extends CI_Controller {
 		$result['response'] = true;
 		$result['msg'] = "Success to get menu...";
 		$result['menu'] = $this->m_menu->getMenu($this->session->userdata('ROLL_ID'));
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+
+	public function checkNotivication(){
+		$result = array();
+		if(!$this->session->userdata('LOGGED')) {
+			$result['response'] = false;
+			$result['msg'] = "You Log Out...";
+		}
+		$result['response'] = true;
+		$result['notif'] = 1;
+		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 }

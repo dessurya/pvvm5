@@ -1,6 +1,12 @@
 <script type="text/javascript">
 	$(function(){
 		callSidebarMenu();
+		checkNotivication();
+
+		setInterval(function(){
+			checkNotivication();
+		}, 30000); // 30 second
+
 		$(document).on('click', 'a#logout', function(){
 			var logouturl = $(this).attr('href');
 			logout(logouturl);
@@ -24,6 +30,28 @@
 		});
 	}
 
+	function checkNotivication() {
+		$.ajax({
+			url: "<?PHP echo site_url().'/login/checkNotivication' ?>",
+			type: 'post',
+			dataType: 'json',
+			beforeSend: function() {
+				// $('#loading-page').show();
+			},
+			success: function(data) {
+				if (data.response == true) {
+					var dataPN = new Array();
+					dataPN['model'] = 'info';
+		            dataPN['title'] = 'New Order';
+		            dataPN['text'] = 'Halo, you got new order please check...';
+		            dataPN['type'] = 'success';
+		            showPNotify(dataPN);
+					$('.top_nav .nav_menu nav ul.navbar-nav li#notivication a span').show().html(data.notif);
+				}
+			}
+		});
+	}
+
 	function logout(url){
 		$.ajax({
 			url: url,
@@ -40,6 +68,58 @@
 			}
 		});
 	}
+
+	function showPNotify(dataPN, dataAction=null){
+        if (dataPN.model == "info") {
+            new PNotify({
+                title: dataPN.title,
+                text: dataPN.text,
+                type: dataPN.type,
+                styling: 'bootstrap3',
+                delay: 3000,
+                buttons: {
+                    closer: true
+                }
+            });
+        }else if (dataPN.model == "confirm") {
+            new PNotify({
+                after_open: function(ui){
+                	$(".true", ui.container).focus();
+                },
+                after_close: function(){
+	            	$('div.ui-pnotify-modal-overlay').remove();
+                },
+                title: dataPN.title,
+                text: dataPN.text,
+                type: dataPN.type,
+                hide:false,
+                styling: 'bootstrap3',
+                delay: 3000,
+                addclass: 'stack-modal',
+                stack:{
+                	'dir1':'down',
+                	'dir2':'right',
+                	'modal' :true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                confirm: {
+                    confirm: true,
+                    buttons:[
+                    	{ text: 'Yes', addClass: 'true btn-primary', removeClass: 'btn-default'},
+                    	{ text: 'No', addClass: 'false'}
+                    ]
+                },
+            }).get().on('pnotify.confirm', function(){
+                action(dataAction);
+            });
+        }
+    }
 
 	<?php if(in_array($this->uri->segment(1), array('vendor', 'order'))) {?>
 	var urlDataTable = "<?php echo site_url().'/'.$this->uri->segment(1).'/getdata'; ?>";
@@ -125,10 +205,14 @@
 
 		$(document).on('ifChanged', 'input.iCheckTrig', function(){
 	        if ($(this).is(':checked')) {
-	            $('input[type=checkbox].iCheckTrig.flat, input[type=checkbox].flat.dtable').prop('checked',true).iCheck('update');
+	            $('input[type=checkbox].iCheckTrig.flat, input[type=checkbox].flat.dtable')
+	            	.prop('checked',true)
+	            	.iCheck('update');
 	        }
 	        else{
-	            $('input[type=checkbox].iCheckTrig.flat, input[type=checkbox].flat.dtable').prop('checked',false).iCheck('update');
+	            $('input[type=checkbox].iCheckTrig.flat, input[type=checkbox].flat.dtable')
+	            	.prop('checked',false)
+	            	.iCheck('update');
 	        }
 	    });
 
@@ -261,56 +345,6 @@
 	        $('input[type="checkbox"].'+classBuild).iCheck({
 	            checkboxClass: 'icheckbox_flat-green'
 	        });
-	    }
-
-	    function showPNotify(dataPN, dataAction=null){
-	        if (dataPN.model == "info") {
-	            new PNotify({
-	                title: dataPN.title,
-	                text: dataPN.text,
-	                type: dataPN.type,
-	                styling: 'bootstrap3',
-	                buttons: {
-	                    closer: true
-	                }
-	            });
-	        }else if (dataPN.model == "confirm") {
-	            new PNotify({
-	                after_open: function(ui){
-	                	$(".true", ui.container).focus();
-	                },
-	                after_close: function(){
-		            	$('div.ui-pnotify-modal-overlay').remove();
-	                },
-	                title: dataPN.title,
-	                text: dataPN.text,
-	                type: dataPN.type,
-	                hide:false,
-	                styling: 'bootstrap3',
-	                addclass: 'stack-modal',
-	                stack:{
-	                	'dir1':'down',
-	                	'dir2':'right',
-	                	'modal' :true
-	                },
-	                buttons: {
-	                    closer: false,
-	                    sticker: false
-	                },
-	                history: {
-	                    history: false
-	                },
-	                confirm: {
-	                    confirm: true,
-	                    buttons:[
-	                    	{ text: 'Yes', addClass: 'true btn-primary', removeClass: 'btn-default'},
-	                    	{ text: 'No', addClass: 'false'}
-	                    ]
-	                },
-	            }).get().on('pnotify.confirm', function(){
-	                action(dataAction);
-	            });
-	        }
 	    }
 		<?php } ?>
 	});
