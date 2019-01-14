@@ -70,7 +70,6 @@
 		<?php if(in_array($this->uri->segment(1), array('vendor', 'order'))) {?>
 			var urlDataTable = "<?php echo site_url().'/'.$this->uri->segment(1).'/getdata'; ?>";
 			var urlForm = "<?php echo site_url().'/'.$this->uri->segment(1).'/callForm'; ?>";
-			var urlDele = "<?php echo site_url().'/'.$this->uri->segment(1).'/delete'; ?>";
 			var urlTools = "<?php echo site_url().'/'.$this->uri->segment(1).'/tools'; ?>";
 		
 			callForm(urlForm);
