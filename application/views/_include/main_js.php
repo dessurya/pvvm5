@@ -20,28 +20,13 @@
 		checkNotivication();
 		setInterval(function(){
 			checkNotivication();
-		}, 300000); // 5 menit = 300000 | 30 second = 30000
-		
-		var urisegment1 = "<?php echo $this->uri->segment(1) ?>";
-		var urisegment2 = "<?php echo $this->uri->segment(2) ?>";
-		var urlTools = "<?php echo site_url().'/' ?>"+urisegment1+"/tools";
-
-		<?php if($this->uri->segment(2) != null){ ?>
-			urlTools += "/show/<?php echo $VENDOR_ID ?>";
-		<?php } ?>
+		}, 30000); // 30 second
 
 		$(document).on('click', 'a#logout', function(){
 			var logouturl = $(this).attr('href');
 			logout(logouturl);
 			return false;
 		});
-
-		$(document).on('click', '#action button.tools.info', function(){
-	    	var data = new Array();
-	    	data['url'] = urlTools+'?action=info';
-	    	data['input'] = null;
-	    	action(data);
-	    });
 
 		function checkNotivication() {
 			$.ajax({
@@ -82,7 +67,6 @@
 			});
 		}
 
-<<<<<<< HEAD
 		<?php if(in_array($this->uri->segment(1), array('vendor', 'order','ipc'))) {?>
 			var urlDataTable = "<?php echo site_url().'/'.$this->uri->segment(1).'/getdata'; ?>";
 			var urlForm = "<?php echo site_url().'/'.$this->uri->segment(1).'/callForm'; ?>";
@@ -294,11 +278,6 @@
 		        });
 		    }
 		<?php } ?>
-=======
-		<?php if( in_array($this->uri->segment(1), array('vendor', 'order')) and $this->uri->segment(2) == null){
-			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
-		} ?>
->>>>>>> 2b7c005026a3597a3fb989324ed0803599926732
 
 		function action(dataAction) {
 			var dataPN = new Array();
@@ -317,30 +296,15 @@
 	            },
 	            success: function(data) {
 	                $('#loading-page').hide();
-	            	if (data.msg !== null && data.msg !== "" && data.msg !== undefined) {
-		                dataPN['model'] = 'info';
-				        dataPN['title'] = 'Success';
-				        dataPN['text'] = data.msg;
-				        dataPN['type'] = 'success';
-		                showPNotify(dataPN);
-	            	}
+	                dataPN['model'] = 'info';
+			        dataPN['title'] = 'Success';
+			        dataPN['text'] = data.msg;
+			        dataPN['type'] = 'success';
+	                showPNotify(dataPN);
 	                if (data.type == "add") {
 	                	callForm(urlForm);
-	                }else if(data.type == "info"){
-	                	$(data.info).each(function(index, value){
-	                		var timeadd = index*2000;
-	                		window.setTimeout(function() {
-		                		dataPN['model'] = 'info';
-						        dataPN['title'] = 'Info';
-						        dataPN['text'] = value;
-						        dataPN['type'] = 'info';
-				                showPNotify(dataPN);
-			                }, timeadd);
-	                	});
 	                }
-	                if (data.reload == true) {
-		                dtableReload();
-	                }
+	                dtableReload();
 	            }
 	        });
 	    }

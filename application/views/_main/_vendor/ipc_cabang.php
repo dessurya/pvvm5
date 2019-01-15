@@ -4,11 +4,6 @@
 			<div class="x_title">
 				<h2>VENDOR</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
-					<div class="btn-group">
-						<button type="button" class="info tools btn btn-sm btn-success">
-                    		<i class="fa fa-info-circle"></i> Info
-                    	</button>
-					</div>
                     <div class="btn-group">
                     	<button type="button" class="btn btn-sm btn-success">
                     		<i class="fa fa-wrench"></i> Tools
@@ -72,7 +67,7 @@
 												<table id="datatable" class="table table-striped table-bordered no-footer">
 													<thead>
 														<tr>
-															<th>No</th>
+															<!-- <th>No</th> -->
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
 															<th>Username</th>
 															<th>Name</th>
@@ -84,7 +79,7 @@
 													<tbody></tbody>
 													<tfoot>
 														<tr>
-															<th></th>
+															<!-- <th></th> -->
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
 															<th class="search">Username</th>
 															<th class="search">Name</th>

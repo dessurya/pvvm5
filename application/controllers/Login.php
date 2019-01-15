@@ -68,10 +68,8 @@ class Login extends CI_Controller {
 			$result['response'] = false;
 			$result['msg'] = "You Log Out...";
 		}
-		$this->load->model('m_login');
-		$notiv = $this->m_login->getNotiv($this->session->userdata('ROLL_ID'));
-		$result['response'] = $notiv['response'];
-		$result['notif'] = $notiv['notiv'];
+		$result['response'] = true;
+		$result['notif'] = 1;
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
