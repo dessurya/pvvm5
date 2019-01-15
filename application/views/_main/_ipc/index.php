@@ -67,7 +67,7 @@
 															<th>Username</th>
 															<th>Name</th>
 															<th>Email</th>
-															<th>Organisasi</th>
+															<th>Posisi</th>
 															<th>Status</th>
 														</tr>
 													</thead>
@@ -79,7 +79,7 @@
 															<th class="search">Username</th>
 															<th class="search">Name</th>
 															<th class="search">Email</th>
-															<th class="search autoComplete">Organisasi</th>
+															<th class="search autoComplete">Posisi</th>
 															<th class="search autoComplete">Status</th>
 														</tr>
 													</tfoot>

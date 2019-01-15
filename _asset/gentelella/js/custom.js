@@ -695,11 +695,11 @@ if (typeof NProgress != 'undefined') {
 				tooltipFillColor: "rgba(51, 51, 51, 0.55)",
 				data: {
 					labels: [
-						"Symbian",
-						"Blackberry",
-						"Other",
-						"Android",
-						"IOS"
+						"Others",
+						"SEWAGE",
+						"Others 2",
+						"OILY SLUGE",
+						"BILGE WATER"
 					],
 					datasets: [{
 						data: [15, 20, 30, 10, 30],
