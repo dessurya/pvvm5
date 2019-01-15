@@ -37,15 +37,6 @@ class Vendor extends CI_Controller {
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/iCheck/icheck.js"></script>';
 
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet">';
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">';
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.buttons.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.nonblock.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.confirm.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.callbacks.js"></script>';
-
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
 
@@ -69,12 +60,12 @@ class Vendor extends CI_Controller {
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
-				$arrdata['route'] = site_url().'/vendor/storeForm?id='.$list['VENDOR_ID'];
+				$arrdata['route'] = site_url().'/vendor/tools?action=store&id='.$list['VENDOR_ID'];
 				$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
 			}
 		}else{
 			$arrdata = array();
-			$arrdata['route'] = site_url().'/vendor/storeForm';
+			$arrdata['route'] = site_url().'/vendor/tools?action=store';
 			$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
 		}
 		header('Content-Type: application/json');
@@ -86,29 +77,10 @@ class Vendor extends CI_Controller {
 		);
 	}
 
-	public function storeForm($data = null){
-		$this->load->model('m_vendor');
-		$response = $this->m_vendor->storeForm($this->session->userdata('ROLL_ID'), $_GET, $_POST);
-		header('Content-Type: application/json');
-		echo json_encode(
-			array(
-				"response" => $response['response'],
-				"msg" => $response['msg'],
-				"type" => $response['type']
-			)
-		);
-	}
-
 	public function tools($data = null){
 		$this->load->model('m_vendor');
-		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET['id'], $_GET['action']);
+		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
 		header('Content-Type: application/json');
-		echo json_encode(
-			array(
-				"response" => $response['response'],
-				"msg" => $response['msg'],
-				"type" => $response['type']
-			)
-		);
+		echo json_encode( $response );
 	}
 }

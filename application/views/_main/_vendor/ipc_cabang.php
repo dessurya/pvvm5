@@ -1,9 +1,3 @@
-<style type="text/css">
-	table#datatable tbody{
-		max-height: 555px;
-		overflow-y: auto;
-	}
-</style>
 <div class="row">
 	<div class="col-md-12">
 		<div class="x_panel">
@@ -11,29 +5,40 @@
 				<h2>VENDOR</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
                     <div class="btn-group">
-                        <a class="add formau btn btn-success btn-sm" href="">
-                            <i class="fa fa-plus"></i> Add
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="update formau btn btn-success btn-sm" href="">
-                            <i class="fa fa-pencil"></i> Update
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="actived tools btn btn-success btn-sm" href="">
-                            <i class="fa fa-check"></i> Actived
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="deactived tools btn btn-success btn-sm" href="">
-                            <i class="fa fa-ban"></i> Deactived
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="delete tools btn btn-success btn-sm" href="">
-                            <i class="fa fa-trash-o"></i> Delete
-                        </a>
+                    	<button type="button" class="btn btn-sm btn-success">
+                    		<i class="fa fa-wrench"></i> Tools
+                    	</button>
+                    	<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+                    		<span class="caret" style="color: white"></span>
+                    	</button>
+                    	<ul class="dropdown-menu" role="menu">
+                    		<li>
+                    			<a class="add formau" href="#">
+		                            <i class="fa fa-plus"></i> Add
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="update formau" href="#">
+                    				<i class="fa fa-pencil"></i> Update
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="actived tools" href="#">
+                    				<i class="fa fa-check"></i> Actived
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="deactived tools" href="#">
+		                            <i class="fa fa-ban"></i> Deactived
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="delete tools" href="#">
+                    				<i class="fa fa-trash-o"></i> Delete
+                    			</a>
+                    		</li>
+
+                    	</ul>
                     </div>
                 </div>
 				<div class="clearfix"></div>
