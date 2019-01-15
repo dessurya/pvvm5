@@ -40,6 +40,7 @@ class Vendor extends CI_Controller {
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
 
+
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
