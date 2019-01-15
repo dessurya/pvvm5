@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class M_order extends CI_Model{
+class M_ipc extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
@@ -8,35 +8,32 @@ class M_order extends CI_Model{
 
 	public function getdata($roll_id){
 		$this->datatables->select("
-			ATOL.PKK_ID AS PKK_ID, 
-			ATOL.SHIP_ID AS SHIP_ID, 
-			ATOL.STATUS_ID AS STATUS_ID, 
-			TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD') AS CREATED_DATE, 
-			UPPER(ATSS.STATUS) AS STATUS, 
-			UPPER(ATS.SHIP_TYPE) AS SHIP_TYPE, 
-			UPPER(ATA.NAME) AS AGENT_NAME
+			ATE.PERSON_ID AS ID, 
+			UPPER(NAME) AS NAME, 
+			UPPER(USERNAME) AS USERNAME, 
+			UPPER(EMAIL) AS EMAIL, 
+			POSISI,
+			CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 		");
-        $this->datatables->from('APWMS_TX_ORDER_LIST ATOL');
-        $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
-        $this->datatables->join('APWMS_TR_SHIP ATS', 'ATS.SHIP_ID = ATOL.SHIP_ID', 'left');
-        $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
-        $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'PKK_ID');
+        $this->datatables->from('APWMS_TX_EMPLOYE ATE');
+        $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATE.AUTH_ID', 'left');
+        $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
         return $this->datatables->generate();
 	}
 
 	public function finddata($roll_id, $id){
 		if (is_array($id)) {
 			$id = implode(',', $id);
-			$where = 'TV.ID IN ('.$id.')';
+			$where = 'TE.ID IN ('.$id.')';
 		}else{
-			$where = 'TV.ID = '.$id;
+			$where = 'TE.ID = '.$id;
 		}
 
 		$query = "
 			SELECT 
-				NAME, EMAIL, PHONE, USERNAME, AUTH_ID, TV.ID AS VENDOR_ID
+				NAME, EMAIL, PHONE, USERNAME, AUTH_ID, TV.ID AS EMPLOYE_ID
 			FROM 
-				APWMS_TX_VENDOR TV
+				APWMS_TX_EMPLOYE TE
 			LEFT JOIN
 				APWMS_TX_AUTH TA
 				ON TA.ID = TV.AUTH_ID
@@ -53,6 +50,7 @@ class M_order extends CI_Model{
 			$result = $this->delete($roll_id, $get['id']);
 		}else if($action == 'deactived' or $action == 'actived'){
 			$result = $this->activedeactive($roll_id, $get);
+			// $result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
 		}
 		return $result;
 	}
@@ -61,12 +59,12 @@ class M_order extends CI_Model{
 		$result = array();
 		if (isset($get['id'])) {
 			$VENDOR_ID = $get['id'];
-			$AUTH_ID = $this->finddata($roll_id,$VENDOR_ID);
+			$AUTH_ID = $this->finddata($roll_id,$EMPLOYE_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		}else{
 			$this->load->model('m_sequences');
 			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
-			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
+			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_EMPLOYE_ID_SEQ");
 		}
 		$this->db->set('ID',  $AUTH_ID);
 		$this->db->set('TYPE',  3);
@@ -74,13 +72,13 @@ class M_order extends CI_Model{
 		// $this->db->set('USERNAME',  $post['username']);
 		if (isset($get['id'])) { $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
 		else{ $this->db->insert('APWMS_TX_AUTH'); }
-		$this->db->set('ID',  $VENDOR_ID);
+		$this->db->set('ID',  $EMPLOYE_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAME',  $post['name']);
 		$this->db->set('EMAIL',  $post['email']);
 		$this->db->set('PHONE',  $post['phone']);
-		if (isset($get['id'])) { $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_VENDOR'); }
-		else{ $this->db->insert('APWMS_TX_VENDOR'); }
+		if (isset($get['id'])) { $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_EMPLOYE'); }
+		else{ $this->db->insert('APWMS_TX_EMPLOYE'); }
 
 		$result['response'] = true;
 		if (isset($get['id'])) { 
@@ -97,39 +95,39 @@ class M_order extends CI_Model{
 	private function delete($roll_id, $id){
 		$arrid = explode('^', $id);
 		$result = array();
-		$vendor = "";
+		$employe = "";
 		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
+			$employe .= $finddata['NAME'].', ';
 			if ($finddata['AUTH_ID'] != null) {
 				$this->db->where('ID', $finddata['AUTH_ID']);
 				$this->db->delete('APWMS_TX_AUTH');
 			}
 			$this->db->where('ID', $idr);
-			$this->db->delete('APWMS_TX_VENDOR');
+			$this->db->delete('APWMS_TX_EMPLOYE');
 		}
 		$result['response'] = true;
 		$result['type'] = "delete";
-		$result['msg'] = "Success, delete vendor ".substr($vendor, 0, -2);
+		$result['msg'] = "Success, delete employee ".substr($employe, 0, -2);
 		return $result;
 	}
 
 	private function activedeactive($roll_id, $get){
 		$arrid = explode('^', $get['id']);
 		$result = array();
-		$vendor = "";
+		$employe = "";
 		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
+			$employe .= $finddata['NAME'].', ';
 			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
 			$this->db->where('ID', $finddata['AUTH_ID']);
 			$this->db->update('APWMS_TX_AUTH');
 		}
 		$result['response'] = true;
 		$result['type'] = $get['action'];
-		$result['msg'] = "Success, ".$get['action']." vendor ".substr($vendor, 0, -2);
+		$result['msg'] = "Success, ".$get['action']." vendor ".substr($employe, 0, -2);
 		return $result;
 	}
 }

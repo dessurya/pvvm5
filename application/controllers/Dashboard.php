@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Order extends CI_Controller {
+class Dashboard extends CI_Controller {
 
 	public $content;
 	public function __construct() {
@@ -12,18 +12,18 @@ class Order extends CI_Controller {
 		}
     }
 
-	public function index($df = null, $ds = null){
+	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
 		if($roll_id == 1) {
-			$urlview = '_main/_order/ipc_cabang.php';
+			$urlview = '_main/_dashboard/ipc_cabang.php';
 		}else if($roll_id == 2) {
-			$urlview = '_main/_order/shipping_agent.php';
+			$urlview = '_main/_dashboard/shipping_agent.php';
 		}else if($roll_id == 3) {
-			$urlview = '_main/_order/index.php';
+			$urlview = '_main/_dashboard/index.php';
 		}
 
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Order";
+		$viewComp['_tittle_'] = "IPWMS | Vendor";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
@@ -44,13 +44,13 @@ class Order extends CI_Controller {
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
-	public function getdata($df = null, $ds = null){
-		$this->load->model('m_order');
+	public function getdata($data = null){
+		$this->load->model('m_vendor');
 		header('Content-Type: application/json');
-		echo $this->m_order->getdata($this->session->userdata('ROLL_ID'));
+		echo $this->m_vendor->getdata($this->session->userdata('ROLL_ID'));
 	}
 
-	public function callForm($df = null, $ds = null){
+	public function callForm($data = null){
 		$data = null;
 		$html = '';
 		if (isset($_GET['id'])) {
@@ -60,13 +60,13 @@ class Order extends CI_Controller {
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
-				$arrdata['route'] = site_url().'/order/tools?action=store&id='.$list['PKK_ID'];
-				$html .= $this->load->view('_main/_order/ipc_cabang-form.php', $arrdata, true);
+				$arrdata['route'] = site_url().'/vendor/tools?action=store&id='.$list['VENDOR_ID'];
+				$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
 			}
 		}else{
 			$arrdata = array();
-			$arrdata['route'] = site_url().'/order/tools?action=store';
-			$html .= $this->load->view('_main/_order/ipc_cabang-form.php', $arrdata, true);
+			$arrdata['route'] = site_url().'/vendor/tools?action=store';
+			$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
 		}
 		header('Content-Type: application/json');
 		echo json_encode(
@@ -77,4 +77,10 @@ class Order extends CI_Controller {
 		);
 	}
 
+	public function tools($data = null){
+		$this->load->model('m_vendor');
+		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+		header('Content-Type: application/json');
+		echo json_encode( $response );
+	}
 }
