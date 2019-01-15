@@ -40,7 +40,6 @@ class Vendor extends CI_Controller {
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
 
-
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
@@ -80,6 +79,27 @@ class Vendor extends CI_Controller {
 	public function tools($data = null){
 		$this->load->model('m_vendor');
 		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+		if ($_GET['action'] == 'info') {
+			$response = array();
+			$response['response'] = true;
+			$response['type'] = "info";
+			$result['msg'] = null;
+			$response['reload'] = false;
+			$response['info'] = array();
+			array_push(
+				$response['info'], 
+				'Right click on table of list for open detail data',
+				'Right click on table of list for open detail data',
+				'Right click on table of list for open detail data',
+				'Right click on table of list for open detail data',
+				'Right click on table of list for open detail data'
+			);
+		}else{
+			$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+			$response['reload'] = true;
+		}
+		$response['df'] = $df;
+		$response['ds'] = $ds;
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}

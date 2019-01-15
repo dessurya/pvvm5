@@ -22,6 +22,14 @@
 			checkNotivication();
 		}, 30000); // 30 second
 
+		var urisegment1 = "<?php echo $this->uri->segment(1) ?>";
+		var urisegment2 = "<?php echo $this->uri->segment(2) ?>";
+		var urlTools = "<?php echo site_url().'/' ?>"+urisegment1+"/tools";
+
+		<?php if($this->uri->segment(2) != null){ ?>
+			urlTools += "/show/<?php echo $VENDOR_ID ?>";
+		<?php } ?>
+
 		$(document).on('click', 'a#logout', function(){
 			var logouturl = $(this).attr('href');
 			logout(logouturl);
