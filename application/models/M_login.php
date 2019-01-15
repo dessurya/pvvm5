@@ -67,5 +67,19 @@ class M_login extends CI_Model{
 		$result['DETAILAUTH'] = $arrdata2[0];
 		return $result;
 	}
+
+	public function getNotiv($roll_id){
+		$result = array();
+		$result['response'] = false;
+		$result['notiv'] = 0;
+		$query = "SELECT COUNT(*) AS NOTIV FROM APWMS_TX_ORDER_LIST WHERE STATUS_ID = 2";
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		if ($arrdata[0]['NOTIV']) {
+			$result['response'] = true;
+			$result['notiv'] = $arrdata[0]['NOTIV'];
+		}
+		return $result;
+	}
 }
 ?>

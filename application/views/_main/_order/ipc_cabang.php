@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>VENDOR</h2>
+				<h2>ORDER WASTE</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
 					<div class="btn-group">
 						<button type="button" class="info tools btn btn-sm btn-success">
@@ -62,7 +62,7 @@
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 							<div class="x_panel">
 								<div class="x_title">
-									<h2>Data <small>Vendor</small></h2>
+									<h2>Data <small>Order Waste</small></h2>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -74,11 +74,11 @@
 														<tr>
 															<th>No</th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
-															<th>Username</th>
-															<th>Name</th>
-															<th>Email</th>
-															<th>Phone</th>
+															<th>Created Date</th>
+															<th>PKK</th>
 															<th>Status</th>
+															<th>Ship</th>
+															<th>Agent</th>
 														</tr>
 													</thead>
 													<tbody></tbody>
@@ -86,11 +86,11 @@
 														<tr>
 															<th></th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
-															<th class="search">Username</th>
-															<th class="search">Name</th>
-															<th class="search">Email</th>
-															<th class="search">Phone</th>
+															<th class="search">Created Date</th>
+															<th class="search">PKK</th>
 															<th class="search autoComplete">Status</th>
+															<th class="search">Ship</th>
+															<th class="search">Agent</th>
 														</tr>
 													</tfoot>
 												</table>

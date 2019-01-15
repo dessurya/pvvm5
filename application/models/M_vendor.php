@@ -50,7 +50,6 @@ class M_vendor extends CI_Model{
 			$result = $this->delete($roll_id, $get['id']);
 		}else if($action == 'deactived' or $action == 'actived'){
 			$result = $this->activedeactive($roll_id, $get);
-			// $result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
 		}
 		return $result;
 	}
