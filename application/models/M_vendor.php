@@ -42,58 +42,61 @@ class M_vendor extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function storeForm($roll_id, $get, $post){
+	public function tools($roll_id, $get, $post){
+		$action = $get['action'];
+		if ($action == 'store'){
+			$result = $this->store($roll_id, $get, $post);
+		}else if ($action == 'delete') {
+			$result = $this->delete($roll_id, $get['id']);
+		}else if($action == 'deactived' or $action == 'actived'){
+			$result = $this->activedeactive($roll_id, $get);
+			// $result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
+		}
+		return $result;
+	}
+
+	private function store($roll_id, $get, $post){
 		$result = array();
-		if ($get == null) {
-			$this->load->model('m_sequences');
-			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
-			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
-		}else{
+		if (isset($get['id'])) {
 			$VENDOR_ID = $get['id'];
 			$AUTH_ID = $this->finddata($roll_id,$VENDOR_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		}else{
+			$this->load->model('m_sequences');
+			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
+			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
 		}
 		$this->db->set('ID',  $AUTH_ID);
 		$this->db->set('TYPE',  3);
 		$this->db->set('PASSWORD',  md5("123"));
 		// $this->db->set('USERNAME',  $post['username']);
-		if ($get == null) { $this->db->insert('APWMS_TX_AUTH'); }
-		else{ $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
+		if (isset($get['id'])) { $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
+		else{ $this->db->insert('APWMS_TX_AUTH'); }
 		$this->db->set('ID',  $VENDOR_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAME',  $post['name']);
 		$this->db->set('EMAIL',  $post['email']);
 		$this->db->set('PHONE',  $post['phone']);
-		if ($get == null) { $this->db->insert('APWMS_TX_VENDOR'); }
-		else{ $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_VENDOR'); }
+		if (isset($get['id'])) { $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_VENDOR'); }
+		else{ $this->db->insert('APWMS_TX_VENDOR'); }
 
 		$result['response'] = true;
-		if ($get == null) { 
-			$result['msg'] = "Success, add new vendor ".$post['name'];
-			$result['type'] = "add";
-		}
-		else{ 
+		if (isset($get['id'])) { 
 			$result['msg'] = "Success, update vendor ".$post['name'];
 			$result['type'] = "update";
 		}
-		return $result;
-	}
-
-
-	public function tools($roll_id, $id, $action){
-		$arrid = explode('^', $id);
-		if ($action == 'delete') {
-			$result = $this->delete($roll_id, $arrid);
-		}else if($action == 'deactived' or $action == 'actived'){
-			$result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
+		else{ 
+			$result['msg'] = "Success, add new vendor ".$post['name'];
+			$result['type'] = "add";
 		}
 		return $result;
 	}
 	
 	private function delete($roll_id, $id){
+		$arrid = explode('^', $id);
 		$result = array();
 		$vendor = "";
-		foreach ($id as $idr) {
+		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
 			$vendor .= $finddata['NAME'].', ';
@@ -107,6 +110,24 @@ class M_vendor extends CI_Model{
 		$result['response'] = true;
 		$result['type'] = "delete";
 		$result['msg'] = "Success, delete vendor ".substr($vendor, 0, -2);
+		return $result;
+	}
+
+	private function activedeactive($roll_id, $get){
+		$arrid = explode('^', $get['id']);
+		$result = array();
+		$vendor = "";
+		foreach ($arrid as $idr) {
+			$finddata = $this->finddata($roll_id,$idr);
+			$finddata = $finddata[0];
+			$vendor .= $finddata['NAME'].', ';
+			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
+			$this->db->where('ID', $finddata['AUTH_ID']);
+			$this->db->update('APWMS_TX_AUTH');
+		}
+		$result['response'] = true;
+		$result['type'] = $get['action'];
+		$result['msg'] = "Success, ".$get['action']." vendor ".substr($vendor, 0, -2);
 		return $result;
 	}
 }

@@ -1,32 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Vendor extends CI_Controller {
+class Ipc extends CI_Controller {
 
 	public $content;
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('datatables');
-		if(!$this->session->userdata('LOGGED')) {
+		if(!$this->session->userdata('LOGGED') or $this->session->userdata('ROLL_ID') != 1) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
     }
 
 	public function index($data = null){
-		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
-			$urlview = '_main/_vendor/ipc_cabang.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_vendor/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_vendor/index.php';
-		}
-
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Vendor";
+		$viewComp['_tittle_'] = "IPWMS | IPC User";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
-		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
+		$viewComp['_contents_'] = $this->load->view('_main/_ipc/index.php', '', true);
 
 		$viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">';
 	    $viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>';
@@ -45,18 +36,18 @@ class Vendor extends CI_Controller {
 	}
 
 	public function getdata($data = null){
-		$this->load->model('m_vendor');
+		$this->load->model('m_ipc');
 		header('Content-Type: application/json');
-		echo $this->m_vendor->getdata($this->session->userdata('ROLL_ID'));
+		echo $this->m_ipc->getdata($this->session->userdata('ROLL_ID'));
 	}
 
 	public function callForm($data = null){
 		$data = null;
 		$html = '';
 		if (isset($_GET['id'])) {
-			$this->load->model('m_vendor');
+			$this->load->model('m_ipc');
 			$id = explode('^', $_GET['id']);
-			$data = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $id);
+			$data = $this->m_ipc->finddata($this->session->userdata('ROLL_ID'), $id);
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
@@ -78,8 +69,8 @@ class Vendor extends CI_Controller {
 	}
 
 	public function tools($data = null){
-		$this->load->model('m_vendor');
-		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+		$this->load->model('m_ipc');
+		$response = $this->m_ipc->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}
