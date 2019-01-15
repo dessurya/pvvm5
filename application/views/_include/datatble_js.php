@@ -2,7 +2,9 @@
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
-	callForm(urlForm);
+	<?php if($this->uri->segment(1) == 'vendor') {?>
+		callForm(urlForm);
+	<?php }?>
 
 	$.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings){
 		return {
@@ -22,9 +24,21 @@
 	    // serverSide: true,
 	    serverSide: false,
 	    ajax: {"url": urlDataTable, "type": "POST"},
-	    aaSorting: [ [1,'desc'] ],
+	    <?php if($this->uri->segment(1) == 'order') {?>
+		    aaSorting: [ [2,'desc'] ],
+		<?php } else if($this->uri->segment(1) == 'vendor') {?>
+		    aaSorting: [ [3,'asc'] ],
+		<?php }?>
 	    columns: [
-			<?php if($this->uri->segment(1) == 'vendor') {?>
+			<?php if($this->uri->segment(1) == 'order') {?>
+			{"data": "PKK_ID", "orderable": false},
+			{"data": "CHECKBOX", "orderable": false},
+			{"data": "CREATED_DATE"},
+			{"data": "PKK_ID"},
+			{"data": "STATUS"},
+			{"data": "SHIP_TYPE"},
+			{"data": "AGENT_NAME"}
+			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			{"data": "ID", "orderable": false},
 			{"data": "CHECKBOX", "orderable": false},
 			{"data": "USERNAME"},

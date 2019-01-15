@@ -40,7 +40,6 @@ class Vendor extends CI_Controller {
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
 
-
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
@@ -126,10 +125,10 @@ class Vendor extends CI_Controller {
 			$response['info'] = array();
 			array_push(
 				$response['info'], 
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
+				// 'Right click on table of list for open detail data',
+				// 'Right click on table of list for open detail data',
+				// 'Right click on table of list for open detail data',
+				// 'Right click on table of list for open detail data',
 				'Right click on table of list for open detail data'
 			);
 		}else{
