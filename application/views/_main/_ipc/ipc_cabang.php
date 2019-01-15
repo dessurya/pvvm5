@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>IPC</h2>
+				<h2>VENDOR</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
                     <div class="btn-group">
                     	<button type="button" class="btn btn-sm btn-success">
@@ -15,6 +15,11 @@
                     		<li>
                     			<a class="add formau" href="#">
 		                            <i class="fa fa-plus"></i> Add
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="update formau" href="#">
+                    				<i class="fa fa-pencil"></i> Update
                     			</a>
                     		</li>
                     		<li>
@@ -52,7 +57,7 @@
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 							<div class="x_panel">
 								<div class="x_title">
-									<h2>Data <small>IPC</small></h2>
+									<h2>Data <small>Vendor</small></h2>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -67,7 +72,7 @@
 															<th>Username</th>
 															<th>Name</th>
 															<th>Email</th>
-															<th>Organisasi</th>
+															<th>Phone</th>
 															<th>Status</th>
 														</tr>
 													</thead>
@@ -79,7 +84,7 @@
 															<th class="search">Username</th>
 															<th class="search">Name</th>
 															<th class="search">Email</th>
-															<th class="search autoComplete">Organisasi</th>
+															<th class="search">Phone</th>
 															<th class="search autoComplete">Status</th>
 														</tr>
 													</tfoot>

@@ -67,7 +67,7 @@
 			});
 		}
 
-		<?php if(in_array($this->uri->segment(1), array('vendor', 'order','ipc'))) {?>
+		<?php if(in_array($this->uri->segment(1), array('vendor', 'order'))) {?>
 			var urlDataTable = "<?php echo site_url().'/'.$this->uri->segment(1).'/getdata'; ?>";
 			var urlForm = "<?php echo site_url().'/'.$this->uri->segment(1).'/callForm'; ?>";
 			var urlTools = "<?php echo site_url().'/'.$this->uri->segment(1).'/tools'; ?>";
@@ -101,15 +101,6 @@
 					{"data": "NAME"},
 					{"data": "EMAIL"},
 					{"data": "PHONE"},
-					{"data": "FLAG_ACTIVE"}
-					<?php }?>
-					<?php if($this->uri->segment(1) == 'ipc') {?>
-					// {"data": "ID", "orderable": false},
-					{"data": "CHECKBOX", "orderable": false},
-					{"data": "USERNAME"},
-					{"data": "NAME"},
-					{"data": "EMAIL"},
-					{"data": "POSISI"},
 					{"data": "FLAG_ACTIVE"}
 					<?php }?>
 	            ],
@@ -360,9 +351,5 @@
 	            });
 	        }
 	    }
-	    callCanvasDoughnut();
-	    function callCanvasDoughnut() {
-	    	init_chart_doughnut();
-		}
     });
 </script>
