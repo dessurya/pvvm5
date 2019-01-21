@@ -2,7 +2,7 @@
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
-	<?php if($this->uri->segment(1) == 'vendor') {?>
+	<?php if (in_array($this->uri->segment(1), array('vendor','ipc'))) {?>
 		callForm(urlForm);
 	<?php }?>
 
@@ -45,6 +45,15 @@
 			{"data": "EMAIL"},
 			{"data": "PHONE"},
 			{"data": "FLAG_ACTIVE"}
+			<?php } else if($this->uri->segment(1) == 'ipc') {?>
+			{"data": "ID", "orderable": false},
+			{"data": "CHECKBOX", "orderable": false},
+			{"data": "NIPP"},
+			{"data": "NAME"},
+			{"data": "EMAIL"},
+			{"data": "POSISI"},
+			{"data": "FLAG_ACTIVE"},
+			{"data": "LAST_LOGIN"}
 			<?php }?>
 	    ],
 	    initComplete: function () {

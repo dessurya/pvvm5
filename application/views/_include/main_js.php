@@ -169,12 +169,16 @@
 	    }
 
 		<?php 
-		if( in_array($this->uri->segment(1), array('vendor', 'order'))){
+		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('order'))){
 			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
 		}
 		?>
+	    callCanvasDoughnut();
+	    function callCanvasDoughnut() {
+	    	init_chart_doughnut();
+	    }
     });
 </script>
