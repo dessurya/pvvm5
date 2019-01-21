@@ -1,3 +1,4 @@
+<!-- <?php print_r($this->session->userdata);  ?> -->
 <div class="row">
 	<div class="col-md-12">
 		<div class="x_panel">
@@ -15,6 +16,11 @@
                     		<li>
                     			<a class="add formau" href="#">
 		                            <i class="fa fa-plus"></i> Add
+                    			</a>
+                    		</li>
+                    		<li>
+                    			<a class="update formau" href="#">
+                    				<i class="fa fa-pencil"></i> Update
                     			</a>
                     		</li>
                     		<li>
@@ -62,25 +68,28 @@
 												<table id="datatable" class="table table-striped table-bordered no-footer">
 													<thead>
 														<tr>
-															<!-- <th>No</th> -->
+															<th>No</th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
-															<th>Username</th>
+															<th>NIPP</th>
 															<th>Name</th>
 															<th>Email</th>
 															<th>Posisi</th>
 															<th>Status</th>
+															<th>Last Login</th>
 														</tr>
 													</thead>
 													<tbody></tbody>
 													<tfoot>
 														<tr>
-															<!-- <th></th> -->
+															<th></th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
-															<th class="search">Username</th>
+															<th class="search">NIPP</th>
 															<th class="search">Name</th>
 															<th class="search">Email</th>
 															<th class="search autoComplete">Posisi</th>
 															<th class="search autoComplete">Status</th>
+															<th class="search">Last Login</th>
+
 														</tr>
 													</tfoot>
 												</table>
