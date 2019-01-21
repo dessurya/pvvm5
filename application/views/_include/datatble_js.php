@@ -1,5 +1,8 @@
 <script type="text/javascript">
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
+	<?php if($this->uri->segment(3) != null) {?>
+		urlDataTable += "<?php echo '/'.$this->uri->segment(3).'/'.$this->uri->segment(4) ?>";
+	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
 	<?php if (in_array($this->uri->segment(1), array('vendor','ipc'))) {?>
@@ -24,7 +27,7 @@
 	    // serverSide: true,
 	    serverSide: false,
 	    ajax: {"url": urlDataTable, "type": "POST"},
-	    <?php if($this->uri->segment(1) == 'order') {?>
+	    <?php if(in_array($this->uri->segment(1), array('order', 'history'))) {?>
 		    aaSorting: [ [1,'desc'] ],
 		<?php } else if($this->uri->segment(1) == 'vendor') {?>
 		    aaSorting: [ [3,'asc'] ],
@@ -32,7 +35,6 @@
 	    columns: [
 			<?php if($this->uri->segment(1) == 'order') {?>
 			{"data": "PKK_ID", "orderable": false},
-			{"data": "CHECKBOX", "orderable": false},
 			{"data": "CREATED_DATE"},
 			{"data": "PKK_ID"},
 			{"data": "STATUS"},
@@ -55,6 +57,13 @@
 			{"data": "POSISI"},
 			{"data": "FLAG_ACTIVE"},
 			{"data": "LAST_LOGIN"}
+			<?php } else if($this->uri->segment(1) == 'history') {?>
+			{"data": "HISTORY_ID", "orderable": false},
+			{"data": "CREATED_DATE"},
+			{"data": "TABLE_NAME"},
+			{"data": "ACTION_TYPE"},
+			{"data": "USERNAME"},
+			{"data": "ROLL"}
 			<?php }?>
 	    ],
 	    initComplete: function () {
@@ -114,12 +123,14 @@
 	    }
 	});
 
-	$(document).on('click', '#action a.formau', function(){
+	$(document).on('click', '#action a.formau, #actionshow button.updateshow', function(){
 	    var url = urlForm;
 	    var dataId = null;
 	    var dataPN = new Array();
 	    if ($(this).hasClass('update')) {
 	        dataId = getDataId();
+	    }else if ($(this).hasClass('updateshow')) {
+	    	dataId = $(this).data('id')
 	    }
 	    if (dataId !== null && dataId !== "" && dataId !== undefined) {
 	        url += "?id="+dataId;
@@ -173,7 +184,7 @@
 	        },
 	        error: function(data) {
 	            $('#loading-page').hide();
-	            location.reload();
+	            // location.reload();
 	        },
 	        success: function(data) {
 	            $('.x_content .tab-content #tab_open').html(data.result);

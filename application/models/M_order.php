@@ -6,7 +6,7 @@ class M_order extends CI_Model{
 		parent::__construct();
 	}
 
-	public function getdata($roll_id){
+	public function getdata($roll_id, $data){
 		$this->datatables->select("
 			ATOL.PKK_ID AS ID,
 			ATOL.PKK_ID AS PKK_ID, 
@@ -21,28 +21,33 @@ class M_order extends CI_Model{
         $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
         $this->datatables->join('APWMS_TR_SHIP ATS', 'ATS.SHIP_ID = ATOL.SHIP_ID', 'left');
         $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
-		if ($roll_id == 1) {
-		}else if($roll_id == 3){
+
+		if($roll_id == 3 or $data != null){
+			if ($data == null and $roll_id == 3) {
+				$venid = $this->session->userdata('DETAIL_ID');
+			}else{
+				$venid = $data;
+			}
 			$query="
 				SELECT
-					DISTINCT(PKK_ID)
-				FROM(
-					SELECT
-						ATOL.PKK_ID AS PKK_ID,
-						ATOLD.PKK_DET_ID
-					FROM
-						APWMS_TX_ORDER_LIST_DET ATOLD
-					JOIN
-						APWMS_TX_ORDER_LIST ATOL
-						ON ATOL.PKK_ID = ATOLD.PKK_ID
-					WHERE VENDOR_ID = ".$this->session->userdata('DETAIL_ID')." )";
+					DISTINCT(ATOL.PKK_ID) AS PKK_ID
+				FROM
+					APWMS_TX_ORDER_LIST_DET ATOLD
+				JOIN
+					APWMS_TX_ORDER_LIST ATOL
+					ON ATOL.PKK_ID = ATOLD.PKK_ID
+				WHERE VENDOR_ID = ".$venid;
 			$runQuery = $this->db->query($query);
 			$arrdata = $runQuery->result_array();
 			function ret($data){
 				return $data['PKK_ID'];
 			}
 			$inid = array_map("ret", $arrdata);
-			$this->datatables->where_in('ATOL.PKK_ID', $inid);
+			if ($inid == null) {
+				$this->datatables->where_in('ATOL.PKK_ID', array(0));
+			}else{
+				$this->datatables->where_in('ATOL.PKK_ID', $inid);
+			}
 		}
         return $this->datatables->generate();
 	}

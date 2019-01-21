@@ -51,6 +51,85 @@
 								class="form-control">
 						</div>
 					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<input 
+								readonly
+								name="FLAG_ACTIVE" 
+								value="<?php echo $vendor['FLAG_ACTIVE'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Last Login</label>
+							<input 
+								readonly
+								name="LAST_LOGIN" 
+								value="<?php echo $vendor['LAST_LOGIN'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Order In Progress</label>
+							<input 
+								readonly
+								name="ORDERWORK" 
+								value="<?php echo $orderinfo['ndone'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Order Done</label>
+							<input 
+								readonly
+								name="ORDERDONE" 
+								value="<?php echo $orderinfo['ydone'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>All Of Order</label>
+							<input 
+								readonly
+								name="ORDERALL" 
+								value="<?php echo $orderinfo['ndone']+$orderinfo['ydone'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="ln_solid"></div>
+				<div id="actionshow" class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<a href="<?php echo site_url().'/order/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAME'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
+								<i class="fa fa-file-text-o"></i> Show Order
+							</a>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
+								<i class="fa fa-clock-o"></i> Show History
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
+								<i class="fa fa-pencil"></i> Update
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

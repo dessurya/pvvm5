@@ -63,6 +63,7 @@ class Vendor extends CI_Controller {
 			$find = $find[0];
 			$send = array();
 			$send['vendor'] = $find;
+			$send['orderinfo'] = $this->m_vendor->orderinfo($this->session->userdata('ROLL_ID'), $data);
 			$response['response'] = true;
 			$response['name'] = 'Vendor : '.$find['NAME'];
 			$response['result'] = $this->load->view($urlview, $send, true);

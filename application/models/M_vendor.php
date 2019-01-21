@@ -47,7 +47,14 @@ class M_vendor extends CI_Model{
 
 		$query = "
 			SELECT 
-				NAME, EMAIL, PHONE, USERNAME, AUTH_ID, TV.ID AS VENDOR_ID
+				NAME, 
+				EMAIL, 
+				PHONE, 
+				USERNAME, 
+				AUTH_ID, 
+				TV.ID AS VENDOR_ID,
+				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
+				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			FROM 
 				APWMS_TX_VENDOR TV
 			LEFT JOIN
@@ -56,6 +63,43 @@ class M_vendor extends CI_Model{
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
+	}
+
+	public function orderinfo($roll_id, $id){
+		$result = array();
+		$idin = "
+			SELECT
+				DISTINCT(ATOL.PKK_ID) AS PKK_ID
+			FROM
+				APWMS_TX_ORDER_LIST_DET ATOLD
+			JOIN
+				APWMS_TX_ORDER_LIST ATOL
+				ON ATOL.PKK_ID = ATOLD.PKK_ID
+			WHERE VENDOR_ID = ".$id;
+
+		$fdone = "
+			SELECT
+				COUNT(STATUS_ID) AS COUNTVAL
+			FROM
+				APWMS_TX_ORDER_LIST
+			WHERE
+				STATUS_ID NOT LIKE 18
+				AND PKK_ID IN (".$idin.")";
+		$rfdone = $this->db->query($fdone);
+		$arfdone = $rfdone->result_array();
+		$result['ndone'] = $arfdone[0]['COUNTVAL'];
+		$tdone = "
+			SELECT
+				COUNT(STATUS_ID) AS COUNTVAL
+			FROM
+				APWMS_TX_ORDER_LIST
+			WHERE
+				STATUS_ID = 18
+				AND PKK_ID IN (".$idin.")";
+		$rtdone = $this->db->query($tdone);
+		$artdone = $rtdone->result_array();
+		$result['ydone'] = $artdone[0]['COUNTVAL'];
+		return $result;
 	}
 
 	public function tools($roll_id, $get, $post){

@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>ORDER WASTE <?php echo strtoupper($this->uri->segment(4)) ?></h2>
+				<h2>HISTORY <?php echo strtoupper($this->uri->segment(4)) ?></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -12,14 +12,14 @@
 							<a href="#tab_list" role="tab" data-toggle="tab" aria-expanded="true">List</a>
 						</li>
 						<li role="presentation" class="">
-							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Order Waste : No Data</a>
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">History : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 							<div class="x_panel">
 								<div class="x_title">
-									<h2>Data <small>Order Waste</small></h2>
+									<h2>Data <small>History</small></h2>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -30,24 +30,22 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
-															<th>Created Date</th>
-															<th>PKK</th>
-															<th>Status</th>
-															<th>Ship</th>
-															<th>Agent</th>
+															<th>Date</th>
+															<th>On</th>
+															<th>Activity</th>
+															<th>User</th>
+															<th>Roll</th>
 														</tr>
 													</thead>
 													<tbody></tbody>
 													<tfoot>
 														<tr>
 															<th></th>
-															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
-															<th class="search">Created Date</th>
-															<th class="search">PKK</th>
-															<th class="search autoComplete">Status</th>
-															<th class="search">Ship</th>
-															<th class="search">Agent</th>
+															<th class="search">Date</th>
+															<th class="search autoComplete">On</th>
+															<th class="search">Activity</th>
+															<th class="search autoComplete">User</th>
+															<th class="search autoComplete">Roll</th>
 														</tr>
 													</tfoot>
 												</table>

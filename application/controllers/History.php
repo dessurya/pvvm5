@@ -1,37 +1,29 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Order extends CI_Controller {
+class History extends CI_Controller {
 
 	public $content;
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('datatables');
-		if(!$this->session->userdata('LOGGED')) {
+		if(!$this->session->userdata('LOGGED') or $this->session->userdata('ROLL_ID') != 1) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
     }
 
 	public function index($data = null){
-		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
-			$urlview = '_main/_order/index.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_order/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_order/index.php';
-		}
-
+		$urlview = '_main/_history/index.php';
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Order";
-		if ($data != null) {
-			$this->load->model('m_vendor');
-			$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
-			if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
-				redirect(base_url().'index.php/order', 'refresh');
-			}
-			$viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
-		}
+		$viewComp['_tittle_'] = "IPWMS | History";
+		// if ($data != null) {
+		// 	$this->load->model('m_vendor');
+		// 	$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
+		// 	if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
+		// 		redirect(base_url().'index.php/order', 'refresh');
+		// 	}
+		// 	$viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
+		// }
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
@@ -53,34 +45,34 @@ class Order extends CI_Controller {
 	}
 
 	public function getdata($data = null){
-		$this->load->model('m_order');
+		$this->load->model('m_history');
 		header('Content-Type: application/json');
-		echo $this->m_order->getdata($this->session->userdata('ROLL_ID'), $data);
+		echo $this->m_history->getdata($this->session->userdata('ROLL_ID'), $data);
+	}
+
+	public function JSON(){
+		$this->load->model('m_history');
+		header('Content-Type: application/json');
+		echo json_encode($this->m_history->finddata($this->session->userdata('ROLL_ID'), 1));
 	}
 
 	public function show($data = null){
 		$response = array();
-		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
-			$urlview = '_main/_order/show.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_order/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_order/show.php';
-		}
+		$urlview = '_main/_history/show.php';
 
 		if ($data == null) {
 			$response['response'] = false;
 		}else{
 			$send = array();
-			$this->load->model('m_order');
-			$find = $this->m_order->finddata($this->session->userdata('ROLL_ID'), $data);
+			$this->load->model('m_history');
+			$this->load->model('m_login');
+			$find = $this->m_history->finddata($this->session->userdata('ROLL_ID'), $data);
 			$find = $find[0];
 			$send['head'] = $find;
-			$send['detail'] = $this->m_order->finddatadetail($this->session->userdata('ROLL_ID'), $data);
-			$send['history'] = $this->m_order->history($this->session->userdata('ROLL_ID'), $data);
+			$detail = $this->m_login->getdetailauth($find['AUTH_ID'], $find['ROLL_ID']);
+			$send['detail'] = $detail;
 			$response['response'] = true;
-			$response['name'] = 'Order Waste : '.$find['PKK_ID'];
+			$response['name'] = 'History : '.$find['CREATED_DATE'];
 			$response['result'] = $this->load->view($urlview, $send, true);
 		}
 

@@ -53,7 +53,7 @@ class M_login extends CI_Model{
 		return $result;
 	}
 
-	private function getdetailauth($id, $type){
+	public function getdetailauth($id, $type){
 		$result = array();
 		$query = "SELECT * FROM APWMS_TR_AUTH_TYPE WHERE ID=".$type;
 		$runQuery = $this->db->query($query);
