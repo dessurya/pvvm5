@@ -44,10 +44,38 @@ class Vendor extends CI_Controller {
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
+	public function show($data = null){
+		$response = array();
+		$roll_id = $this->session->userdata('ROLL_ID');
+		if($roll_id == 1) {
+			$urlview = '_main/_vendor/show_ipc_cabang.php';
+		}else if($roll_id == 2) {
+			$urlview = '_main/_vendor/shipping_agent.php';
+		}else if($roll_id == 3) {
+			$urlview = '_main/_vendor/index.php';
+		}
+
+		if ($data == null) {
+			$response['response'] = false;
+		}else{
+			$this->load->model('m_vendor');
+			$find = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
+			$find = $find[0];
+			$send = array();
+			$send['vendor'] = $find;
+			$response['response'] = true;
+			$response['name'] = 'Vendor : '.$find['NAME'];
+			$response['result'] = $this->load->view($urlview, $send, true);
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $response );
+	}
+
 	public function getdata($data = null){
 		$this->load->model('m_vendor');
 		header('Content-Type: application/json');
-		echo $this->m_vendor->getdata($this->session->userdata('ROLL_ID'));
+		echo $this->m_vendor->getdata($this->session->userdata('ROLL_ID'), $data);
 	}
 
 	public function callForm($data = null){
@@ -80,27 +108,7 @@ class Vendor extends CI_Controller {
 	public function tools($data = null){
 		$this->load->model('m_vendor');
 		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
-		if ($_GET['action'] == 'info') {
-			$response = array();
-			$response['response'] = true;
-			$response['type'] = "info";
-			$result['msg'] = null;
-			$response['reload'] = false;
-			$response['info'] = array();
-			array_push(
-				$response['info'], 
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data',
-				'Right click on table of list for open detail data'
-			);
-		}else{
-			$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
-			$response['reload'] = true;
-		}
-		$response['df'] = $df;
-		$response['ds'] = $ds;
+		$response['reload'] = true;
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}

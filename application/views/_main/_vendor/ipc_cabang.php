@@ -37,7 +37,6 @@
                     				<i class="fa fa-trash-o"></i> Delete
                     			</a>
                     		</li>
-
                     	</ul>
                     </div>
                 </div>
@@ -51,6 +50,9 @@
 						</li>
 						<li role="presentation" class="">
 							<a href="#tab_form" role="tab" data-toggle="tab" aria-expanded="true">Form</a>
+						</li>
+						<li role="presentation" class="">
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Vendor : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
@@ -67,7 +69,7 @@
 												<table id="datatable" class="table table-striped table-bordered no-footer">
 													<thead>
 														<tr>
-															<!-- <th>No</th> -->
+															<th>No</th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
 															<th>Username</th>
 															<th>Name</th>
@@ -79,7 +81,7 @@
 													<tbody></tbody>
 													<tfoot>
 														<tr>
-															<!-- <th></th> -->
+															<th></th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
 															<th class="search">Username</th>
 															<th class="search">Name</th>
@@ -96,6 +98,15 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade in" id="tab_form"></div>
+						<div role="tabpanel" class="tab-pane fade in" id="tab_open">
+							<div class="alert alert-success">
+								<ul class="fa-ul">
+									<li>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
