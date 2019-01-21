@@ -10,7 +10,7 @@ class Login extends CI_Controller {
 
 	public function index($data = null){
 		if($this->session->userdata('LOGGED')) {
-			redirect(base_url().'index.php/profile', 'refresh');
+			redirect(base_url().'index.php/dashboard', 'refresh');
 		}
 		$viewComp = array();
 		$viewComp['_tittle_'] = "IPWMS | Sign In Area";
@@ -19,7 +19,7 @@ class Login extends CI_Controller {
 
 	public function signin(){
 		if($this->session->userdata('LOGGED')) {
-			redirect(base_url().'index.php/profile', 'refresh');
+			redirect(base_url().'index.php/dashboard', 'refresh');
 		}
 		$result = array();
 		$result['response'] = false;

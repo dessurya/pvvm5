@@ -51,13 +51,13 @@ class Ipc extends CI_Controller {
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
-				$arrdata['route'] = site_url().'/ipc/tools?action=store&id='.$list['EMPLOYEE_ID'];
-				$html .= $this->load->view('_main/_ipc/index.php', $arrdata, true);
+				$arrdata['route'] = site_url().'/ipc/tools?action=store&id='.$list['EMPLOYE_ID'];
+				$html .= $this->load->view('_main/_ipc/form_edit.php', $arrdata, true);
 			}
 		}else{
 			$arrdata = array();
 			$arrdata['route'] = site_url().'/ipc/tools?action=store';
-			$html .= $this->load->view('_main/_ipc/index.php', $arrdata, true);
+			$html .= $this->load->view('_main/_ipc/form_edit.php', $arrdata, true);
 		}
 		header('Content-Type: application/json');
 		echo json_encode(

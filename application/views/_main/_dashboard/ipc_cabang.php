@@ -20,6 +20,7 @@
 		<!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
 	</div>
 </div>
+<!-- <?php print_r($this->session->userdata);?> -->
 <div class="row">
 	<div class="col-md-6 col-sm-6 col-xs-12">
 		<div class="x_panel tile fixed_height_320 overflow_hidden">

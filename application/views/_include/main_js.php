@@ -82,7 +82,7 @@
 			});
 		}
 
-		<?php if( in_array($this->uri->segment(1), array('vendor', 'order')) and $this->uri->segment(2) == null){
+		<?php if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc')) and $this->uri->segment(2) == null){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		} ?>
 
@@ -181,6 +181,10 @@
 	                action(dataAction);
 	            });
 	        }
+	    }
+	    callCanvasDoughnut();
+	    function callCanvasDoughnut() {
+	    	init_chart_doughnut();
 	    }
     });
 </script>
