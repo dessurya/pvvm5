@@ -8,6 +8,7 @@ class M_order extends CI_Model{
 
 	public function getdata($roll_id){
 		$this->datatables->select("
+			ATOL.PKK_ID AS ID,
 			ATOL.PKK_ID AS PKK_ID, 
 			ATOL.SHIP_ID AS SHIP_ID, 
 			ATOL.STATUS_ID AS STATUS_ID, 
@@ -20,27 +21,130 @@ class M_order extends CI_Model{
         $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
         $this->datatables->join('APWMS_TR_SHIP ATS', 'ATS.SHIP_ID = ATOL.SHIP_ID', 'left');
         $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
-        $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'PKK_ID');
+		if ($roll_id == 1) {
+		}else if($roll_id == 3){
+			$query="
+				SELECT
+					DISTINCT(PKK_ID)
+				FROM(
+					SELECT
+						ATOL.PKK_ID AS PKK_ID,
+						ATOLD.PKK_DET_ID
+					FROM
+						APWMS_TX_ORDER_LIST_DET ATOLD
+					JOIN
+						APWMS_TX_ORDER_LIST ATOL
+						ON ATOL.PKK_ID = ATOLD.PKK_ID
+					WHERE VENDOR_ID = ".$this->session->userdata('DETAIL_ID')." )";
+			$runQuery = $this->db->query($query);
+			$arrdata = $runQuery->result_array();
+			function ret($data){
+				return $data['PKK_ID'];
+			}
+			$inid = array_map("ret", $arrdata);
+			$this->datatables->where_in('ATOL.PKK_ID', $inid);
+		}
         return $this->datatables->generate();
 	}
 
 	public function finddata($roll_id, $id){
 		if (is_array($id)) {
 			$id = implode(',', $id);
-			$where = 'TV.ID IN ('.$id.')';
+			$where = 'ATOL.PKK_ID IN ('.$id.')';
 		}else{
-			$where = 'TV.ID = '.$id;
+			$where = 'ATOL.PKK_ID = '.$id;
 		}
 
 		$query = "
 			SELECT 
-				NAME, EMAIL, PHONE, USERNAME, AUTH_ID, TV.ID AS VENDOR_ID
+				ATOL.PKK_ID AS PKK_ID, 
+				ATOL.SHIP_ID AS SHIP_ID, 
+				ATOL.STATUS_ID AS STATUS_ID, 
+				TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD') AS CREATED_DATE, 
+				UPPER(ATSS.STATUS) AS STATUS, 
+				UPPER(ATS.SHIP_TYPE) AS SHIP_TYPE, 
+				UPPER(ATA.NAME) AS AGENT_NAME
 			FROM 
-				APWMS_TX_VENDOR TV
+				APWMS_TX_ORDER_LIST ATOL
 			LEFT JOIN
-				APWMS_TX_AUTH TA
-				ON TA.ID = TV.AUTH_ID
+				APWMS_TR_STATUS ATSS
+				ON ATSS.STATUS_ID = ATOL.STATUS_ID
+			LEFT JOIN
+				APWMS_TR_SHIP ATS
+				ON ATS.SHIP_ID = ATOL.SHIP_ID
+			LEFT JOIN
+				APWMS_TX_AGENT ATA
+				ON ATA.ID = ATS.AGENT_ID
 			WHERE ".$where;
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function finddatadetail($roll_id, $id){
+		if (is_array($id)) {
+			$id = implode(',', $id);
+			$where = 'ATOLD.PKK_ID IN ('.$id.')';
+		}else{
+			$where = 'ATOLD.PKK_ID = '.$id;
+		}
+
+		if ($roll_id == 3) {
+			$where .= " and ATOLD.VENDOR_ID = ".$this->session->userdata('DETAIL_ID');
+		}
+
+		$query = "
+			SELECT 
+				PKK_ID,
+				PKK_DET_ID,
+				ATOLD.VENDOR_ID AS VENDOR_ID,
+				ATV.NAME AS VENDOR_NAME,
+				ATOLD.WASTE_ID AS WASTE_ID,
+				ATW.WASTE_NAME AS WASTE_NAME,
+				ATW.UM_ID AS UM_ID,
+				ATWU.UM_NAME AS UM_NAME,
+				MAX_QTY,
+				LOAD_QTY,
+				REQUEST_QTY,
+				ACTUAL_QTY
+			FROM 
+				APWMS_TX_ORDER_LIST_DET ATOLD
+			LEFT JOIN
+				APWMS_TR_WASTE ATW
+				ON ATOLD.WASTE_ID = ATW.WASTE_ID
+			LEFT JOIN
+				APWMS_TR_WASTE_UM ATWU
+				ON ATW.UM_ID = ATWU.UM_ID
+			LEFT JOIN
+				APWMS_TX_VENDOR ATV
+				ON ATOLD.VENDOR_ID = ATV.ID
+			WHERE ".$where;
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function history($roll_id, $id){
+		$queryadd = " ATHL.TABLE_NAME = 'APWMS_TX_ORDER_LIST' AND ATHL.TABLE_ID = ".$id;
+		if ($roll_id == 3) {
+			$queryadd .=" AND ( ATHL.AUTH_ID = ".$this->session->userdata('AUTH_ID')." OR ATAT.ID = 1 ) ";
+		}
+		$queryadd .= " ORDER BY ATHL.CREATED_DATE DESC";
+		$query = "
+			SELECT 
+				TO_CHAR(ATHL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CDATE,
+				ATHL.ACTION_TYPE AS ACTION_TYPE,
+				ATHL.AUTH_ID AS AUTH_ID,
+				ATA.USERNAME AS USERNAME,
+				ATAT.NAME AS ROLL,
+				ATAT.TABLE_NAME AS TAB_USER
+			FROM 
+				APWMS_TX_HISTORY_LOG ATHL
+			LEFT JOIN
+				APWMS_TX_AUTH ATA
+				ON ATHL.AUTH_ID = ATA.ID
+			LEFT JOIN
+				APWMS_TR_AUTH_TYPE ATAT
+				ON ATA.TYPE = ATAT.ID
+			WHERE ".$queryadd;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}

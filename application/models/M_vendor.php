@@ -6,19 +6,35 @@ class M_vendor extends CI_Model{
 		parent::__construct();
 	}
 
-	public function getdata($roll_id){
-		$this->datatables->select("
-			ATV.ID AS ID, 
-			UPPER(NAME) AS NAME, 
-			UPPER(USERNAME) AS USERNAME, 
-			UPPER(EMAIL) AS EMAIL, 
-			PHONE,
-			CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
-		");
-        $this->datatables->from('APWMS_TX_VENDOR ATV');
-        $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATV.AUTH_ID', 'left');
-        $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
-        return $this->datatables->generate();
+	public function getdata($roll_id, $data){
+		if ($data == null) {
+			$this->datatables->select("
+				ATV.ID AS ID, 
+				UPPER(NAME) AS NAME, 
+				UPPER(USERNAME) AS USERNAME, 
+				UPPER(EMAIL) AS EMAIL, 
+				PHONE,
+				CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
+			");
+		    $this->datatables->from('APWMS_TX_VENDOR ATV');
+		    $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATV.AUTH_ID', 'left');
+		    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
+		    return $this->datatables->generate();
+		}else if($data == 'autoComplate'){
+			$query = "
+				SELECT 
+					LOWER(NAME) AS VENDOR_NAME, 
+					TV.ID AS VENDOR_ID
+				FROM 
+					APWMS_TX_VENDOR TV
+				LEFT JOIN
+					APWMS_TX_AUTH TA
+					ON TA.ID = TV.AUTH_ID
+				WHERE TA.FLAG_ACTIVE = 'Y'";
+			$runQuery = $this->db->query($query);
+			$arrdata = $runQuery->result_array();
+			return json_encode($arrdata);
+		}
 	}
 
 	public function finddata($roll_id, $id){

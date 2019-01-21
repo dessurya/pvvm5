@@ -4,11 +4,6 @@
 			<div class="x_title">
 				<h2>VENDOR</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
-					<div class="btn-group">
-						<button type="button" class="info tools btn btn-sm btn-success">
-                    		<i class="fa fa-info-circle"></i> Info
-                    	</button>
-					</div>
                     <div class="btn-group">
                     	<button type="button" class="btn btn-sm btn-success">
                     		<i class="fa fa-wrench"></i> Tools
@@ -42,7 +37,6 @@
                     				<i class="fa fa-trash-o"></i> Delete
                     			</a>
                     		</li>
-
                     	</ul>
                     </div>
                 </div>
@@ -56,6 +50,9 @@
 						</li>
 						<li role="presentation" class="">
 							<a href="#tab_form" role="tab" data-toggle="tab" aria-expanded="true">Form</a>
+						</li>
+						<li role="presentation" class="">
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Vendor : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
@@ -101,6 +98,15 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade in" id="tab_form"></div>
+						<div role="tabpanel" class="tab-pane fade in" id="tab_open">
+							<div class="alert alert-success">
+								<ul class="fa-ul">
+									<li>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -3,49 +3,6 @@
 		<div class="x_panel">
 			<div class="x_title">
 				<h2>ORDER WASTE</h2>
-				<div id="action" class="nav navbar-right panel_toolbox">
-					<div class="btn-group">
-						<button type="button" class="info tools btn btn-sm btn-success">
-                    		<i class="fa fa-info-circle"></i> Info
-                    	</button>
-					</div>
-                    <div class="btn-group">
-                    	<button type="button" class="btn btn-sm btn-success">
-                    		<i class="fa fa-wrench"></i> Tools
-                    	</button>
-                    	<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
-                    		<span class="caret" style="color: white"></span>
-                    	</button>
-                    	<ul class="dropdown-menu" role="menu">
-                    		<li>
-                    			<a class="add formau" href="#">
-		                            <i class="fa fa-plus"></i> Add
-                    			</a>
-                    		</li>
-                    		<li>
-                    			<a class="update formau" href="#">
-                    				<i class="fa fa-pencil"></i> Update
-                    			</a>
-                    		</li>
-                    		<li>
-                    			<a class="actived tools" href="#">
-                    				<i class="fa fa-check"></i> Actived
-                    			</a>
-                    		</li>
-                    		<li>
-                    			<a class="deactived tools" href="#">
-		                            <i class="fa fa-ban"></i> Deactived
-                    			</a>
-                    		</li>
-                    		<li>
-                    			<a class="delete tools" href="#">
-                    				<i class="fa fa-trash-o"></i> Delete
-                    			</a>
-                    		</li>
-
-                    	</ul>
-                    </div>
-                </div>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -55,7 +12,7 @@
 							<a href="#tab_list" role="tab" data-toggle="tab" aria-expanded="true">List</a>
 						</li>
 						<li role="presentation" class="">
-							<a href="#tab_form" role="tab" data-toggle="tab" aria-expanded="true">Form</a>
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Order Waste : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
@@ -73,7 +30,7 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th><input class="iCheckTrig flat" type="checkbox"></th>
+															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
 															<th>Created Date</th>
 															<th>PKK</th>
 															<th>Status</th>
@@ -85,7 +42,7 @@
 													<tfoot>
 														<tr>
 															<th></th>
-															<th><input class="iCheckTrig flat" type="checkbox"></th>
+															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
 															<th class="search">Created Date</th>
 															<th class="search">PKK</th>
 															<th class="search autoComplete">Status</th>
@@ -100,7 +57,15 @@
 								</div>
 							</div>
 						</div>
-						<div role="tabpanel" class="tab-pane fade in" id="tab_form"></div>
+						<div role="tabpanel" class="tab-pane fade in" id="tab_open">
+							<div class="alert alert-success">
+								<ul class="fa-ul">
+									<li>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

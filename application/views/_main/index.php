@@ -31,7 +31,7 @@
 							<a href="#" class="site_title">
 								<span>IPWMS</span>
 							</a>
-							<small class="site_title">Indoesia Port Waste Management System</small>
+							<small class="site_title">Indonesia Port Waste Management System</small>
 							<div class="clearfix"></div>
 							<?php // menu profile quick info ?>
 							<div class="profile clearfix">

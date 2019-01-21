@@ -23,25 +23,13 @@
 		}, 300000); // 5 menit = 300000 | 30 second = 30000
 		
 		var urisegment1 = "<?php echo $this->uri->segment(1) ?>";
-		var urisegment2 = "<?php echo $this->uri->segment(2) ?>";
 		var urlTools = "<?php echo site_url().'/' ?>"+urisegment1+"/tools";
-
-		<?php if($this->uri->segment(2) != null){ ?>
-			urlTools += "/show/<?php echo $VENDOR_ID ?>";
-		<?php } ?>
 
 		$(document).on('click', 'a#logout', function(){
 			var logouturl = $(this).attr('href');
 			logout(logouturl);
 			return false;
 		});
-
-		$(document).on('click', '#action button.tools.info', function(){
-	    	var data = new Array();
-	    	data['url'] = urlTools+'?action=info';
-	    	data['input'] = null;
-	    	action(data);
-	    });
 
 		function checkNotivication() {
 			$.ajax({
@@ -82,10 +70,6 @@
 			});
 		}
 
-		<?php if( in_array($this->uri->segment(1), array('vendor', 'order')) and $this->uri->segment(2) == null){
-			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
-		} ?>
-
 		function action(dataAction) {
 			var dataPN = new Array();
 	        $.ajax({
@@ -100,6 +84,7 @@
 	            },
 	            error: function(data) {
 	                $('#loading-page').hide();
+	                location.reload();
 	            },
 	            success: function(data) {
 	                $('#loading-page').hide();
@@ -182,5 +167,14 @@
 	            });
 	        }
 	    }
+
+		<?php 
+		if( in_array($this->uri->segment(1), array('vendor', 'order'))){
+			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
+		}
+		if( in_array($this->uri->segment(1), array('order'))){
+			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
+		}
+		?>
     });
 </script>

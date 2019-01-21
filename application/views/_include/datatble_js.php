@@ -25,14 +25,13 @@
 	    serverSide: false,
 	    ajax: {"url": urlDataTable, "type": "POST"},
 	    <?php if($this->uri->segment(1) == 'order') {?>
-		    aaSorting: [ [2,'desc'] ],
+		    aaSorting: [ [1,'desc'] ],
 		<?php } else if($this->uri->segment(1) == 'vendor') {?>
 		    aaSorting: [ [3,'asc'] ],
 		<?php }?>
 	    columns: [
 			<?php if($this->uri->segment(1) == 'order') {?>
 			{"data": "PKK_ID", "orderable": false},
-			{"data": "CHECKBOX", "orderable": false},
 			{"data": "CREATED_DATE"},
 			{"data": "PKK_ID"},
 			{"data": "STATUS"},
@@ -81,17 +80,14 @@
 	    },
 	    drawCallback: function(row){
 	        rebuildiCheck('dtable');
-	        var id = $('td:eq(0)', row).html();
-			$('tr', row).attr('id', id);
 	    },
 		rowCallback: function(row, data, iDisplayIndex) {
 			var info = this.fnPagingInfo();
 			var page = info.iPage;
 			var length = info.iLength;
 			var index = page * length + (iDisplayIndex + 1);
-			var id = $('td:eq(0)', row).html();
-			$(row).attr('data-id', id);
-			$('td:eq(0)', row).html(index).attr('data-id', id);
+			$(row).attr('id', data.ID);
+			$('td:eq(0)', row).html(index);
 		}
 	});
 
@@ -152,12 +148,34 @@
 	});
 
 	$(document).on('contextmenu', '#datatable tbody tr', function(){
-		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show?id=' ?>'+$(this).data('id');
-		// alert(url);
-		// window.open(url, '_blank');
-		window.location.replace(url);
+		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+$(this).attr('id');
+		openDetailData(url);
 		return false;
 	});
+
+	function openDetailData(url){
+	    $.ajax({
+	        url: url,
+	        type: 'get',
+	        dataType: 'json',
+	        beforeSend: function() {
+	            $('#loading-page').show();
+	        },
+	        error: function(data) {
+	            $('#loading-page').hide();
+	            location.reload();
+	        },
+	        success: function(data) {
+	            $('.x_content .tab-content #tab_open').html(data.result);
+				$('ul.nav-tabs li.tab_open').show();
+	        	$('ul.nav-tabs.bar_tabs a[href=#tab_open]').tab('show').html(data.name);
+	        	<?php if( in_array($this->uri->segment(1), array('order'))){?>
+				callVendor();
+				<?php } ?>
+	            $('#loading-page').hide();
+	        }
+	    });
+	}
 
 	$(document).on('click', '#action a.tools', function(){
 		var data = new Array();

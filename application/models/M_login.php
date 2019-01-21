@@ -22,6 +22,11 @@ class M_login extends CI_Model{
 			$setsesion['NAME'] = $resultofexcute['data']['DETAILAUTH']['NAME'];
 			$setsesion['EMAIL'] = $resultofexcute['data']['DETAILAUTH']['EMAIL'];
 			$setsesion['TABLE_NAME'] = $resultofexcute['data']['TABLE_NAME'];
+			if ($resultofexcute['data']['ROLLID'] != 1) {
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['ID'];
+			} else if ($resultofexcute['data']['ROLLID'] == 1){
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['PERSON_ID'];
+			}
 			$this->session->set_userdata($setsesion);
 		} else{
 			$result['response'] = false;
@@ -72,7 +77,7 @@ class M_login extends CI_Model{
 		$result = array();
 		$result['response'] = false;
 		$result['notiv'] = 0;
-		$query = "SELECT COUNT(*) AS NOTIV FROM APWMS_TX_ORDER_LIST WHERE STATUS_ID = 2";
+		$query = "SELECT COUNT(*) AS NOTIV FROM APWMS_TX_ORDER_LIST WHERE STATUS_ID = 11";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		if ($arrdata[0]['NOTIV']) {
