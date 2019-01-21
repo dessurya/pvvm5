@@ -32,6 +32,7 @@
 	    columns: [
 			<?php if($this->uri->segment(1) == 'order') {?>
 			{"data": "PKK_ID", "orderable": false},
+			{"data": "CHECKBOX", "orderable": false},
 			{"data": "CREATED_DATE"},
 			{"data": "PKK_ID"},
 			{"data": "STATUS"},
