@@ -58,7 +58,7 @@ class M_ipc extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		if (isset($get['id'])) {
-			$VENDOR_ID = $get['id'];
+			$EMPLOYE_ID = $get['id'];
 			$AUTH_ID = $this->finddata($roll_id,$EMPLOYE_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		}else{
@@ -74,6 +74,7 @@ class M_ipc extends CI_Model{
 		else{ $this->db->insert('APWMS_TX_AUTH'); }
 		$this->db->set('ID',  $EMPLOYE_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
+		$this->db->set('NIPP',  $post['nipp']);
 		$this->db->set('NAME',  $post['name']);
 		$this->db->set('EMAIL',  $post['email']);
 		$this->db->set('PHONE',  $post['phone']);
