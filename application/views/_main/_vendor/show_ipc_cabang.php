@@ -109,24 +109,31 @@
 				</div>
 				<div class="ln_solid"></div>
 				<div id="actionshow" class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<a href="<?php echo site_url().'/order/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAME'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
 								<i class="fa fa-file-text-o"></i> Show Order
 							</a>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
-							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
+							<a href="<?php echo site_url().'/history/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAME'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
 								<i class="fa fa-clock-o"></i> Show History
-							</button>
+							</a>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
 								<i class="fa fa-pencil"></i> Update
+							</button>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block refreshshow">
+								<i class="fa fa-refresh"></i> Refresh Data
 							</button>
 						</div>
 					</div>

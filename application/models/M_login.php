@@ -22,6 +22,11 @@ class M_login extends CI_Model{
 			$setsesion['NAME'] = $resultofexcute['data']['DETAILAUTH']['NAME'];
 			$setsesion['EMAIL'] = $resultofexcute['data']['DETAILAUTH']['EMAIL'];
 			$setsesion['TABLE_NAME'] = $resultofexcute['data']['TABLE_NAME'];
+			if ($resultofexcute['data']['ROLLID'] != 1) {
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['ID'];
+			} else if ($resultofexcute['data']['ROLLID'] == 1){
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['PERSON_ID'];
+			}
 			$this->session->set_userdata($setsesion);
 		} else{
 			$result['response'] = false;
@@ -65,6 +70,34 @@ class M_login extends CI_Model{
 		$runQuery2 = $this->db->query($query2);
 		$arrdata2 = $runQuery2->result_array();
 		$result['DETAILAUTH'] = $arrdata2[0];
+		return $result;
+	}
+
+	public function getnotif($rollid){
+		$addwhere = "";
+		if ($rollid == 1){
+			$addwhere = " ATOL.STATUS_ID = 101";
+		}else if ($rollid == 3) {
+			$addwhere = " ATOLD.STATUS_ID = 202 AND ATOLD.VENDOR_ID = ".$this->session->userdata('DETAIL_ID');
+		}
+		$result = array();
+		$result['response'] = false;
+		$result['notif'] = 0;
+		$sql = "
+		SELECT
+			COUNT(DISTINCT(ATOL.PKK_ID)) AS CPI
+		FROM
+			APWMS_TX_ORDER_LIST_DET ATOLD
+		JOIN
+			APWMS_TX_ORDER_LIST ATOL
+			ON ATOL.PKK_ID = ATOLD.PKK_ID
+		WHERE".$addwhere;
+		$run = $this->db->query($sql);
+		$arrdata = $run->result_array();
+		if ($arrdata[0]['CPI'] > 0) {
+			$result['response'] = true;
+			$result['notif'] = $arrdata[0]['CPI'];
+		}
 		return $result;
 	}
 }

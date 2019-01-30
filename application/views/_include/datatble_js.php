@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
 	<?php if($this->uri->segment(3) != null) {?>
-		urlDataTable += "<?php echo '/'.$this->uri->segment(3).'/'.$this->uri->segment(4) ?>";
+		urlDataTable += "<?php echo '/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$this->uri->segment(5) ?>";
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
@@ -37,8 +37,9 @@
 			{"data": "PKK_ID", "orderable": false},
 			{"data": "CREATED_DATE"},
 			{"data": "PKK_ID"},
+			{"data": "NO_LAYANAN"},
 			{"data": "STATUS"},
-			{"data": "SHIP_TYPE"},
+			{"data": "KODE_PELABUHAN"},
 			{"data": "AGENT_NAME"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			{"data": "ID", "orderable": false},
@@ -167,9 +168,14 @@
 	    showPNotify(dataPN, data);
 	    return false;
 	});
-
+	
 	$(document).on('contextmenu', '#datatable tbody tr', function(){
 		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+$(this).attr('id');
+		openDetailData(url);
+		return false;
+	});
+	$(document).on('click', 'button.refreshshow', function(){
+		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+$(this).data('id');
 		openDetailData(url);
 		return false;
 	});
@@ -194,6 +200,7 @@
 				callVendor();
 				<?php } ?>
 	            $('#loading-page').hide();
+	            dtableReload();
 	        }
 	    });
 	}

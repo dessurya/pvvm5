@@ -48,6 +48,8 @@
 			            dataPN['type'] = 'success';
 			            showPNotify(dataPN);
 						$('.top_nav .nav_menu nav ul.navbar-nav li#notivication a span').show().html(data.notif);
+					}else if(data.response == false && data.response == 'You Log Out...'){
+						location.reload();
 					}
 				}
 			});
@@ -79,12 +81,12 @@
 	            data: dataAction.input,
 	            // processData:false,
 	            // contentType:false,
-	            beforeSend: function() {
+	            beforeSend: function(data) {
 	                $('#loading-page').show();
 	            },
 	            error: function(data) {
 	                $('#loading-page').hide();
-	                location.reload();
+	                // location.reload();
 	            },
 	            success: function(data) {
 	                $('#loading-page').hide();
@@ -97,6 +99,8 @@
 	            	}
 	                if (data.type == "add") {
 	                	callForm(urlForm);
+	                }else if(data.type == "verifyvendor"){
+	                	openDetailData(data.url);
 	                }else if(data.type == "info"){
 	                	$(data.info).each(function(index, value){
 	                		var timeadd = index*2000;

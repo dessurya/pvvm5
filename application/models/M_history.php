@@ -21,28 +21,12 @@ class M_history extends CI_Model{
         $this->datatables->join('APWMS_TX_AUTH ATA', 'ATHL.AUTH_ID = ATA.ID', 'left');
         $this->datatables->join('APWMS_TR_AUTH_TYPE ATAT', 'ATA.TYPE = ATAT.ID', 'left');
 
-		if($roll_id == 3 or $data != null){
-			if ($data == null and $roll_id == 3) {
-				$venid = $this->session->userdata('DETAIL_ID');
-			}else{
-				$venid = $data;
+		if($data != null){
+			if ($this->uri->segment(5) == 'vendor') {
+				$this->load->model('m_vendor');
+				$ven = $this->m_vendor->finddata($roll_id,$data);
+				$this->datatables->where_in('ATHL.AUTH_ID', $ven[0]['AUTH_ID']);
 			}
-			$query="
-				SELECT
-					DISTINCT(ATOL.PKK_ID) AS PKK_ID
-				FROM
-					APWMS_TX_ORDER_LIST_DET ATOLD
-				JOIN
-					APWMS_TX_ORDER_LIST ATOL
-					ON ATOL.PKK_ID = ATOLD.PKK_ID
-				WHERE VENDOR_ID = ".$venid;
-			$runQuery = $this->db->query($query);
-			$arrdata = $runQuery->result_array();
-			function ret($data){
-				return $data['PKK_ID'];
-			}
-			$inid = array_map("ret", $arrdata);
-			$this->datatables->where_in('ATOL.PKK_ID', $inid);
 		}
         return $this->datatables->generate();
 	}
@@ -79,6 +63,22 @@ class M_history extends CI_Model{
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
+	}
+
+	public function record($tabname, $acttyp, $descrp, $tablid, $json){
+		$this->load->model('m_sequences');
+		$history_id = $this->m_sequences->getNextVal("APWMS_TX_HISTORY_LOG_ID_SEQ");
+
+		$this->db->set('HISTORY_ID', $history_id);
+		$this->db->set('TABLE_NAME', $tabname);
+		$this->db->set('TABLE_ID', $tablid);
+		$this->db->set('ACTION_TYPE', $acttyp);
+		$this->db->set('DESCRIPTION', $descrp);
+		$this->db->set('JSON', $json);
+		$this->db->set('AUTH_ID', $this->session->userdata('AUTH_ID'));
+		$this->db->set('CREATED_BY', $this->session->userdata('AUTH_ID'));
+		$this->db->set('CREATED_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+
 	}
 }
 ?>

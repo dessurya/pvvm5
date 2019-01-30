@@ -16,14 +16,16 @@ class History extends CI_Controller {
 		$urlview = '_main/_history/index.php';
 		$viewComp = array();
 		$viewComp['_tittle_'] = "IPWMS | History";
-		// if ($data != null) {
-		// 	$this->load->model('m_vendor');
-		// 	$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
-		// 	if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
-		// 		redirect(base_url().'index.php/order', 'refresh');
-		// 	}
-		// 	$viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
-		// }
+		if ($data != null) {
+			if ($this->uri->segment(5) == 'vendor') {
+				$this->load->model('m_vendor');
+				$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
+				if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
+					redirect(base_url().'index.php/order', 'refresh');
+				}
+				$viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
+			}
+		}
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);

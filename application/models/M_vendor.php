@@ -141,6 +141,7 @@ class M_vendor extends CI_Model{
 		else{ $this->db->insert('APWMS_TX_VENDOR'); }
 
 		$result['response'] = true;
+		$this->load->model('m_history');
 		if (isset($get['id'])) { 
 			$result['msg'] = "Success, update vendor ".$post['name'];
 			$result['type'] = "update";
@@ -149,6 +150,9 @@ class M_vendor extends CI_Model{
 			$result['msg'] = "Success, add new vendor ".$post['name'];
 			$result['type'] = "add";
 		}
+		$object->
+		$this->m_history->record('APWMS_TX_AUTH', $result['type'], $result['msg'], $AUTH_ID);
+		$this->m_history->record('APWMS_TX_VENDOR', $result['type'], $result['msg'], $VENDOR_ID);
 		return $result;
 	}
 	

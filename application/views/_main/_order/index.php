@@ -30,11 +30,11 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
 															<th>Created Date</th>
 															<th>PKK</th>
+															<th>No Layanan</th>
 															<th>Status</th>
-															<th>Ship</th>
+															<th>Pelabuhan</th>
 															<th>Agent</th>
 														</tr>
 													</thead>
@@ -42,11 +42,11 @@
 													<tfoot>
 														<tr>
 															<th></th>
-															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
 															<th class="search">Created Date</th>
 															<th class="search">PKK</th>
+															<th class="search">No Layanan</th>
 															<th class="search autoComplete">Status</th>
-															<th class="search">Ship</th>
+															<th class="search autoComplete">Pelabuhan</th>
 															<th class="search">Agent</th>
 														</tr>
 													</tfoot>

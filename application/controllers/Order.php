@@ -48,7 +48,32 @@ class Order extends CI_Controller {
 	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
 		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
 
-
+		$viewComp['_link_css_'] .='
+		<style type="text/css">
+			#orderwastedetail input,
+			#orderwastedetail select{
+				padding: 3px;
+			}
+			#orderwastedetail input[name="WASTE_NAME"],
+			#orderwastedetail input[name="WASTE_TYPE_NAME"]{
+				width: 140px;
+			}
+			#orderwastedetail input[name="UM_NAME"]{
+				width: 65px;
+			}
+			#orderwastedetail input[name="MAX_LOAD_QTY"],
+			#orderwastedetail input[name="KEEP_QTY"],
+			#orderwastedetail input[name="REQUEST_QTY"],
+			#orderwastedetail input[name="TOTAL_QTY"],
+			#orderwastedetail input[name="ACTUAL_REQUEST_QTY"]{
+				text-align: right;
+				width: 50px;
+			}
+			#orderwastedetail select[name="VENDOR_NAME"]{
+				width: 180px;
+			}
+		</style>
+		';
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
@@ -82,10 +107,33 @@ class Order extends CI_Controller {
 			$response['response'] = true;
 			$response['name'] = 'Order Waste : '.$find['PKK_ID'];
 			$response['result'] = $this->load->view($urlview, $send, true);
+			$response['reload'] = true;
+
+			if ($find['STATUS_ID'] == 101) {
+				$this->m_order->changestatus($this->session->userdata('ROLL_ID'), $find['PKK_ID'], $find['STATUS_ID'], 'open');
+			}
 		}
 
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}
 
+	public function tools($data = null){
+		$response = array();
+		$this->load->model('m_order');
+		if ($data == 'verifyvendor') {
+			$response['type'] = 'verifyvendor';
+			$send = array();
+			$send['post'] = $_POST;
+			$send['get'] = $_GET;
+			$this->m_order->verifyvendor($this->session->userdata('ROLL_ID'), $send);
+			$response['response'] = true;
+			$response['reload'] = true;
+			$response['msg'] = 'Success...';
+			$response['url'] = site_url().'/order/show/'.$_GET['pkk_id'];
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $response );
+	}
 }

@@ -10,17 +10,16 @@ class M_order extends CI_Model{
 		$this->datatables->select("
 			ATOL.PKK_ID AS ID,
 			ATOL.PKK_ID AS PKK_ID, 
-			ATOL.SHIP_ID AS SHIP_ID, 
+			ATOL.NO_LAYANAN AS NO_LAYANAN, 
+			ATOL.KODE_PELABUHAN AS KODE_PELABUHAN, 
+			ATOL.NAMA_PERUSAHAAN AS AGENT_NAME, 
 			ATOL.STATUS_ID AS STATUS_ID, 
-			TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD') AS CREATED_DATE, 
-			UPPER(ATSS.STATUS) AS STATUS, 
-			UPPER(ATS.SHIP_TYPE) AS SHIP_TYPE, 
-			UPPER(ATA.NAME) AS AGENT_NAME
+			TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE, 
+			UPPER(ATSS.STATUS) AS STATUS
 		");
         $this->datatables->from('APWMS_TX_ORDER_LIST ATOL');
         $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
-        $this->datatables->join('APWMS_TR_SHIP ATS', 'ATS.SHIP_ID = ATOL.SHIP_ID', 'left');
-        $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
+        // $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
 
 		if($roll_id == 3 or $data != null){
 			if ($data == null and $roll_id == 3) {
@@ -36,18 +35,18 @@ class M_order extends CI_Model{
 				JOIN
 					APWMS_TX_ORDER_LIST ATOL
 					ON ATOL.PKK_ID = ATOLD.PKK_ID
-				WHERE VENDOR_ID = ".$venid;
+				WHERE ATOLD.STATUS_ID <> 201 AND VENDOR_ID = ".$venid;
 			$runQuery = $this->db->query($query);
 			$arrdata = $runQuery->result_array();
-			function ret($data){
-				return $data['PKK_ID'];
-			}
-			$inid = array_map("ret", $arrdata);
-			if ($inid == null) {
-				$this->datatables->where_in('ATOL.PKK_ID', array(0));
+			if ($arrdata) {
+				function ret($data){
+					return $data['PKK_ID'];
+				}
+				$inid = array_map("ret", $arrdata);
 			}else{
-				$this->datatables->where_in('ATOL.PKK_ID', $inid);
+				$inid = array(0);
 			}
+			$this->datatables->where_in('ATOL.PKK_ID', $inid);
 		}
         return $this->datatables->generate();
 	}
@@ -63,23 +62,21 @@ class M_order extends CI_Model{
 		$query = "
 			SELECT 
 				ATOL.PKK_ID AS PKK_ID, 
-				ATOL.SHIP_ID AS SHIP_ID, 
 				ATOL.STATUS_ID AS STATUS_ID, 
-				TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD') AS CREATED_DATE, 
-				UPPER(ATSS.STATUS) AS STATUS, 
-				UPPER(ATS.SHIP_TYPE) AS SHIP_TYPE, 
-				UPPER(ATA.NAME) AS AGENT_NAME
+				ATOL.NO_LAYANAN AS NO_LAYANAN, 
+				ATOL.KODE_PELABUHAN AS KODE_PELABUHAN, 
+				ATOL.NAMA_PERUSAHAAN AS AGENT_NAME, 
+				ATOL.PELABUHAN_BONGKAR_TERAKHIR AS PELABUHAN_BONGKAR_TERAKHIR, 
+				TO_CHAR(ATOL.TANGGAL_BONGKAR_TERAKHIR, 'YYYY/MM/DD HH24:MI:SS') AS TANGGAL_BONGKAR_TERAKHIR, 
+				ATOL.NOMOR_DOKUMEN AS NOMOR_DOKUMEN, 
+				ATOL.SUMBER_LIMBAH AS SUMBER_LIMBAH, 
+				TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE, 
+				UPPER(ATSS.STATUS) AS STATUS
 			FROM 
 				APWMS_TX_ORDER_LIST ATOL
 			LEFT JOIN
 				APWMS_TR_STATUS ATSS
 				ON ATSS.STATUS_ID = ATOL.STATUS_ID
-			LEFT JOIN
-				APWMS_TR_SHIP ATS
-				ON ATS.SHIP_ID = ATOL.SHIP_ID
-			LEFT JOIN
-				APWMS_TX_AGENT ATA
-				ON ATA.ID = ATS.AGENT_ID
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
@@ -103,19 +100,30 @@ class M_order extends CI_Model{
 				PKK_DET_ID,
 				ATOLD.VENDOR_ID AS VENDOR_ID,
 				ATV.NAME AS VENDOR_NAME,
+				ATOLD.STATUS_ID AS STATUS_ID,
+				ATS.STATUS AS STATUS,
 				ATOLD.WASTE_ID AS WASTE_ID,
 				ATW.WASTE_NAME AS WASTE_NAME,
+				ATW.WASTE_TYPE_ID AS WASTE_TYPE_ID,
+				ATWT.WASTE_TYPE_NAME AS WASTE_TYPE_NAME,
 				ATW.UM_ID AS UM_ID,
 				ATWU.UM_NAME AS UM_NAME,
-				MAX_QTY,
-				LOAD_QTY,
+				MAX_LOAD_QTY,
+				KEEP_QTY,
 				REQUEST_QTY,
-				ACTUAL_QTY
+				ACTUAL_REQUEST_QTY,
+				TOTAL_QTY
 			FROM 
 				APWMS_TX_ORDER_LIST_DET ATOLD
 			LEFT JOIN
+				APWMS_TR_STATUS ATS
+				ON ATOLD.STATUS_ID = ATS.STATUS_ID
+			LEFT JOIN
 				APWMS_TR_WASTE ATW
 				ON ATOLD.WASTE_ID = ATW.WASTE_ID
+			LEFT JOIN
+				APWMS_TR_WASTE_TYPE ATWT
+				ON ATW.WASTE_TYPE_ID = ATWT.WASTE_TYPE_ID
 			LEFT JOIN
 				APWMS_TR_WASTE_UM ATWU
 				ON ATW.UM_ID = ATWU.UM_ID
@@ -154,92 +162,42 @@ class M_order extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function tools($roll_id, $get, $post){
-		$action = $get['action'];
-		if ($action == 'store'){
-			$result = $this->store($roll_id, $get, $post);
-		}else if ($action == 'delete') {
-			$result = $this->delete($roll_id, $get['id']);
-		}else if($action == 'deactived' or $action == 'actived'){
-			$result = $this->activedeactive($roll_id, $get);
-		}
-		return $result;
-	}
-
-	private function store($roll_id, $get, $post){
-		$result = array();
-		if (isset($get['id'])) {
-			$VENDOR_ID = $get['id'];
-			$AUTH_ID = $this->finddata($roll_id,$VENDOR_ID);
-			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+	public function changestatus($roll_id, $id, $stid, $act){
+		if (in_array($stid, array(101, 102, 103))) {
+			$table = 'APWMS_TX_ORDER_LIST';
+			$wid = 'PKK_ID';
 		}else{
-			$this->load->model('m_sequences');
-			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
-			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
+			$table = 'APWMS_TX_ORDER_LIST_DET';
+			$wid = 'PKK_DET_ID';
 		}
-		$this->db->set('ID',  $AUTH_ID);
-		$this->db->set('TYPE',  3);
-		$this->db->set('PASSWORD',  md5("123"));
-		// $this->db->set('USERNAME',  $post['username']);
-		if (isset($get['id'])) { $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
-		else{ $this->db->insert('APWMS_TX_AUTH'); }
-		$this->db->set('ID',  $VENDOR_ID);
-		$this->db->set('AUTH_ID',  $AUTH_ID);
-		$this->db->set('NAME',  $post['name']);
-		$this->db->set('EMAIL',  $post['email']);
-		$this->db->set('PHONE',  $post['phone']);
-		if (isset($get['id'])) { $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_VENDOR'); }
-		else{ $this->db->insert('APWMS_TX_VENDOR'); }
 
-		$result['response'] = true;
-		if (isset($get['id'])) { 
-			$result['msg'] = "Success, update vendor ".$post['name'];
-			$result['type'] = "update";
+		if ($stid == 101 and $act == 'open') {
+			$this->db->set('STATUS_ID',  102);
+		}else if ($stid == 102 and $act == 'verifyvendor'){
+			$this->db->set('STATUS_ID',  103);
+		}else if($stid == 201 and $act == 'verifyvendor'){
+			$this->db->set('STATUS_ID',  202);
 		}
-		else{ 
-			$result['msg'] = "Success, add new vendor ".$post['name'];
-			$result['type'] = "add";
-		}
-		return $result;
-	}
-	
-	private function delete($roll_id, $id){
-		$arrid = explode('^', $id);
-		$result = array();
-		$vendor = "";
-		foreach ($arrid as $idr) {
-			$finddata = $this->finddata($roll_id,$idr);
-			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
-			if ($finddata['AUTH_ID'] != null) {
-				$this->db->where('ID', $finddata['AUTH_ID']);
-				$this->db->delete('APWMS_TX_AUTH');
-			}
-			$this->db->where('ID', $idr);
-			$this->db->delete('APWMS_TX_VENDOR');
-		}
-		$result['response'] = true;
-		$result['type'] = "delete";
-		$result['msg'] = "Success, delete vendor ".substr($vendor, 0, -2);
-		return $result;
+		$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+		$this->db->where($wid,  $id);
+		$this->db->update($table);
 	}
 
-	private function activedeactive($roll_id, $get){
-		$arrid = explode('^', $get['id']);
+	public function verifyvendor($roll_id, $data){
 		$result = array();
-		$vendor = "";
-		foreach ($arrid as $idr) {
-			$finddata = $this->finddata($roll_id,$idr);
-			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
-			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
-			$this->db->where('ID', $finddata['AUTH_ID']);
-			$this->db->update('APWMS_TX_AUTH');
+		foreach ($data['post'] as $list) {
+			$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+			$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+			$this->db->set('VENDOR_ID',  $list['VENDOR_ID']);
+			$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
+			$this->db->update('APWMS_TX_ORDER_LIST_DET');
+			$this->changestatus($roll_id, $list['PKK_DET_ID'], $list['STATUS_ID'], 'verifyvendor');
 		}
-		$result['response'] = true;
-		$result['type'] = $get['action'];
-		$result['msg'] = "Success, ".$get['action']." vendor ".substr($vendor, 0, -2);
-		return $result;
+		$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+		$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+		$this->db->where('PKK_ID', $data['get']['pkk_id']);
+		$this->db->update('APWMS_TX_ORDER_LIST');
+		$this->changestatus($roll_id, $data['get']['pkk_id'], 102, 'verifyvendor');
 	}
 }
 ?>
