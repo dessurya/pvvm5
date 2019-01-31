@@ -14,7 +14,7 @@ class Order extends CI_Controller {
 
 	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
+		if($roll_id == 1 or $roll_id == 4) {
 			$urlview = '_main/_order/index.php';
 		}else if($roll_id == 2) {
 			$urlview = '_main/_order/shipping_agent.php';
@@ -86,7 +86,7 @@ class Order extends CI_Controller {
 	public function show($data = null){
 		$response = array();
 		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
+		if($roll_id == 1 or $roll_id == 4) {
 			$urlview = '_main/_order/show.php';
 		}else if($roll_id == 2) {
 			$urlview = '_main/_order/shipping_agent.php';

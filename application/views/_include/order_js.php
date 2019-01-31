@@ -1,5 +1,5 @@
 <script type="text/javascript">
-<?php if ($this->session->userdata('ROLL_ID') == 1) { ?>
+<?php if ($this->session->userdata('ROLL_ID') == 1 or $this->session->userdata('ROLL_ID') == 4) { ?>
 	$(document).on('click', '#tab_open button#verifyvendor', function () {
 		var data = new Array();
 		data['url'] = $(this).data('action');
@@ -94,12 +94,16 @@
 	}
 
 	function setVendor(opt) {
-    	$('#tab_open #orderwastedetail tbody tr.roid_1 select').each(function(){
+    	$('#tab_open #orderwastedetail tbody tr.roid_1 select, #tab_open #orderwastedetail tbody tr.roid_4 select').each(function(){
     		$(this).html('<option value="'+$(this).data('id')+'">'+$(this).data('name')+'</option>');
     	});
     	$('#tab_open #orderwastedetail tbody tr select').html(opt);
     	$('#tab_open #orderwastedetail tbody tr select').each(function(){
     		$(this).val($(this).data('id'));
     	});
-    	$('#tab_open #orderwastedetail tbody tr.roid_1 select.stid_101[disabled],#tab_open #orderwastedetail tbody tr.roid_1 select.stid_102[disabled]').html('');
+    	var optrem = '#tab_open #orderwastedetail tbody tr.roid_1 select.stid_101[disabled]';
+    	optrem += ', #tab_open #orderwastedetail tbody tr.roid_1 select.stid_102[disabled]';
+    	optrem += ', #tab_open #orderwastedetail tbody tr.roid_4 select.stid_101[disabled]';
+    	optrem += ', #tab_open #orderwastedetail tbody tr.roid_4 select.stid_102[disabled]';
+    	$(optrem).html('');
 	}

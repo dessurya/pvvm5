@@ -22,10 +22,10 @@ class M_login extends CI_Model{
 			$setsesion['NAME'] = $resultofexcute['data']['DETAILAUTH']['NAME'];
 			$setsesion['EMAIL'] = $resultofexcute['data']['DETAILAUTH']['EMAIL'];
 			$setsesion['TABLE_NAME'] = $resultofexcute['data']['TABLE_NAME'];
-			if ($resultofexcute['data']['ROLLID'] != 1) {
-				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['ID'];
-			} else if ($resultofexcute['data']['ROLLID'] == 1){
+			if ($resultofexcute['data']['ROLLID'] == 1 or $resultofexcute['data']['ROLLID'] == 4) {
 				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['PERSON_ID'];
+			} else if ($resultofexcute['data']['ROLLID'] != 1){
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['ID'];
 			}
 			$this->session->set_userdata($setsesion);
 		} else{

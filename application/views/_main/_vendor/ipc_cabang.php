@@ -32,11 +32,13 @@
 		                            <i class="fa fa-ban"></i> Deactived
                     			</a>
                     		</li>
+                    		<?php /*
                     		<li>
                     			<a class="delete tools" href="#">
                     				<i class="fa fa-trash-o"></i> Delete
                     			</a>
                     		</li>
+                    		*/?>
                     	</ul>
                     </div>
                 </div>

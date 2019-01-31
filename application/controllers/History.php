@@ -7,7 +7,7 @@ class History extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('datatables');
-		if(!$this->session->userdata('LOGGED') or $this->session->userdata('ROLL_ID') != 1) {
+		if(!$this->session->userdata('LOGGED') or !in_array($this->session->userdata('ROLL_ID'), array(1,4))) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
     }

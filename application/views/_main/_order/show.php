@@ -11,7 +11,7 @@
 		);
 		if (in_array($data['type'], $default_dis)) {
 			return 'disabled';
-		}else if ($data['type'] == 'VENDOR_NAME' and (!in_array($status, array(101, 102)) or $roll_id == 3 or $data['REQUEST_QTY'] == 0)) {
+		}else if ($data['type'] == 'VENDOR_NAME' and (!in_array($status, array(101, 102)) or $roll_id != 4 or $data['REQUEST_QTY'] == 0)) {
 			return 'disabled';
 		}else if ($data['type'] == 'ACTUAL_REQUEST_QTY' and ($roll_id != 3 or $status != 103)) {
 			return 'disabled';
@@ -197,7 +197,7 @@
 		</div>
 		<div class="ln_solid"></div>
 
-		<?php if ((in_array($head['STATUS_ID'], array(101, 102))) and $this->session->userdata('ROLL_ID') == 1) { ?>
+		<?php if ((in_array($head['STATUS_ID'], array(101, 102))) and $this->session->userdata('ROLL_ID') == 4) { ?>
 		<button 
 			data-action="<?php echo site_url().'/order/tools/verifyvendor?pkk_id='.$head['PKK_ID'] ?>" 
 			id="verifyvendor" 
