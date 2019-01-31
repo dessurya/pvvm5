@@ -1,9 +1,93 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class M_ipc extends CI_Model{
+class M_dashboard extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+	}
+
+	public function getTotalOrder(){
+		$runQuery = $this->db->query('SELECT * FROM APWMS_TX_ORDER_LIST');
+		$arrdata = $runQuery->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
+	}
+
+	public function getTotalVendor(){
+		$runQuery = $this->db->query('SELECT * FROM APWMS_TX_VENDOR');
+		$arrdata = $runQuery->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
+	}
+
+	public function getTotalRequestQty(){
+		$runQuery = $this->db->query('SELECT SUM(REQUEST_QTY) as REQUEST_QTY FROM APWMS_TX_ORDER_LIST_DET');
+		$arrdata = $runQuery->result_array();
+		$result = $arrdata[0]['REQUEST_QTY'];
+		return $result;
+	}
+
+	public function getTotalActRequestQty(){
+		$runQuery = $this->db->query('SELECT SUM(NVL(ACTUAL_REQUEST_QTY,0)) as ACT_REQUEST_QTY FROM APWMS_TX_ORDER_LIST_DET');
+		$arrdata = $runQuery->result_array();
+		$result = $arrdata[0]['ACT_REQUEST_QTY'];
+
+		if ($arrdata[0]['ACT_REQUEST_QTY']== null) {
+			$arrdata[0]['ACT_REQUEST_QTY']== '0' ;
+		}
+		return $result; 
+	}
+
+	public function getWaste(){
+		$runQuery = $this->db->query('SELECT * FROM APWMS_TR_WASTE ');
+		$arrdata = $runQuery->result_array();
+		return $arrdata;
+	}
+
+	public function getMenu($roll_id){
+		$query = "
+			SELECT
+				*
+			FROM 
+				APWMS_TR_AUTH_TYPE_MENU ATM
+			INNER JOIN
+				APWMS_TR_MENU TM
+				ON ATM.MENU_ID = TM.ID
+			WHERE 
+				TM.TYPE_MENU = 'P'
+				AND ATM.AUTH_TYPE_ID = ".$roll_id."
+			ORDER BY TM.SORT_MENU ASC
+		";
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		$menus = "";
+
+		foreach ($arrdata as $list) {
+			$menus .= "<li>";
+			$list['URL_MENU'] == null ? $menus .= "<a>" : $menus .='<a href="'.site_url().'/'.$list['URL_MENU'].'">';
+			$list['ICON'] == null ? "" : $menus .=$list['ICON']." ";
+			$menus .= $list['TITLE_MENU'];
+			$childs = $this->getChild($list['ID']);
+			if (count($childs) >= 1) {
+				$menus .= '<span class="fa fa-chevron-down"></span></a>';
+				$menus .= '<ul class="nav child_menu">';
+				foreach ($childs as $listsd) {
+					$menus .= "<li>";
+					$menus .='<a href="'.site_url().'/'.$listsd['URL_MENU'].'">';
+					$listsd['ICON'] == null ? "" : $menus .=$listsd['ICON']." ";
+					$menus .= $listsd['TITLE_MENU'];
+					$menus .= '</a>';
+					$menus .= "</li>";
+				}	
+				$menus .= '</ul>';
+			}
+			else{
+				$menus .= "</a>";
+			}
+			$menus .= "</li>";
+		}
+
+		return $menus;
 	}
 
 	public function getdata($roll_id){
@@ -32,7 +116,7 @@ class M_ipc extends CI_Model{
 
 		$query = "
 			SELECT 
-				NIPP, EMAIL, POSISI, NAME, AUTH_ID, TE.PERSON_ID AS EMPLOYE_ID, CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
+				NIPP, EMAIL, POSISI, NAME, AUTH_ID, TE.PERSON_ID AS EMPLOYE_ID
 			FROM 
 				APWMS_TX_EMPLOYE TE
 			LEFT JOIN

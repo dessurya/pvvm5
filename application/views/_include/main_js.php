@@ -99,7 +99,7 @@
 	            	}
 	                if (data.type == "add") {
 	                	callForm(urlForm);
-	                }else if(data.type == "verifyvendor"){
+	                }else if(data.type == "verifyvendor"||data.type == "saveact"||data.type == "submact"){
 	                	openDetailData(data.url);
 	                }else if(data.type == "info"){
 	                	$(data.info).each(function(index, value){
@@ -173,11 +173,14 @@
 	    }
 
 		<?php 
-		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history'))){
+		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history', 'profile'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('order'))){
 			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
+		}
+		if( in_array($this->uri->segment(1), array('dashboard'))){
+			echo substr($this->load->view('_include/dashboard_js.php', '', true), 31 );
 		}
 		?>
 	    callCanvasDoughnut();

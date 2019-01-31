@@ -102,7 +102,7 @@
 							<div class="alert alert-success">
 								<ul class="fa-ul">
 									<li>
-										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Double Click On Row Of Table</code>
 									</li>
 								</ul>
 							</div>

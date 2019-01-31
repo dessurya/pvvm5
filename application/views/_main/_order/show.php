@@ -291,7 +291,7 @@
 					<?php foreach ($history as $list) { ?>
 						<tr>
 							<td><?php echo $list['CDATE'] ?></td>
-							<td><?php echo $list['ROLL'].'/'.$list['USERNAME'] ?></td>
+							<td><?php echo $list['USERNAME'].' - '.$list['ROLL'] ?></td>
 							<td><?php echo $list['ACTION_TYPE'] ?></td>
 						</tr>
 					<?php } ?>

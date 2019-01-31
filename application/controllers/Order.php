@@ -120,17 +120,22 @@ class Order extends CI_Controller {
 
 	public function tools($data = null){
 		$response = array();
+		$response['response'] = true;
+		$response['url'] = site_url().'/order/show/'.$_GET['pkk_id'];
+		$response['msg'] = 'Success...';
+		$response['type'] = $data;
+		$send = array();
+		$send['post'] = $_POST;
+		$send['get'] = $_GET;
 		$this->load->model('m_order');
 		if ($data == 'verifyvendor') {
-			$response['type'] = 'verifyvendor';
-			$send = array();
-			$send['post'] = $_POST;
-			$send['get'] = $_GET;
 			$this->m_order->verifyvendor($this->session->userdata('ROLL_ID'), $send);
-			$response['response'] = true;
 			$response['reload'] = true;
-			$response['msg'] = 'Success...';
-			$response['url'] = site_url().'/order/show/'.$_GET['pkk_id'];
+		}else if($data == 'saveact') {
+			$this->m_order->saveact($this->session->userdata('ROLL_ID'), $send);
+			$response['reload'] = false;
+		}else if($data == 'submact') {
+			// $response['reload'] = $this->m_order->submact($this->session->userdata('ROLL_ID'), $send);
 		}
 
 		header('Content-Type: application/json');

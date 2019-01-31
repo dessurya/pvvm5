@@ -14,6 +14,9 @@
 			font-size: 10pt;
 			line-height: 20px;
 		}
+		#datatable tr{
+			cursor: pointer;
+		}
 	</style>
 	{_link_css_}
 	<script type="text/javascript" src="<?php echo base_url().'_asset/gentelella/js/jquery.min.js' ?>"></script>

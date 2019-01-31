@@ -1,124 +1,102 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="x_panel">
-			<div class="x_content">
-				<div class="" role="tabpanel" data-example-id="togglable-tabs">
-					<ul class="nav nav-tabs bar_tabs right" role="tablist">
-						<li role="presentation" class="">
-							<a href="#tab_dashboard" role="tab" data-toggle="tab" aria-expanded="true">History Log</a>
-						</li>
-						<li role="presentation" class="active">
-							<a href="#tab_profile" role="tab" data-toggle="tab" aria-expanded="true">Profile</a>
-						</li>
-					</ul>
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane fade active in" id="tab_profile">
-							<h2>Detail</h2>
-							<div class="col-md-4">
-								
+<div class="col-md-3 col-sm-12 col-xs-12 profile_details">
+	<div class="well profile_view">
+		<div class="col-sm-12">
+			<div class="right col-xs-12 text-center">
+				<img src="<?php echo base_url('_asset/gentelella/images/img.jpg'); ?>" alt="" class="img-circle img-responsive" style="display: inline-block;">
+			</div>
+			<div class="left col-xs-12">
+				<h2><?php echo $detailProfile['NAME'] ?></h2>
+				<p><strong>NIPP : </strong> </i><?php echo $detailProfile['NIPP'] ?> </p>
+				<ul class="list-unstyled">
+					<li><i class="fa fa-building"></i> <?php echo $detailProfile['POSISI'] ?> </li>
+					<li><i class="fa fa-phone"></i> <?php echo $detailProfile['ORGANISASI'] ?> </li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+	<div class="profile_img">
+		<div id="crop-avatar">
+
+			<img class="img-responsive avatar-view" src="<?php echo base_url('_asset/gentelella/images/img.jpg'); ?>" alt="Avatar" title="Change the avatar">
+		</div>
+	</div>
+	<h3><?php echo $detailProfile['NAME'] ?></h3>
+	<ul class="list-unstyled user_data">
+		<li>
+			<i class="fa fa-map-marker user-profile-icon"></i><?php echo $detailProfile['NIPP'] ?>
+		</li>
+		<li>
+			<i class="fa fa-briefcase user-profile-icon"></i> <?php echo $detailProfile['POSISI'] ?>
+		</li>
+		<li class="m-top-xs">
+			<i class="fa fa-external-link user-profile-icon"></i>
+			<a href="http://www.kimlabs.com/profile/" target="_blank"><?php echo $detailProfile['ORGANISASI'] ?></a>
+		</li>
+	</ul>
+	<br>
+</div> -->
+<div class="col-md-9 col-sm-12 col-xs-12">
+	<h2>Recent Activities</h2>
+	<div class="row">
+		<div class="x_content">
+			<div class="" role="tabpanel" data-example-id="togglable-tabs">
+				<ul class="nav nav-tabs bar_tabs" role="tablist">
+					<li role="presentation" class="active">
+						<a href="#tab_list" role="tab" data-toggle="tab" aria-expanded="true">List</a>
+					</li>
+					<li role="presentation" class="">
+						<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">History : No Data</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Data <small>Activity</small></h2>
+								<div class="clearfix"></div>
 							</div>
-							<div class="col-md-8">
-								<table class="table">
-									<tr>
-										<th>Nama</th>
-										<td><?php echo $detailProfile['NAME'] ?></td>
-									</tr>
-									<tr>
-										<th>Email</th>
-										<td><?php echo $detailProfile['EMAIL'] ?></td>
-									</tr>
-									
-								</table>
-							</div>
-						</div>
-						<div role="tabpanel" class="tab-pane fade in" id="tab_dashboard">
-							<h2>History Log</h2>
-							
-							<div class="col-md-8 col-sm-4 col-xs-12">
-								<div class="x_panel">
-									<div class="x_title">
-										<h2>Recent Activities <small>Sessions</small></h2>
-										<ul class="nav navbar-right panel_toolbox">
-											<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-											</li>
-											<li class="dropdown">
-												<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-												<ul class="dropdown-menu" role="menu">
-													<li><a href="#">Settings 1</a>
-													</li>
-													<li><a href="#">Settings 2</a>
-													</li>
-												</ul>
-											</li>
-											<li><a class="close-link"><i class="fa fa-close"></i></a>
-											</li>
-										</ul>
-										<div class="clearfix"></div>
-									</div>
-									<div class="x_content" style="display: block;">
-										<div class="dashboard-widget-content">
-											<ul class="list-unstyled timeline widget">
-												<li>
-													<div class="block">
-														<div class="block_content">
-															<h2 class="title">
-																<a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-															</h2>
-															<div class="byline">
-																<span>13 hours ago</span> by <a>Jane Smith</a>
-															</div>
-															<p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-															</p>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="block">
-														<div class="block_content">
-															<h2 class="title">
-																<a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-															</h2>
-															<div class="byline">
-																<span>13 hours ago</span> by <a>Jane Smith</a>
-															</div>
-															<p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-															</p>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="block">
-														<div class="block_content">
-															<h2 class="title">
-																<a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-															</h2>
-															<div class="byline">
-																<span>13 hours ago</span> by <a>Jane Smith</a>
-															</div>
-															<p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-															</p>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="block">
-														<div class="block_content">
-															<h2 class="title">
-																<a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-															</h2>
-															<div class="byline">
-																<span>13 hours ago</span> by <a>Jane Smith</a>
-															</div>
-															<p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-															</p>
-														</div>
-													</div>
-												</li>
-											</ul>
+							<div class="x_content">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="table-responsive">
+											<table id="datatable" class="table table-striped table-bordered no-footer">
+												<thead>
+													<tr>
+														<th>No</th>
+														<th>Date</th>
+														<th>On</th>
+														<th>Activity</th>
+														<th>User</th>
+														<th>Roll</th>
+													</tr>
+												</thead>
+												<tbody></tbody>
+												<tfoot>
+													<tr>
+														<th></th>
+														<th class="search">Date</th>
+														<th class="search autoComplete">On</th>
+														<th class="search">Activity</th>
+														<th class="search autoComplete">User</th>
+														<th class="search autoComplete">Roll</th>
+													</tr>
+												</tfoot>
+											</table>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane fade in" id="tab_open">
+						<div class="alert alert-success">
+							<ul class="fa-ul">
+								<li>
+									<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>

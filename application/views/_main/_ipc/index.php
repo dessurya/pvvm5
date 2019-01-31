@@ -53,6 +53,9 @@
 						<li role="presentation" class="">
 							<a href="#tab_form" role="tab" data-toggle="tab" aria-expanded="true">Form</a>
 						</li>
+						<li role="presentation" class="">
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">IPC : No Data</a>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
@@ -100,6 +103,15 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade in" id="tab_form"></div>
+						<div role="tabpanel" class="tab-pane fade in" id="tab_open">
+							<div class="alert alert-success">
+								<ul class="fa-ul">
+									<li>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

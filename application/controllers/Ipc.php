@@ -68,6 +68,35 @@ class Ipc extends CI_Controller {
 		);
 	}
 
+	public function show($data = null){
+		$response = array();
+		$roll_id = $this->session->userdata('ROLL_ID');
+		if($roll_id == 1) {
+			$urlview = '_main/_ipc/show.php';
+		}else if($roll_id == 2) {
+			$urlview = '_main/_ipc/shipping_agent.php';
+		}else if($roll_id == 3) {
+			$urlview = '_main/_ipc/index.php';
+		}
+
+		if ($data == null) {
+			$response['response'] = false;
+		}else{
+			$this->load->model('m_ipc');
+			$find = $this->m_ipc->finddata($this->session->userdata('ROLL_ID'), $data);
+			$find = $find[0];
+			$send = array();
+			$send['ipc'] = $find;
+			// $send['orderinfo'] = $this->m_vendor->orderinfo($this->session->userdata('ROLL_ID'), $data);
+			$response['response'] = true;
+			$response['name'] = 'IPC : '.$find['NAME'];
+			$response['result'] = $this->load->view($urlview, $send, true);
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $response );
+	}
+
 	public function tools($data = null){
 		$this->load->model('m_ipc');
 		$response = $this->m_ipc->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);

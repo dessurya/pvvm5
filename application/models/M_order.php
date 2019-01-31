@@ -7,6 +7,16 @@ class M_order extends CI_Model{
 	}
 
 	public function getdata($roll_id, $data){
+		$newpost = array();
+		foreach ($_POST['columns'] as $list) {
+			if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
+				$onpost = array();
+				$onpost['key'] = $list['data'];
+				$onpost['val'] = $list['search']['value'];
+				array_push($newpost, $onpost);
+			}
+		}
+
 		$this->datatables->select("
 			ATOL.PKK_ID AS ID,
 			ATOL.PKK_ID AS PKK_ID, 
@@ -20,6 +30,19 @@ class M_order extends CI_Model{
         $this->datatables->from('APWMS_TX_ORDER_LIST ATOL');
         $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
         // $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
+
+        if (count($newpost) >= 1) {
+        	foreach ($newpost as $list) {
+        		$search = $list['val'];
+        		if ($list['key'] == 'CREATED_DATE') { $field = 'ATOL.CREATED_DATE'; }
+        		else if ($list['key'] == 'PKK_ID') { $field = 'ATOL.PKK_ID'; }
+        		else if ($list['key'] == 'NO_LAYANAN') { $field = 'ATOL.NO_LAYANAN'; }
+        		else if ($list['key'] == 'STATUS') { $field = 'ATSS.STATUS'; }
+        		else if ($list['key'] == 'KODE_PELABUHAN') { $field = 'ATOL.KODE_PELABUHAN'; }
+        		else if ($list['key'] == 'AGENT_NAME') { $field = 'ATOL.NAMA_PERUSAHAAN'; }
+        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        	}
+        }
 
 		if($roll_id == 3 or $data != null){
 			if ($data == null and $roll_id == 3) {
@@ -184,7 +207,6 @@ class M_order extends CI_Model{
 	}
 
 	public function verifyvendor($roll_id, $data){
-		$result = array();
 		foreach ($data['post'] as $list) {
 			$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
 			$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
@@ -198,6 +220,57 @@ class M_order extends CI_Model{
 		$this->db->where('PKK_ID', $data['get']['pkk_id']);
 		$this->db->update('APWMS_TX_ORDER_LIST');
 		$this->changestatus($roll_id, $data['get']['pkk_id'], 102, 'verifyvendor');
+
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'verify vendor', 'Success verify vendor on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	public function saveact($roll_id, $data){
+		foreach ($data['post'] as $list) {
+			if ($list != null or $list != undefined) {
+				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
+				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
+				$this->db->update('APWMS_TX_ORDER_LIST_DET');
+			}
+		}
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	public function submact($roll_id, $data){
+		foreach ($data['post'] as $list) {
+			if ($list != null or $list != undefined) {
+				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
+				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
+				$this->db->update('APWMS_TX_ORDER_LIST_DET');
+			}
+		}
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	private function recordhistory($tabname, $acttyp, $descrp, $tablid, $json){
+		$this->load->model('m_history');
+		$this->m_history->record($tabname, $acttyp, $descrp, $tablid, $json);
 	}
 }
 ?>
