@@ -19,3 +19,8 @@
 			});
 		}
     });
+
+	callCanvasDoughnut();
+	function callCanvasDoughnut() {
+		init_chart_doughnut();
+	}

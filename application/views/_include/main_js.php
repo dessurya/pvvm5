@@ -183,9 +183,5 @@
 			echo substr($this->load->view('_include/dashboard_js.php', '', true), 31 );
 		}
 		?>
-	    callCanvasDoughnut();
-	    function callCanvasDoughnut() {
-	    	init_chart_doughnut();
-	    }
     });
 </script>

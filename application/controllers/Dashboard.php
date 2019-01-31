@@ -7,6 +7,7 @@ class Dashboard extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('datatables');
+		$this->load->model('m_dashboard');
 		if(!$this->session->userdata('LOGGED')) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
@@ -43,6 +44,23 @@ class Dashboard extends CI_Controller {
 
 		$this->parser->parse('_main/index', $viewComp);
 	}
+
+	public function getDetailDashboard(){
+		$result = array();
+		if(!$this->session->userdata('LOGGED')) {
+			$result['response'] = false;
+			$result['msg'] = "You Log Out...";
+		}
+		$result['response'] = true;
+		$result['msg'] = "Success to get detail dashboard...";
+		$result['order'] = $this->m_dashboard->getTotalOrder();
+		$result['vendor'] = $this->m_dashboard->getTotalVendor();
+		$result['request_qty'] = $this->m_dashboard->getTotalRequestQty();
+		$result['act_request_qty'] = $this->m_dashboard->getTotalActRequestQty();
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+
 
 	public function getdata($data = null){
 		$this->load->model('m_vendor');
