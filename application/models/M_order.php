@@ -7,6 +7,16 @@ class M_order extends CI_Model{
 	}
 
 	public function getdata($roll_id, $data){
+		$newpost = array();
+		foreach ($_POST['columns'] as $list) {
+			if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
+				$onpost = array();
+				$onpost['key'] = $list['data'];
+				$onpost['val'] = $list['search']['value'];
+				array_push($newpost, $onpost);
+			}
+		}
+
 		$this->datatables->select("
 			ATOL.PKK_ID AS ID,
 			ATOL.PKK_ID AS PKK_ID, 
@@ -20,6 +30,19 @@ class M_order extends CI_Model{
         $this->datatables->from('APWMS_TX_ORDER_LIST ATOL');
         $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
         // $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
+
+        if (count($newpost) >= 1) {
+        	foreach ($newpost as $list) {
+        		$search = $list['val'];
+        		if ($list['key'] == 'CREATED_DATE') { $field = 'ATOL.CREATED_DATE'; }
+        		else if ($list['key'] == 'PKK_ID') { $field = 'ATOL.PKK_ID'; }
+        		else if ($list['key'] == 'NO_LAYANAN') { $field = 'ATOL.NO_LAYANAN'; }
+        		else if ($list['key'] == 'STATUS') { $field = 'ATSS.STATUS'; }
+        		else if ($list['key'] == 'KODE_PELABUHAN') { $field = 'ATOL.KODE_PELABUHAN'; }
+        		else if ($list['key'] == 'AGENT_NAME') { $field = 'ATOL.NAMA_PERUSAHAAN'; }
+        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        	}
+        }
 
 		if($roll_id == 3 or $data != null){
 			if ($data == null and $roll_id == 3) {

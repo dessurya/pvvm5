@@ -8,6 +8,16 @@ class M_vendor extends CI_Model{
 
 	public function getdata($roll_id, $data){
 		if ($data == null) {
+			$newpost = array();
+			foreach ($_POST['columns'] as $list) {
+				if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
+					$onpost = array();
+					$onpost['key'] = $list['data'];
+					$onpost['val'] = $list['search']['value'];
+					array_push($newpost, $onpost);
+				}
+			}
+
 			$this->datatables->select("
 				ATV.ID AS ID, 
 				UPPER(NAME) AS NAME, 
@@ -19,6 +29,23 @@ class M_vendor extends CI_Model{
 		    $this->datatables->from('APWMS_TX_VENDOR ATV');
 		    $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATV.AUTH_ID', 'left');
 		    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
+
+		    if (count($newpost) >= 1) {
+	        	foreach ($newpost as $list) {
+	        		$search = $list['val'];
+	        		if ($list['key'] == 'USERNAME') { $field = 'USERNAME'; }
+	        		else if ($list['key'] == 'NAME') { $field = 'NAME'; }
+	        		else if ($list['key'] == 'EMAIL') { $field = 'EMAIL'; }
+	        		else if ($list['key'] == 'PHONE') { $field = 'PHONE'; }
+	        		else if ($list['key'] == 'FLAG_ACTIVE') { 
+	        			$field = 'FLAG_ACTIVE';
+	        			if ($search == 'ACTIVED' ) { $search = 'Y'; }
+	        			else if ($search == 'DEACTIVE' ) { $search = 'N'; }
+	        		}
+	        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+	        	}
+	        }
+
 		    return $this->datatables->generate();
 		}else if($data == 'autoComplate'){
 			$query = "

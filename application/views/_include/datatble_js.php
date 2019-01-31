@@ -24,8 +24,8 @@
 	var datatable = $('#datatable').DataTable({
 		// fixedHeader: { header:true, footer:true },
 	    processing: true,
-	    // serverSide: true,
-	    serverSide: false,
+	    serverSide: true,
+	    // serverSide: false,
 	    ajax: {"url": urlDataTable, "type": "POST"},
 	    <?php if(in_array($this->uri->segment(1), array('order', 'history'))) {?>
 		    aaSorting: [ [1,'desc'] ],
@@ -34,7 +34,7 @@
 		<?php }?>
 	    columns: [
 			<?php if($this->uri->segment(1) == 'order') {?>
-			{"data": "PKK_ID", "orderable": false},
+			{"data": "PKK_ID", "orderable": false, "searchable":false},
 			{"data": "CREATED_DATE"},
 			{"data": "PKK_ID"},
 			{"data": "NO_LAYANAN"},
@@ -42,8 +42,8 @@
 			{"data": "KODE_PELABUHAN"},
 			{"data": "AGENT_NAME"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
-			{"data": "ID", "orderable": false},
-			{"data": "CHECKBOX", "orderable": false, "class": "not"},
+			{"data": "ID", "orderable": false, "searchable":false},
+			{"data": "CHECKBOX", "orderable": false, "class": "not", "searchable":false},
 			{"data": "USERNAME"},
 			{"data": "NAME"},
 			{"data": "EMAIL"},
@@ -59,7 +59,7 @@
 			{"data": "FLAG_ACTIVE"},
 			{"data": "LAST_LOGIN"}
 			<?php } else if($this->uri->segment(1) == 'history') {?>
-			{"data": "HISTORY_ID", "orderable": false},
+			{"data": "HISTORY_ID", "orderable": false, "searchable":false},
 			{"data": "CREATED_DATE"},
 			{"data": "TABLE_NAME"},
 			{"data": "ACTION_TYPE"},

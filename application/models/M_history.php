@@ -7,6 +7,16 @@ class M_history extends CI_Model{
 	}
 
 	public function getdata($roll_id, $data){
+		$newpost = array();
+		foreach ($_POST['columns'] as $list) {
+			if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
+				$onpost = array();
+				$onpost['key'] = $list['data'];
+				$onpost['val'] = $list['search']['value'];
+				array_push($newpost, $onpost);
+			}
+		}
+
 		$this->datatables->select("
 			ATHL.HISTORY_ID AS ID,
 			ATHL.HISTORY_ID AS HISTORY_ID,
@@ -20,6 +30,23 @@ class M_history extends CI_Model{
         $this->datatables->from('APWMS_TX_HISTORY_LOG ATHL');
         $this->datatables->join('APWMS_TX_AUTH ATA', 'ATHL.AUTH_ID = ATA.ID', 'left');
         $this->datatables->join('APWMS_TR_AUTH_TYPE ATAT', 'ATA.TYPE = ATAT.ID', 'left');
+
+        if (count($newpost) >= 1) {
+        	foreach ($newpost as $list) {
+        		$search = $list['val'];
+        		if ($list['key'] == 'CREATED_DATE') { $field = 'ATHL.CREATED_DATE'; }
+        		else if ($list['key'] == 'USERNAME') { $field = 'ATA.USERNAME'; }
+        		else if ($list['key'] == 'ACTION_TYPE') { $field = 'ATHL.ACTION_TYPE'; }
+        		else if ($list['key'] == 'ROLL') { $field = 'ATAT.NAME'; }
+        		else if ($list['key'] == 'TABLE_NAME') { 
+        			$field = 'ATHL.TABLE_NAME';
+        			if ($search == 'USER' ) { $search = 'APWMS_TX_AUTH'; }
+        			else if ($search == 'VENDOR' ) { $search = 'APWMS_TX_VENDOR'; }
+        			else if ($search == 'ORDER' ) { $search = 'APWMS_TX_ORDER_LIST'; }
+        		}
+        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        	}
+        }
 
 		if($data != null){
 			if ($this->uri->segment(5) == 'vendor') {

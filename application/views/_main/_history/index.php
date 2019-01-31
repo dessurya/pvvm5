@@ -43,7 +43,7 @@
 															<th></th>
 															<th class="search">Date</th>
 															<th class="search autoComplete">On</th>
-															<th class="search autoComplete">Activity</th>
+															<th class="search">Activity</th>
 															<th class="search autoComplete">User</th>
 															<th class="search autoComplete">Roll</th>
 														</tr>
