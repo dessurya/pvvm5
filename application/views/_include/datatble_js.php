@@ -43,7 +43,7 @@
 			{"data": "AGENT_NAME"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			{"data": "ID", "orderable": false},
-			{"data": "CHECKBOX", "orderable": false},
+			{"data": "CHECKBOX", "orderable": false, "class": "not"},
 			{"data": "USERNAME"},
 			{"data": "NAME"},
 			{"data": "EMAIL"},
@@ -169,9 +169,12 @@
 	    return false;
 	});
 	
-	$(document).on('contextmenu', '#datatable tbody tr', function(){
-		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+$(this).attr('id');
-		openDetailData(url);
+	$(document).on('dblclick', '#datatable tbody tr td', function(){
+		if(!$(this).hasClass('not')){
+			var idshow = $(this).closest('tr').attr('id');
+			var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+idshow;
+			openDetailData(url);
+		}
 		return false;
 	});
 	$(document).on('click', 'button.refreshshow', function(){

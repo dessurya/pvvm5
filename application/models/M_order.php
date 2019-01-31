@@ -184,7 +184,6 @@ class M_order extends CI_Model{
 	}
 
 	public function verifyvendor($roll_id, $data){
-		$result = array();
 		foreach ($data['post'] as $list) {
 			$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
 			$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
@@ -198,6 +197,57 @@ class M_order extends CI_Model{
 		$this->db->where('PKK_ID', $data['get']['pkk_id']);
 		$this->db->update('APWMS_TX_ORDER_LIST');
 		$this->changestatus($roll_id, $data['get']['pkk_id'], 102, 'verifyvendor');
+
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'verify vendor', 'Success verify vendor on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	public function saveact($roll_id, $data){
+		foreach ($data['post'] as $list) {
+			if ($list != null or $list != undefined) {
+				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
+				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
+				$this->db->update('APWMS_TX_ORDER_LIST_DET');
+			}
+		}
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	public function submact($roll_id, $data){
+		foreach ($data['post'] as $list) {
+			if ($list != null or $list != undefined) {
+				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
+				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
+				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
+				$this->db->update('APWMS_TX_ORDER_LIST_DET');
+			}
+		}
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$json = json_encode($object);
+			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+		// record history
+	}
+
+	private function recordhistory($tabname, $acttyp, $descrp, $tablid, $json){
+		$this->load->model('m_history');
+		$this->m_history->record($tabname, $acttyp, $descrp, $tablid, $json);
 	}
 }
 ?>

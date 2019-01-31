@@ -99,7 +99,7 @@
 	            	}
 	                if (data.type == "add") {
 	                	callForm(urlForm);
-	                }else if(data.type == "verifyvendor"){
+	                }else if(data.type == "verifyvendor"||data.type == "saveact"||data.type == "submact"){
 	                	openDetailData(data.url);
 	                }else if(data.type == "info"){
 	                	$(data.info).each(function(index, value){

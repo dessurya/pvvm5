@@ -14,8 +14,8 @@ class M_history extends CI_Model{
 			ATHL.AUTH_ID AS AUTH_ID,
 			ATA.USERNAME AS USERNAME,
 			ATAT.NAME AS ROLL,
-			ATHL.TABLE_NAME AS TABLE_NAME,
-			ATHL.ACTION_TYPE AS ACTION_TYPE
+			ATHL.ACTION_TYPE AS ACTION_TYPE,
+			CASE ATHL.TABLE_NAME WHEN 'APWMS_TX_AUTH' THEN 'USER' WHEN 'APWMS_TX_VENDOR' THEN 'VENDOR' WHEN 'APWMS_TX_ORDER_LIST' THEN 'ORDER' END AS TABLE_NAME
 		");
         $this->datatables->from('APWMS_TX_HISTORY_LOG ATHL');
         $this->datatables->join('APWMS_TX_AUTH ATA', 'ATHL.AUTH_ID = ATA.ID', 'left');
@@ -48,10 +48,10 @@ class M_history extends CI_Model{
 				ATA.USERNAME AS USERNAME,
 				ATAT.ID AS ROLL_ID,
 				ATAT.NAME AS ROLL,
-				ATHL.TABLE_NAME AS TABLE_NAME,
 				ATHL.ACTION_TYPE AS ACTION_TYPE,
 				ATHL.DESCRIPTION AS DESCRIPTION,
-				ATHL.JSON AS JSON
+				ATHL.JSON AS JSON,
+				CASE ATHL.TABLE_NAME WHEN 'APWMS_TX_AUTH' THEN 'USER' WHEN 'APWMS_TX_VENDOR' THEN 'VENDOR' END AS TABLE_NAME
 			FROM 
 				APWMS_TX_HISTORY_LOG ATHL
 			LEFT JOIN
@@ -78,7 +78,7 @@ class M_history extends CI_Model{
 		$this->db->set('AUTH_ID', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_BY', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-
+		$this->db->insert('APWMS_TX_HISTORY_LOG');
 	}
 }
 ?>

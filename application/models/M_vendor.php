@@ -11,7 +11,7 @@ class M_vendor extends CI_Model{
 			$this->datatables->select("
 				ATV.ID AS ID, 
 				UPPER(NAME) AS NAME, 
-				UPPER(USERNAME) AS USERNAME, 
+				USERNAME AS USERNAME, 
 				UPPER(EMAIL) AS EMAIL, 
 				PHONE,
 				CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
@@ -53,6 +53,7 @@ class M_vendor extends CI_Model{
 				USERNAME, 
 				AUTH_ID, 
 				TV.ID AS VENDOR_ID,
+				TA.TYPE AS TYPE,
 				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
 				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			FROM 
@@ -127,9 +128,9 @@ class M_vendor extends CI_Model{
 			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
 		}
 		$this->db->set('ID',  $AUTH_ID);
-		$this->db->set('TYPE',  3);
+		$this->db->set('USERNAME',  '_nev'.$AUTH_ID.$VENDOR_ID);
 		$this->db->set('PASSWORD',  md5("123"));
-		// $this->db->set('USERNAME',  $post['username']);
+		$this->db->set('TYPE',  3);
 		if (isset($get['id'])) { $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
 		else{ $this->db->insert('APWMS_TX_AUTH'); }
 		$this->db->set('ID',  $VENDOR_ID);
@@ -141,7 +142,6 @@ class M_vendor extends CI_Model{
 		else{ $this->db->insert('APWMS_TX_VENDOR'); }
 
 		$result['response'] = true;
-		$this->load->model('m_history');
 		if (isset($get['id'])) { 
 			$result['msg'] = "Success, update vendor ".$post['name'];
 			$result['type'] = "update";
@@ -150,13 +150,16 @@ class M_vendor extends CI_Model{
 			$result['msg'] = "Success, add new vendor ".$post['name'];
 			$result['type'] = "add";
 		}
-		$object->
-		$this->m_history->record('APWMS_TX_AUTH', $result['type'], $result['msg'], $AUTH_ID);
-		$this->m_history->record('APWMS_TX_VENDOR', $result['type'], $result['msg'], $VENDOR_ID);
+
+		// record history
+			$json = json_encode($this->finddata($roll_id, $VENDOR_ID));
+			$this->recordhistory('APWMS_TX_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
+		// record history
 		return $result;
 	}
 	
 	private function delete($roll_id, $id){
+		$this->load->model('m_history');
 		$arrid = explode('^', $id);
 		$result = array();
 		$vendor = "";
@@ -168,6 +171,10 @@ class M_vendor extends CI_Model{
 				$this->db->where('ID', $finddata['AUTH_ID']);
 				$this->db->delete('APWMS_TX_AUTH');
 			}
+			// record history
+				$json = json_encode($finddata);
+				$this->recordhistory('APWMS_TX_VENDOR', 'delete', 'Success delete vendor '.$finddata['NAME'], $finddata['VENDOR_ID'], $json);
+			// record history
 			$this->db->where('ID', $idr);
 			$this->db->delete('APWMS_TX_VENDOR');
 		}
@@ -181,6 +188,7 @@ class M_vendor extends CI_Model{
 		$arrid = explode('^', $get['id']);
 		$result = array();
 		$vendor = "";
+		$this->load->model('m_history');
 		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
@@ -188,11 +196,20 @@ class M_vendor extends CI_Model{
 			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
 			$this->db->where('ID', $finddata['AUTH_ID']);
 			$this->db->update('APWMS_TX_AUTH');
+			// record history
+				$json = json_encode($finddata);
+				$this->m_history->record('APWMS_TX_AUTH', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAME'], $finddata['AUTH_ID'], $json);
+			// record history
 		}
 		$result['response'] = true;
 		$result['type'] = $get['action'];
 		$result['msg'] = "Success, ".$get['action']." vendor ".substr($vendor, 0, -2);
 		return $result;
+	}
+
+	private function recordhistory($tabname, $acttyp, $descrp, $tablid, $json){
+		$this->load->model('m_history');
+		$this->m_history->record($tabname, $acttyp, $descrp, $tablid, $json);
 	}
 }
 ?>

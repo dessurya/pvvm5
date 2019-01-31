@@ -43,7 +43,7 @@
 															<th></th>
 															<th class="search">Date</th>
 															<th class="search autoComplete">On</th>
-															<th class="search">Activity</th>
+															<th class="search autoComplete">Activity</th>
 															<th class="search autoComplete">User</th>
 															<th class="search autoComplete">Roll</th>
 														</tr>
@@ -59,7 +59,7 @@
 							<div class="alert alert-success">
 								<ul class="fa-ul">
 									<li>
-										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+										<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Double Click On Row Of Table</code>
 									</li>
 								</ul>
 							</div>
