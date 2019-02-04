@@ -11,7 +11,7 @@ class M_order extends CI_Model{
 		foreach ($_POST['columns'] as $list) {
 			if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
 				$onpost = array();
-				$onpost['key'] = $list['data'];
+				$onpost['key'] = $list['name'];
 				$onpost['val'] = $list['search']['value'];
 				array_push($newpost, $onpost);
 			}
@@ -169,17 +169,18 @@ class M_order extends CI_Model{
 				TO_CHAR(ATHL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CDATE,
 				ATHL.ACTION_TYPE AS ACTION_TYPE,
 				ATHL.AUTH_ID AS AUTH_ID,
-				ATA.USERNAME AS USERNAME,
-				ATAT.NAME AS ROLL,
+				ATV.NAME||ATE.NAME||' - '||ATA.USERNAME||' - '||ATAT.NAME AS USERDETAIL,
 				ATAT.TABLE_NAME AS TAB_USER
 			FROM 
 				APWMS_TX_HISTORY_LOG ATHL
 			LEFT JOIN
-				APWMS_TX_AUTH ATA
-				ON ATHL.AUTH_ID = ATA.ID
+				APWMS_TX_AUTH ATA ON ATHL.AUTH_ID = ATA.ID
 			LEFT JOIN
-				APWMS_TR_AUTH_TYPE ATAT
-				ON ATA.TYPE = ATAT.ID
+				APWMS_TR_AUTH_TYPE ATAT ON ATA.TYPE = ATAT.ID
+			LEFT JOIN
+				APWMS_TX_EMPLOYE ATE ON ATHL.AUTH_ID = ATE.AUTH_ID
+			LEFT JOIN
+				APWMS_TX_VENDOR ATV ON ATHL.AUTH_ID = ATV.AUTH_ID
 			WHERE ".$queryadd;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();

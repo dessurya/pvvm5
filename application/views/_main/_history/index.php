@@ -34,6 +34,7 @@
 															<th>On</th>
 															<th>Activity</th>
 															<th>User</th>
+															<th>Name</th>
 															<th>Roll</th>
 														</tr>
 													</thead>
@@ -44,7 +45,8 @@
 															<th class="search">Date</th>
 															<th class="search autoComplete">On</th>
 															<th class="search">Activity</th>
-															<th class="search autoComplete">User</th>
+															<th class="search">User</th>
+															<th class="search">Name</th>
 															<th class="search autoComplete">Roll</th>
 														</tr>
 													</tfoot>

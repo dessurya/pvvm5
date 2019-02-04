@@ -11,18 +11,20 @@ class M_history extends CI_Model{
 		foreach ($_POST['columns'] as $list) {
 			if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
 				$onpost = array();
-				$onpost['key'] = $list['data'];
+				$onpost['key'] = $list['name'];
 				$onpost['val'] = $list['search']['value'];
 				array_push($newpost, $onpost);
 			}
 		}
 
 		$this->datatables->select("
+			ATV.NAME AS ATVNAME,
+			ATE.NAME AS ATENAME,
+			ATA.USERNAME AS USERNAME,
 			ATHL.HISTORY_ID AS ID,
 			ATHL.HISTORY_ID AS HISTORY_ID,
 			TO_CHAR(ATHL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CREATED_DATE,
 			ATHL.AUTH_ID AS AUTH_ID,
-			ATA.USERNAME AS USERNAME,
 			ATAT.NAME AS ROLL,
 			ATHL.ACTION_TYPE AS ACTION_TYPE,
 			CASE ATHL.TABLE_NAME WHEN 'APWMS_TX_AUTH' THEN 'USER' WHEN 'APWMS_TX_VENDOR' THEN 'VENDOR' WHEN 'APWMS_TX_ORDER_LIST' THEN 'ORDER' END AS TABLE_NAME
@@ -30,6 +32,8 @@ class M_history extends CI_Model{
         $this->datatables->from('APWMS_TX_HISTORY_LOG ATHL');
         $this->datatables->join('APWMS_TX_AUTH ATA', 'ATHL.AUTH_ID = ATA.ID', 'left');
         $this->datatables->join('APWMS_TR_AUTH_TYPE ATAT', 'ATA.TYPE = ATAT.ID', 'left');
+        $this->datatables->join('APWMS_TX_EMPLOYE ATE', 'ATHL.AUTH_ID = ATE.AUTH_ID', 'left');
+        $this->datatables->join('APWMS_TX_VENDOR ATV', 'ATHL.AUTH_ID = ATV.AUTH_ID', 'left');
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
@@ -44,7 +48,14 @@ class M_history extends CI_Model{
         			else if ($search == 'VENDOR' ) { $search = 'APWMS_TX_VENDOR'; }
         			else if ($search == 'ORDER' ) { $search = 'APWMS_TX_ORDER_LIST'; }
         		}
-        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        		else if ($list['key'] == 'NAME') {
+        			$this->datatables->or_like('UPPER(ATV.NAME)', strtoupper($search));
+        			$this->datatables->or_like('UPPER(ATE.NAME)', strtoupper($search));
+        		}
+
+        		if ($list['key'] != 'NAME') {
+	        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        		}
         	}
         }
 

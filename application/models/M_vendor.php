@@ -12,7 +12,7 @@ class M_vendor extends CI_Model{
 			foreach ($_POST['columns'] as $list) {
 				if ($list['searchable'] == 'true' and ($list['search']['value'] != "" or $list['search']['value'] != null)) {
 					$onpost = array();
-					$onpost['key'] = $list['data'];
+					$onpost['key'] = $list['name'];
 					$onpost['val'] = $list['search']['value'];
 					array_push($newpost, $onpost);
 				}
@@ -46,6 +46,7 @@ class M_vendor extends CI_Model{
 	        	}
 	        }
 
+	        $this->datatables->where('ATA.TYPE <>', 5	);
 		    return $this->datatables->generate();
 		}else if($data == 'autoComplate'){
 			$query = "
@@ -57,7 +58,7 @@ class M_vendor extends CI_Model{
 				LEFT JOIN
 					APWMS_TX_AUTH TA
 					ON TA.ID = TV.AUTH_ID
-				WHERE TA.FLAG_ACTIVE = 'Y'";
+				WHERE TA.FLAG_ACTIVE = 'Y' AND TA.TYPE <> 5";
 			$runQuery = $this->db->query($query);
 			$arrdata = $runQuery->result_array();
 			return json_encode($arrdata);

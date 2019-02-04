@@ -80,7 +80,7 @@
 	        },
 	        error: function(data) {
 	            $('#loading-page').hide();
-	            location.reload();
+	            // location.reload();
 	        },
             success: function(data) {
             	var option = "";
