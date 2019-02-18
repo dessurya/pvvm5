@@ -14,13 +14,7 @@ class Vendor extends CI_Controller {
 
 	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
-			$urlview = '_main/_vendor/ipc_cabang.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_vendor/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_vendor/index.php';
-		}
+		$urlview = '_main/_vendor/index.php';
 
 		$viewComp = array();
 		$viewComp['_tittle_'] = "IPWMS | Vendor";
@@ -34,13 +28,7 @@ class Vendor extends CI_Controller {
 	public function show($data = null){
 		$response = array();
 		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1) {
-			$urlview = '_main/_vendor/show_ipc_cabang.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_vendor/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_vendor/index.php';
-		}
+		$urlview = '_main/_vendor/show.php';
 
 		if ($data == null) {
 			$response['response'] = false;
@@ -51,8 +39,9 @@ class Vendor extends CI_Controller {
 			$send = array();
 			$send['vendor'] = $find;
 			$send['orderinfo'] = $this->m_vendor->orderinfo($this->session->userdata('ROLL_ID'), $data);
+			$send['history'] = $this->m_vendor->findhistory($this->session->userdata('ROLL_ID'), $data);
 			$response['response'] = true;
-			$response['name'] = 'Vendor : '.$find['NAME'];
+			$response['name'] = 'Vendor : '.$find['NAMA'];
 			$response['result'] = $this->load->view($urlview, $send, true);
 		}
 
@@ -77,12 +66,12 @@ class Vendor extends CI_Controller {
 				$arrdata = array();
 				$arrdata['data'] = $list;
 				$arrdata['route'] = site_url().'/vendor/tools?action=store&id='.$list['VENDOR_ID'];
-				$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
+				$html .= $this->load->view('_main/_vendor/form.php', $arrdata, true);
 			}
 		}else{
 			$arrdata = array();
 			$arrdata['route'] = site_url().'/vendor/tools?action=store';
-			$html .= $this->load->view('_main/_vendor/ipc_cabang-form.php', $arrdata, true);
+			$html .= $this->load->view('_main/_vendor/form.php', $arrdata, true);
 		}
 		header('Content-Type: application/json');
 		echo json_encode(

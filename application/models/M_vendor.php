@@ -19,24 +19,26 @@ class M_vendor extends CI_Model{
 			}
 
 			$this->datatables->select("
-				ATV.ID AS ID, 
-				UPPER(NAME) AS NAME, 
+				ATWV.VENDOR_ID AS VENDOR_ID, 
+				UPPER(NAMA) AS NAMA, 
 				USERNAME AS USERNAME, 
 				UPPER(EMAIL) AS EMAIL, 
 				PHONE,
+				NPWP,
 				CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			");
-		    $this->datatables->from('APWMS_TX_VENDOR ATV');
-		    $this->datatables->join('APWMS_TX_AUTH ATA', 'ATA.ID = ATV.AUTH_ID', 'left');
-		    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
+		    $this->datatables->from('AAPWMS_TR_WASTE_VENDOR ATWV');
+		    $this->datatables->join('AAPWMS_TX_SYSTEM_AUTH ATSA', 'ATSA.AUTH_ID = ATWV.AUTH_ID', 'left');
+		    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'VENDOR_ID');
 
 		    if (count($newpost) >= 1) {
 	        	foreach ($newpost as $list) {
 	        		$search = $list['val'];
 	        		if ($list['key'] == 'USERNAME') { $field = 'USERNAME'; }
-	        		else if ($list['key'] == 'NAME') { $field = 'NAME'; }
+	        		else if ($list['key'] == 'NAMA') { $field = 'NAMA'; }
 	        		else if ($list['key'] == 'EMAIL') { $field = 'EMAIL'; }
 	        		else if ($list['key'] == 'PHONE') { $field = 'PHONE'; }
+	        		else if ($list['key'] == 'NPWP') { $field = 'NPWP'; }
 	        		else if ($list['key'] == 'FLAG_ACTIVE') { 
 	        			$field = 'FLAG_ACTIVE';
 	        			if ($search == 'ACTIVED' ) { $search = 'Y'; }
@@ -45,8 +47,6 @@ class M_vendor extends CI_Model{
 	        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
 	        	}
 	        }
-
-	        $this->datatables->where('ATA.TYPE <>', 5	);
 		    return $this->datatables->generate();
 		}else if($data == 'autoComplate'){
 			$query = "
@@ -68,52 +68,62 @@ class M_vendor extends CI_Model{
 	public function finddata($roll_id, $id){
 		if (is_array($id)) {
 			$id = implode(',', $id);
-			$where = 'TV.ID IN ('.$id.')';
+			$where = 'TV.VENDOR_ID IN ('.$id.')';
 		}else{
-			$where = 'TV.ID = '.$id;
+			$where = 'TV.VENDOR_ID = '.$id;
 		}
 
 		$query = "
 			SELECT 
-				NAME, 
+				NAMA, 
 				EMAIL, 
 				PHONE, 
+				NPWP, 
 				USERNAME, 
-				AUTH_ID, 
-				TV.ID AS VENDOR_ID,
-				TA.TYPE AS TYPE,
+				TV.AUTH_ID, 
+				VENDOR_ID,
+				AUTH_TYPE_ID,
 				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
 				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			FROM 
-				APWMS_TX_VENDOR TV
+				AAPWMS_TR_WASTE_VENDOR TV
 			LEFT JOIN
-				APWMS_TX_AUTH TA
-				ON TA.ID = TV.AUTH_ID
+				AAPWMS_TX_SYSTEM_AUTH TA
+				ON TA.AUTH_ID = TV.AUTH_ID
 			WHERE ".$where;
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function findhistory($roll_id, $id){
+		$query = "
+			SELECT 
+				TO_CHAR(HL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CREATED_DATE,
+				HL.AUTH_ID AS AUTH_ID, 
+				ACTION_TYPE,
+				WU.NAMA||WV.NAMA||' - '||USERNAME||' - '||AUTH_TYPE_NAME AS NAMA,
+				TABLE_ID
+			FROM AAPWMS_TX_HISTORY_LOG HL
+			LEFT JOIN AAPWMS_TX_SYSTEM_AUTH TA ON HL.AUTH_ID = TA.AUTH_ID
+			LEFT JOIN AAPWMS_TR_WASTE_USER WU ON HL.AUTH_ID = WU.AUTH_ID
+			LEFT JOIN AAPWMS_TR_WASTE_VENDOR WV ON HL.AUTH_ID = WV.AUTH_ID
+			LEFT JOIN AAPWMS_TR_AUTH_TYPE AT ON TA.AUTH_TYPE_ID = AT.AUTH_TYPE_ID
+			WHERE HL.TABLE_NAME = 'AAPWMS_TR_WASTE_VENDOR' AND HL.TABLE_ID = ".$id."
+			ORDER BY HL.CREATED_DATE DESC";
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}
 
 	public function orderinfo($roll_id, $id){
 		$result = array();
-		$idin = "
-			SELECT
-				DISTINCT(ATOL.PKK_ID) AS PKK_ID
-			FROM
-				APWMS_TX_ORDER_LIST_DET ATOLD
-			JOIN
-				APWMS_TX_ORDER_LIST ATOL
-				ON ATOL.PKK_ID = ATOLD.PKK_ID
-			WHERE VENDOR_ID = ".$id;
-
 		$fdone = "
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				APWMS_TX_ORDER_LIST
+				AAPWMS_TR_WASTE_ORDER
 			WHERE
-				STATUS_ID NOT LIKE 104
-				AND PKK_ID IN (".$idin.")";
+				STATUS_ID NOT LIKE 3
+				AND VENDOR_ID = ".$id;
 		$rfdone = $this->db->query($fdone);
 		$arfdone = $rfdone->result_array();
 		$result['ndone'] = $arfdone[0]['COUNTVAL'];
@@ -121,10 +131,10 @@ class M_vendor extends CI_Model{
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				APWMS_TX_ORDER_LIST
+				AAPWMS_TR_WASTE_ORDER
 			WHERE
-				STATUS_ID = 104
-				AND PKK_ID IN (".$idin.")";
+				STATUS_ID = 3
+				AND VENDOR_ID = ".$id;
 		$rtdone = $this->db->query($tdone);
 		$artdone = $rtdone->result_array();
 		$result['ydone'] = $artdone[0]['COUNTVAL'];
@@ -152,22 +162,23 @@ class M_vendor extends CI_Model{
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		}else{
 			$this->load->model('m_sequences');
-			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
-			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
+			$AUTH_ID = $this->m_sequences->getNextVal("AUTH_ID");
+			$VENDOR_ID = $this->m_sequences->getNextVal("VENDOR_ID");
 		}
-		$this->db->set('ID',  $AUTH_ID);
-		$this->db->set('USERNAME',  '_nev'.$AUTH_ID.$VENDOR_ID);
-		$this->db->set('PASSWORD',  md5("123"));
-		$this->db->set('TYPE',  3);
-		if (isset($get['id'])) { $this->db->where('ID',  $AUTH_ID); $this->db->update('APWMS_TX_AUTH'); }
-		else{ $this->db->insert('APWMS_TX_AUTH'); }
-		$this->db->set('ID',  $VENDOR_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
-		$this->db->set('NAME',  $post['name']);
+		$this->db->set('USERNAME',  $post['username']);
+		$this->db->set('PASSWORD',  md5("123"));
+		$this->db->set('AUTH_TYPE_ID',  3);
+		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('AAPWMS_TX_SYSTEM_AUTH'); }
+		else{ $this->db->insert('AAPWMS_TX_SYSTEM_AUTH'); }
+		$this->db->set('VENDOR_ID',  $VENDOR_ID);
+		$this->db->set('AUTH_ID',  $AUTH_ID);
+		$this->db->set('NAMA',  $post['name']);
 		$this->db->set('EMAIL',  $post['email']);
 		$this->db->set('PHONE',  $post['phone']);
-		if (isset($get['id'])) { $this->db->where('ID',  $VENDOR_ID); $this->db->update('APWMS_TX_VENDOR'); }
-		else{ $this->db->insert('APWMS_TX_VENDOR'); }
+		$this->db->set('NPWP',  $post['npwp']);
+		if (isset($get['id'])) { $this->db->where('VENDOR_ID',  $VENDOR_ID); $this->db->update('AAPWMS_TR_WASTE_VENDOR'); }
+		else{ $this->db->insert('AAPWMS_TR_WASTE_VENDOR'); }
 
 		$result['response'] = true;
 		if (isset($get['id'])) { 
@@ -181,30 +192,29 @@ class M_vendor extends CI_Model{
 
 		// record history
 			$json = json_encode($this->finddata($roll_id, $VENDOR_ID));
-			$this->recordhistory('APWMS_TX_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
+			$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
 		// record history
 		return $result;
 	}
 	
 	private function delete($roll_id, $id){
-		$this->load->model('m_history');
 		$arrid = explode('^', $id);
 		$result = array();
 		$vendor = "";
 		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
+			$vendor .= $finddata['NAMA'].', ';
 			if ($finddata['AUTH_ID'] != null) {
-				$this->db->where('ID', $finddata['AUTH_ID']);
-				$this->db->delete('APWMS_TX_AUTH');
+				$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
+				$this->db->delete('AAPWMS_TX_SYSTEM_AUTH');
 			}
 			// record history
 				$json = json_encode($finddata);
-				$this->recordhistory('APWMS_TX_VENDOR', 'delete', 'Success delete vendor '.$finddata['NAME'], $finddata['VENDOR_ID'], $json);
+				$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', 'delete', 'Success delete vendor '.$finddata['NAMA'], $finddata['VENDOR_ID'], $json);
 			// record history
-			$this->db->where('ID', $idr);
-			$this->db->delete('APWMS_TX_VENDOR');
+			$this->db->where('VENDOR_ID', $idr);
+			$this->db->delete('AAPWMS_TR_WASTE_VENDOR');
 		}
 		$result['response'] = true;
 		$result['type'] = "delete";
@@ -216,17 +226,16 @@ class M_vendor extends CI_Model{
 		$arrid = explode('^', $get['id']);
 		$result = array();
 		$vendor = "";
-		$this->load->model('m_history');
 		foreach ($arrid as $idr) {
 			$finddata = $this->finddata($roll_id,$idr);
 			$finddata = $finddata[0];
-			$vendor .= $finddata['NAME'].', ';
+			$vendor .= $finddata['NAMA'].', ';
 			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
-			$this->db->where('ID', $finddata['AUTH_ID']);
-			$this->db->update('APWMS_TX_AUTH');
+			$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
+			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
 			// record history
 				$json = json_encode($finddata);
-				$this->m_history->record('APWMS_TX_AUTH', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAME'], $finddata['AUTH_ID'], $json);
+				$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAMA'], $idr, $json);
 			// record history
 		}
 		$result['response'] = true;

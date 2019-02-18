@@ -77,6 +77,7 @@
 															<th>Name</th>
 															<th>Email</th>
 															<th>Phone</th>
+															<th>NPWP</th>
 															<th>Status</th>
 														</tr>
 													</thead>
@@ -88,6 +89,7 @@
 															<th class="search">Name</th>
 															<th class="search">Email</th>
 															<th class="search">Phone</th>
+															<th class="search">NPWP</th>
 															<th class="search autoComplete">Status</th>
 														</tr>
 													</tfoot>

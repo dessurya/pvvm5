@@ -2,12 +2,10 @@
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['NAME']; } else { echo 'Add'; } ?></small></h2>
+				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['NAMA']; } else { echo 'Add'; } ?></small></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				<?php
-				/*
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
@@ -23,41 +21,25 @@
 					</div>
 					<div class="col-md-12">
 						<div class="form-group">
-							<label>Roll Type</label>
-							<input 
-								name="auth_type" 
-								value="Vendor" 
-								type="text" 
-								class="form-control" 
-								placeholder="Vendor"
-								readonly="">
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group">
-							<label>Password</label>
-							<input 
-								name="password" 
-								value="somethingsecret"
-								type="password" 
-								class="form-control" 
-								placeholder="somethingsecret"
-								readonly="">
-						</div>
-					</div>
-				</div>
-				*/
-				?>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<label>Name</label>
+							<label>Nama</label>
 							<input 
 								name="name" 
-								value="<?php if(isset($data)) { echo $data['NAME']; } ?>" 
+								value="<?php if(isset($data)) { echo $data['NAMA']; } ?>" 
 								type="text" 
 								class="form-control" 
-								placeholder="Enter Name"
+								placeholder="Enter Nama"
+								required="">
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>NPWP</label>
+							<input 
+								name="npwp" 
+								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>" 
+								type="text" 
+								class="form-control" 
+								placeholder="Enter NPWP"
 								required="">
 						</div>
 					</div>

@@ -105,9 +105,9 @@ class M_history extends CI_Model{
 
 	public function record($tabname, $acttyp, $descrp, $tablid, $json){
 		$this->load->model('m_sequences');
-		$history_id = $this->m_sequences->getNextVal("APWMS_TX_HISTORY_LOG_ID_SEQ");
+		// $history_id = $this->m_sequences->getNextVal("HISTORY_ID");
 
-		$this->db->set('HISTORY_ID', $history_id);
+		// $this->db->set('HISTORY_ID', $history_id);
 		$this->db->set('TABLE_NAME', $tabname);
 		$this->db->set('TABLE_ID', $tablid);
 		$this->db->set('ACTION_TYPE', $acttyp);
@@ -116,7 +116,7 @@ class M_history extends CI_Model{
 		$this->db->set('AUTH_ID', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_BY', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-		$this->db->insert('APWMS_TX_HISTORY_LOG');
+		$this->db->insert('AAPWMS_TX_HISTORY_LOG');
 	}
 }
 ?>

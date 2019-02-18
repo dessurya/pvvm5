@@ -1,6 +1,6 @@
 <div class="x_panel">
 	<div class="x_title">
-		<h2><?php echo strtoupper($vendor['NAME']) ?><small>Vendor</small></h2>
+		<h2><?php echo strtoupper($vendor['NAMA']) ?><small>Vendor</small></h2>
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content">
@@ -13,7 +13,18 @@
 							<input 
 								readonly
 								name="NAME" 
-								value="<?php echo $vendor['NAME'] ?>" 
+								value="<?php echo $vendor['NAMA'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>NPWP</label>
+							<input 
+								readonly
+								name="NPWP" 
+								value="<?php echo $vendor['NPWP'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -62,7 +73,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-12">
 						<div class="form-group">
 							<label>Last Login</label>
 							<input 
@@ -109,28 +120,21 @@
 				</div>
 				<div class="ln_solid"></div>
 				<div id="actionshow" class="row">
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
-							<a href="<?php echo site_url().'/order/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAME'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
+							<a href="<?php echo site_url().'/order/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAMA'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
 								<i class="fa fa-file-text-o"></i> Show Order
 							</a>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<a href="<?php echo site_url().'/history/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAME'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
-								<i class="fa fa-clock-o"></i> Show History
-							</a>
-						</div>
-					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
 							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
 								<i class="fa fa-pencil"></i> Update
 							</button>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
 							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block refreshshow">
 								<i class="fa fa-refresh"></i> Refresh Data
@@ -139,6 +143,35 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="x_panel">
+	<div class="x_title">
+		<h2>History</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered no-footer">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>By</th>
+						<th>Activity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($history as $list) { ?>
+					<tr>
+						<td><?php echo $list['CREATED_DATE'] ?></td>
+						<td><?php echo $list['NAMA'] ?></td>
+						<td><?php echo $list['ACTION_TYPE'] ?></td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>

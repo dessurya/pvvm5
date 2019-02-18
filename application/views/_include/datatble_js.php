@@ -42,12 +42,13 @@
 			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
 			{name: "AGENT_NAME", data: "AGENT_NAME"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
-			{name: "NO", data: "ID", orderable: false, searchable:false},
+			{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 			{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
 			{name: "USERNAME", data: "USERNAME"},
-			{name: "NAME", data: "NAME"},
+			{name: "NAMA", data: "NAMA"},
 			{name: "EMAIL", data: "EMAIL"},
 			{name: "PHONE", data: "PHONE"},
+			{name: "NPWP", data: "NPWP"},
 			{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 			<?php } else if($this->uri->segment(1) == 'ipc') {?>
 			{name: "NO", data: "ID", orderable: false, searchable:false},
@@ -117,7 +118,9 @@
 			var page = info.iPage;
 			var length = info.iLength;
 			var index = page * length + (iDisplayIndex + 1);
-			$(row).attr('id', data.ID);
+			<?php if($this->uri->segment(1) == 'vendor') { ?>
+			$(row).attr('id', data.VENDOR_ID);
+			<?php } ?>
 			$('td:eq(0)', row).html(index);
 		}
 	});
