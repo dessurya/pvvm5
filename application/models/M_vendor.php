@@ -112,7 +112,7 @@ class M_vendor extends CI_Model{
 			FROM
 				APWMS_TX_ORDER_LIST
 			WHERE
-				STATUS_ID NOT LIKE 18
+				STATUS_ID NOT LIKE 104
 				AND PKK_ID IN (".$idin.")";
 		$rfdone = $this->db->query($fdone);
 		$arfdone = $rfdone->result_array();
@@ -123,7 +123,7 @@ class M_vendor extends CI_Model{
 			FROM
 				APWMS_TX_ORDER_LIST
 			WHERE
-				STATUS_ID = 18
+				STATUS_ID = 104
 				AND PKK_ID IN (".$idin.")";
 		$rtdone = $this->db->query($tdone);
 		$artdone = $rtdone->result_array();

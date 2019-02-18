@@ -80,11 +80,10 @@
 															<th>Status</th>
 														</tr>
 													</thead>
-													<tbody></tbody>
 													<tfoot>
 														<tr>
 															<th></th>
-															<th><input class="iCheckTrig flat" type="checkbox"></th>
+															<th></th>
 															<th class="search">Username</th>
 															<th class="search">Name</th>
 															<th class="search">Email</th>
@@ -92,6 +91,7 @@
 															<th class="search autoComplete">Status</th>
 														</tr>
 													</tfoot>
+													<tbody></tbody>
 												</table>
 											</div>
 										</div>

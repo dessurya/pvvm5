@@ -9,15 +9,6 @@
 	<meta name="description" content="bootstrap material admin template">
 	<meta name="author" content="IPC">
 	<?php $this->load->view('_include/include_css') ?>
-	<style type="text/css">
-		small.site_title{
-			font-size: 10pt;
-			line-height: 20px;
-		}
-		#datatable tr{
-			cursor: pointer;
-		}
-	</style>
 	{_link_css_}
 	<script type="text/javascript" src="<?php echo base_url().'_asset/gentelella/js/jquery.min.js' ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url().'_asset/gentelella/js/onloadloading.js' ?>"></script>

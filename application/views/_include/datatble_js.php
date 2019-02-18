@@ -34,48 +34,48 @@
 		<?php }?>
 	    columns: [
 			<?php if($this->uri->segment(1) == 'order') {?>
-			{"name": "NO", "data": "PKK_ID", "orderable": false, "searchable":false},
-			{"name": "CREATED_DATE", "data": "CREATED_DATE"},
-			{"name": "PKK_ID", "data": "PKK_ID"},
-			{"name": "NO_LAYANAN", "data": "NO_LAYANAN"},
-			{"name": "STATUS", "data": "STATUS"},
-			{"name": "KODE_PELABUHAN", "data": "KODE_PELABUHAN"},
-			{"name": "AGENT_NAME", "data": "AGENT_NAME"}
+			{name: "NO", data: "PKK_ID", orderable: false, searchable:false},
+			{name: "CREATED_DATE", data: "CREATED_DATE"},
+			{name: "PKK_ID", data: "PKK_ID"},
+			{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+			{name: "STATUS", data: "STATUS"},
+			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
+			{name: "AGENT_NAME", data: "AGENT_NAME"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
-			{"name": "NO", "data": "ID", "orderable": false, "searchable":false},
-			{"name": "CHECKBOX", "data": "CHECKBOX", "orderable": false, "class": "not", "searchable":false},
-			{"name": "USERNAME", "data": "USERNAME"},
-			{"name": "NAME", "data": "NAME"},
-			{"name": "EMAIL", "data": "EMAIL"},
-			{"name": "PHONE", "data": "PHONE"},
-			{"name": "FLAG_ACTIVE", "data": "FLAG_ACTIVE"}
+			{name: "NO", data: "ID", orderable: false, searchable:false},
+			{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+			{name: "USERNAME", data: "USERNAME"},
+			{name: "NAME", data: "NAME"},
+			{name: "EMAIL", data: "EMAIL"},
+			{name: "PHONE", data: "PHONE"},
+			{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 			<?php } else if($this->uri->segment(1) == 'ipc') {?>
-			{"name": "NO", "data": "ID", "orderable": false, "searchable":false},
-			{"name": "CHECKBOX", "data": "CHECKBOX", "orderable": false, "class": "not", "searchable":false},
-			{"name": "NIPP", "data": "NIPP"},
-			{"name": "NAME", "data": "NAME"},
-			{"name": "EMAIL", "data": "EMAIL"},
-			{"name": "POSISI", "data": "POSISI"},
-			{"name": "FLAG_ACTIVE", "data": "FLAG_ACTIVE"},
-			{"name": "LAST_LOGIN", "data": "LAST_LOGIN"}
+			{name: "NO", data: "ID", orderable: false, searchable:false},
+			{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+			{name: "NIPP", data: "NIPP"},
+			{name: "NAME", data: "NAME"},
+			{name: "EMAIL", data: "EMAIL"},
+			{name: "POSISI", data: "POSISI"},
+			{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"},
+			{name: "LAST_LOGIN", data: "LAST_LOGIN"}
 			<?php } else if($this->uri->segment(1) == 'history') {?>
-			{"name": "NO", "data": "HISTORY_ID", "orderable": false, "searchable":false},
-			{"name": "CREATED_DATE", "data": "CREATED_DATE"},
-			{"name": "TABLE_NAME", "data": "TABLE_NAME"},
-			{"name": "ACTION_TYPE", "data": "ACTION_TYPE"},
-			{"name": "USERNAME", "data": "USERNAME"},
-			{"name": "NAME", "data": function(data) { //name
+			{name: "NO", data: "HISTORY_ID", orderable: false, searchable:false},
+			{name: "CREATED_DATE", data: "CREATED_DATE"},
+			{name: "TABLE_NAME", data: "TABLE_NAME"},
+			{name: "ACTION_TYPE", data: "ACTION_TYPE"},
+			{name: "USERNAME", data: "USERNAME"},
+			{name: "NAME", data: function(data) { //name
 				if(data.ATVNAME != null){ return data.ATVNAME; }
 				else if(data.ATENAME != null){ return data.ATENAME; }
 			} },
-			{"name": "ROLL", "data": "ROLL"}
+			{name: "ROLL", data: "ROLL"}
 			<?php } else if($this->uri->segment(1) == 'profile') {?>
-			{"name": "NO", "data": "HISTORY_ID", "orderable": false},
-			{"name": "CREATED_DATE", "data": "CREATED_DATE"},
-			{"name": "TABLE_NAME", "data": "TABLE_NAME"},
-			{"name": "ACTION_TYPE", "data": "ACTION_TYPE"},
-			{"name": "USERNAME", "data": "USERNAME"},
-			{"name": "ROLL", "data": "ROLL"}
+			{name: "NO", data: "HISTORY_ID", orderable: false},
+			{name: "CREATED_DATE", data: "CREATED_DATE"},
+			{name: "TABLE_NAME", data: "TABLE_NAME"},
+			{name: "ACTION_TYPE", data: "ACTION_TYPE"},
+			{name: "USERNAME", data: "USERNAME"},
+			{name: "ROLL", data: "ROLL"}
 			<?php }?>
 	    ],
 	    initComplete: function () {

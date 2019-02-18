@@ -19,13 +19,15 @@ class M_login extends CI_Model{
 			$setsesion['ROLL_ID'] = $resultofexcute['data']['ROLLID'];
 			$setsesion['ROLLNAME'] = $resultofexcute['data']['ROLLNAME'];
 			$setsesion['AUTH_ID'] = $resultofexcute['data']['DETAILAUTH']['AUTH_ID'];
-			$setsesion['NAME'] = $resultofexcute['data']['DETAILAUTH']['NAME'];
+			$setsesion['NAME'] = $resultofexcute['data']['DETAILAUTH']['NAMA'];
 			$setsesion['EMAIL'] = $resultofexcute['data']['DETAILAUTH']['EMAIL'];
 			$setsesion['TABLE_NAME'] = $resultofexcute['data']['TABLE_NAME'];
 			if ($resultofexcute['data']['ROLLID'] == 1 or $resultofexcute['data']['ROLLID'] == 4) {
-				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['PERSON_ID'];
+				$setsesion['USER_ID'] = $resultofexcute['data']['DETAILAUTH']['USER_ID'];
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['USER_ID'];
 			} else if ($resultofexcute['data']['ROLLID'] != 1){
-				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['ID'];
+				$setsesion['VENDOR_ID'] = $resultofexcute['data']['DETAILAUTH']['VENDOR_ID'];
+				$setsesion['DETAIL_ID'] = $resultofexcute['data']['DETAILAUTH']['VENDOR_ID'];
 			}
 			$this->session->set_userdata($setsesion);
 		} else{
@@ -43,14 +45,14 @@ class M_login extends CI_Model{
 		$result['response'] = false;
 		$result['data'] = null;
 		$result['active'] = null;
-		$query = "SELECT * FROM APWMS_TX_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$password;
+		$query = "SELECT * FROM AAPWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$password;
 		$runQuery = $this->db->query($query);
 		if ($runQuery->num_rows() > 0) {
 			$arrdata = $runQuery->result_array();
 			$this->db->set('LAST_LOGIN', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-			$this->db->where('ID', $arrdata[0]['ID']);
-			$this->db->update('APWMS_TX_AUTH');
-			$getdetailauth = $this->getdetailauth($arrdata[0]['ID'], $arrdata[0]['TYPE']);
+			$this->db->where('AUTH_ID', $arrdata[0]['AUTH_ID']);
+			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
+			$getdetailauth = $this->getdetailauth($arrdata[0]['AUTH_ID'], $arrdata[0]['AUTH_TYPE_ID']);
 			$result['response'] = true;
 			$result['data'] = $getdetailauth;
 			$result['active'] = $arrdata[0]['FLAG_ACTIVE'];
@@ -60,11 +62,12 @@ class M_login extends CI_Model{
 
 	public function getdetailauth($id, $type){
 		$result = array();
-		$query = "SELECT * FROM APWMS_TR_AUTH_TYPE WHERE ID=".$type;
+		$query = "SELECT * FROM AAPWMS_TR_AUTH_TYPE WHERE AUTH_TYPE_ID=".$type;
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
+		
 		$result['ROLLID'] = $type;
-		$result['ROLLNAME'] = $arrdata[0]['NAME'];
+		$result['ROLLNAME'] = $arrdata[0]['AUTH_TYPE_NAME'];
 		$result['TABLE_NAME'] = $arrdata[0]['TABLE_NAME'];
 		$query2 = "SELECT * FROM ".$arrdata[0]['TABLE_NAME']." WHERE AUTH_ID=".$id;
 		$runQuery2 = $this->db->query($query2);

@@ -8,3 +8,46 @@
 <link href="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.css' ?>" rel="stylesheet">
 <link href="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.buttons.css' ?>" rel="stylesheet">
 <link href="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.nonblock.css' ?>" rel="stylesheet">
+
+<?php if ( in_array($this->uri->segment(1), array('vendor', 'order')) ) { ?>
+	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">
+<?php } if ($this->uri->segment(1) == 'order') { ?>
+	<style type="text/css">
+		#orderwastedetail input,
+		#orderwastedetail select{
+			padding: 3px;
+		}
+		#orderwastedetail input[name="WASTE_NAME"],
+		#orderwastedetail input[name="WASTE_TYPE_NAME"]{
+			width: 140px;
+		}
+		#orderwastedetail input[name="UM_NAME"]{
+			width: 65px;
+		}
+		#orderwastedetail input[name="MAX_LOAD_QTY"],
+		#orderwastedetail input[name="KEEP_QTY"],
+		#orderwastedetail input[name="REQUEST_QTY"],
+		#orderwastedetail input[name="TOTAL_QTY"],
+		#orderwastedetail input[name="ACTUAL_REQUEST_QTY"]{
+			text-align: right;
+			width: 50px;
+		}
+		#orderwastedetail select[name="VENDOR_NAME"]{
+			width: 180px;
+		}
+	</style>
+<?php } ?>
+
+<style type="text/css">
+	small.site_title{
+		font-size: 10pt;
+		line-height: 20px;
+	}
+	table#datatable tr{
+		cursor: pointer;
+	}
+	table#datatable tfoot { display: table-header-group; }
+	table#datatable tfoot input { margin: 0; }
+</style>

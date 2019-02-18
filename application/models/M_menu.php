@@ -11,14 +11,14 @@ class M_menu extends CI_Model{
 			SELECT
 				*
 			FROM 
-				APWMS_TR_AUTH_TYPE_MENU ATM
+				AAPWMS_TR_AUTH_TYPE_MENU ATM
 			INNER JOIN
-				APWMS_TR_MENU TM
-				ON ATM.MENU_ID = TM.ID
+				AAPWMS_TR_SYSTEM_MENU TSM
+				ON ATM.MENU_ID = TSM.MENU_ID
 			WHERE 
-				TM.TYPE_MENU = 'P'
+				TSM.TYPE_MENU = 'P'
 				AND ATM.AUTH_TYPE_ID = ".$roll_id."
-			ORDER BY TM.SORT_MENU ASC
+			ORDER BY TSM.SORT_NUMBER ASC
 		";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
@@ -29,7 +29,7 @@ class M_menu extends CI_Model{
 			$list['URL_MENU'] == null ? $menus .= "<a>" : $menus .='<a href="'.site_url().'/'.$list['URL_MENU'].'">';
 			$list['ICON'] == null ? "" : $menus .=$list['ICON']." ";
 			$menus .= $list['TITLE_MENU'];
-			$childs = $this->getChild($list['ID']);
+			$childs = $this->getChild($list['MENU_ID']);
 			if (count($childs) >= 1) {
 				$menus .= '<span class="fa fa-chevron-down"></span></a>';
 				$menus .= '<ul class="nav child_menu">';
@@ -57,10 +57,10 @@ class M_menu extends CI_Model{
 			SELECT
 				*
 			FROM 
-				APWMS_TR_MENU
+				AAPWMS_TR_SYSTEM_MENU
 			WHERE 
 				ID_PARENT = ".$id."
-			ORDER BY SORT_MENU ASC
+			ORDER BY SORT_NUMBER ASC
 		";
 		$runQuery = $this->db->query($query);
 		return $runQuery->result_array();

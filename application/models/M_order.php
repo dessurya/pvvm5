@@ -79,7 +79,7 @@ class M_order extends CI_Model{
 			$id = implode(',', $id);
 			$where = 'ATOL.PKK_ID IN ('.$id.')';
 		}else{
-			$where = 'ATOL.PKK_ID = '.$id;
+			$where = "ATOL.PKK_ID = '".$id."'";
 		}
 
 		$query = "
@@ -110,7 +110,7 @@ class M_order extends CI_Model{
 			$id = implode(',', $id);
 			$where = 'ATOLD.PKK_ID IN ('.$id.')';
 		}else{
-			$where = 'ATOLD.PKK_ID = '.$id;
+			$where = "ATOLD.PKK_ID = '".$id."'";
 		}
 
 		if ($roll_id == 3) {
@@ -159,7 +159,7 @@ class M_order extends CI_Model{
 	}
 
 	public function history($roll_id, $id){
-		$queryadd = " ATHL.TABLE_NAME = 'APWMS_TX_ORDER_LIST' AND ATHL.TABLE_ID = ".$id;
+		$queryadd = " ATHL.TABLE_NAME = 'APWMS_TX_ORDER_LIST' AND ATHL.TABLE_ID = '".$id."'";
 		if ($roll_id == 3) {
 			$queryadd .=" AND ( ATHL.AUTH_ID = ".$this->session->userdata('AUTH_ID')." OR ATAT.ID = 1 ) ";
 		}

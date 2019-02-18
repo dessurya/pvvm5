@@ -35,45 +35,6 @@ class Order extends CI_Controller {
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
-
-		$viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">';
-	    $viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>';
-
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/iCheck/icheck.js"></script>';
-
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
-
-		$viewComp['_link_css_'] .='
-		<style type="text/css">
-			#orderwastedetail input,
-			#orderwastedetail select{
-				padding: 3px;
-			}
-			#orderwastedetail input[name="WASTE_NAME"],
-			#orderwastedetail input[name="WASTE_TYPE_NAME"]{
-				width: 140px;
-			}
-			#orderwastedetail input[name="UM_NAME"]{
-				width: 65px;
-			}
-			#orderwastedetail input[name="MAX_LOAD_QTY"],
-			#orderwastedetail input[name="KEEP_QTY"],
-			#orderwastedetail input[name="REQUEST_QTY"],
-			#orderwastedetail input[name="TOTAL_QTY"],
-			#orderwastedetail input[name="ACTUAL_REQUEST_QTY"]{
-				text-align: right;
-				width: 50px;
-			}
-			#orderwastedetail select[name="VENDOR_NAME"]{
-				width: 180px;
-			}
-		</style>
-		';
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
