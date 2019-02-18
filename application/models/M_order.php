@@ -18,18 +18,20 @@ class M_order extends CI_Model{
 		}
 
 		$this->datatables->select("
-			ATOL.PKK_ID AS ID,
-			ATOL.PKK_ID AS PKK_ID, 
-			ATOL.NO_LAYANAN AS NO_LAYANAN, 
-			ATOL.KODE_PELABUHAN AS KODE_PELABUHAN, 
-			ATOL.NAMA_PERUSAHAAN AS AGENT_NAME, 
-			ATOL.STATUS_ID AS STATUS_ID, 
-			TO_CHAR(ATOL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE, 
-			UPPER(ATSS.STATUS) AS STATUS
+			WARTA_KAPAL_IN_ID AS ID,
+			PKK_NO,
+			NO_LAYANAN,
+			KODE_PELABUHAN,
+			NAMA_PERUSAHAAN,
+			ORDER_ID,
+			VENDOR_ID, 
+			STATUS_ID,
+			STATUS,
+			TO_CHAR(WARTA_KAPAL_IN_DATE, 'YYYY/MM/DD HH24:MI:SS') AS WARTA_KAPAL_IN_DATE, 
+			TO_CHAR(ORDER_DATE, 'YYYY/MM/DD HH24:MI:SS') AS ORDER_DATE
 		");
-        $this->datatables->from('APWMS_TX_ORDER_LIST ATOL');
-        $this->datatables->join('APWMS_TR_STATUS ATSS', 'ATSS.STATUS_ID = ATOL.STATUS_ID', 'left');
-        // $this->datatables->join('APWMS_TX_AGENT ATA', 'ATA.ID = ATS.AGENT_ID', 'left');
+        $this->datatables->from('ORDER_WARTA_KAPAL');
+	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
@@ -44,33 +46,33 @@ class M_order extends CI_Model{
         	}
         }
 
-		if($roll_id == 3 or $data != null){
-			if ($data == null and $roll_id == 3) {
-				$venid = $this->session->userdata('DETAIL_ID');
-			}else{
-				$venid = $data;
-			}
-			$query="
-				SELECT
-					DISTINCT(ATOL.PKK_ID) AS PKK_ID
-				FROM
-					APWMS_TX_ORDER_LIST_DET ATOLD
-				JOIN
-					APWMS_TX_ORDER_LIST ATOL
-					ON ATOL.PKK_ID = ATOLD.PKK_ID
-				WHERE ATOLD.STATUS_ID <> 201 AND VENDOR_ID = ".$venid;
-			$runQuery = $this->db->query($query);
-			$arrdata = $runQuery->result_array();
-			if ($arrdata) {
-				function ret($data){
-					return $data['PKK_ID'];
-				}
-				$inid = array_map("ret", $arrdata);
-			}else{
-				$inid = array(0);
-			}
-			$this->datatables->where_in('ATOL.PKK_ID', $inid);
-		}
+		// if($roll_id == 3 or $data != null){
+		// 	if ($data == null and $roll_id == 3) {
+		// 		$venid = $this->session->userdata('DETAIL_ID');
+		// 	}else{
+		// 		$venid = $data;
+		// 	}
+		// 	$query="
+		// 		SELECT
+		// 			DISTINCT(ATOL.PKK_ID) AS PKK_ID
+		// 		FROM
+		// 			APWMS_TX_ORDER_LIST_DET ATOLD
+		// 		JOIN
+		// 			APWMS_TX_ORDER_LIST ATOL
+		// 			ON ATOL.PKK_ID = ATOLD.PKK_ID
+		// 		WHERE ATOLD.STATUS_ID <> 201 AND VENDOR_ID = ".$venid;
+		// 	$runQuery = $this->db->query($query);
+		// 	$arrdata = $runQuery->result_array();
+		// 	if ($arrdata) {
+		// 		function ret($data){
+		// 			return $data['PKK_ID'];
+		// 		}
+		// 		$inid = array_map("ret", $arrdata);
+		// 	}else{
+		// 		$inid = array(0);
+		// 	}
+		// 	$this->datatables->where_in('ATOL.PKK_ID', $inid);
+		// }
         return $this->datatables->generate();
 	}
 

@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>ORDER WASTE <?php echo strtoupper($this->uri->segment(4)) ?></h2>
+				<h2><?php echo $tittle; ?></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -12,14 +12,14 @@
 							<a href="#tab_list" role="tab" data-toggle="tab" aria-expanded="true">List</a>
 						</li>
 						<li role="presentation" class="">
-							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Order Waste : No Data</a>
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true"><?php echo $tittle; ?> : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 							<div class="x_panel">
 								<div class="x_title">
-									<h2>Data <small>Order Waste</small></h2>
+									<h2>Data <small><?php echo $tittle; ?></small></h2>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -29,27 +29,33 @@
 												<table id="datatable" class="table table-striped table-bordered no-footer">
 													<thead>
 														<tr>
+															<?php if ($tittle == 'Order List') { ?>
 															<th>No</th>
+															<th><input class="iCheckTrig flat" type="checkbox"></th>
 															<th>Created Date</th>
 															<th>PKK</th>
 															<th>No Layanan</th>
 															<th>Status</th>
 															<th>Pelabuhan</th>
-															<th>Agent</th>
+															<?php } else if($tittle == 'sdassadsad') { ?>
+															<?php } ?>
 														</tr>
 													</thead>
-													<tbody></tbody>
 													<tfoot>
 														<tr>
+															<?php if ($tittle == 'Order List') { ?>
+															<th></th>
 															<th></th>
 															<th class="search">Created Date</th>
 															<th class="search">PKK</th>
 															<th class="search">No Layanan</th>
 															<th class="search autoComplete">Status</th>
 															<th class="search autoComplete">Pelabuhan</th>
-															<th class="search">Agent</th>
+															<?php } else if($tittle == 'sdassadsad') { ?>
+															<?php } ?>
 														</tr>
 													</tfoot>
+													<tbody></tbody>
 												</table>
 											</div>
 										</div>
