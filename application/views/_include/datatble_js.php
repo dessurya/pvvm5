@@ -5,7 +5,7 @@
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
-	<?php if (in_array($this->uri->segment(1), array('vendor','ipc'))) {?>
+	<?php if (in_array($this->uri->segment(1), array('vendor','ipc','profile'))) {?>
 		callForm(urlForm);
 	<?php }?>
 

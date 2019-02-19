@@ -35,26 +35,40 @@ class Profile extends CI_Controller {
 	}
 
 	private function getContent(){
+		$this->load->model('m_profile');
 		$roll_id = $this->session->userdata('ROLL_ID');
-		$query = "SELECT * FROM ".$this->session->userdata('TABLE_NAME')." WHERE AUTH_ID=".$this->session->userdata('AUTH_ID');
-		$runQuery = $this->db->query($query);
-		$detailProfile = $runQuery->result_array();
-
+		//old query
+		// $query = "SELECT * FROM ".$this->session->userdata('TABLE_NAME')." WHERE AUTH_ID=".$this->session->userdata('AUTH_ID');
+		// $runQuery = $this->db->query($query);
+		// $detailProfile = $runQuery->result_array();
+		$detailProfile = $this->m_profile->getdetail($this->session->userdata('ROLL_ID'), $this->session->userdata('AUTH_ID'));
 		$arrdata = array();
 		$arrdata['detailProfile'] = $detailProfile[0];
+		$arrdata['route'] = site_url().'/profile/changepass/id='.$detailProfile[0]['ID'];
 		if ($roll_id == 1) { // ipc cabang
-			return $this->load->view('_main/_profile/ipc_cabang.php', $arrdata, true);
+			return $this->load->view('_main/_profile/user.php', $arrdata, true);
 		}else if($roll_id == 2) { // shipping agent
 			return $this->load->view('_main/_profile/shipping_agent.php', $arrdata, true);
-		}else if($roll_id == 2) { // vendor
+		}else if($roll_id == 3) { // vendor
 			return $this->load->view('_main/_profile/vendor.php', $arrdata, true);
 		}
 	}
 
+
 	public function getdata($data = null){
+		$this->load->model('m_order');	
 		$this->load->model('m_profile');
+		$roll_id = $this->session->userdata('ROLL_ID');
+
 		header('Content-Type: application/json');
-		echo $this->m_profile->getdata($this->session->userdata('ROLL_ID'), $data, $this->session->userdata('AUTH_ID'));
+		if ($roll_id == 1) { // ipc cabang
+			echo $this->m_profile->getdata($this->session->userdata('ROLL_ID'), $data, $this->session->userdata('AUTH_ID'));
+		}else if($roll_id == 2) { // shipping agent
+			echo $this->m_profile->getdata($this->session->userdata('ROLL_ID'), $data, $this->session->userdata('AUTH_ID'));
+		}else if($roll_id == 3) { // vendor
+			echo $this->m_profile->getdata($this->session->userdata('ROLL_ID'), $data, $this->session->userdata('AUTH_ID'));
+		}
+		// echo $this->m_profile->getdata($this->session->userdata('ROLL_ID'), $data, $this->session->userdata('AUTH_ID'));
 	}
 
 	public function JSON(){
@@ -63,28 +77,58 @@ class Profile extends CI_Controller {
 		echo json_encode($this->m_history->finddata($this->session->userdata('ROLL_ID'), 1));
 	}
 
-	public function show($data = null){
-		$response = array();
-		$urlview = '_main/_profile/show.php';
-
-		if ($data == null) {
-			$response['response'] = false;
-		}else{
-			$send = array();
-			$this->load->model('m_profile');
-			$this->load->model('m_login');
-			$find = $this->m_profile->finddata($this->session->userdata('ROLL_ID'), $data);
-			$find = $find[0];
-			$send['head'] = $find;
-			$detail = $this->m_login->getdetailauth($find['AUTH_ID'], $find['ROLL_ID']);
-			$send['detail'] = $detail;
-			$response['response'] = true;
-			$response['name'] = 'Activity : '.$find['CREATED_DATE'];
-			$response['result'] = $this->load->view($urlview, $send, true);
+	public function callForm($data = null){
+		$data = null;
+		$html = '';
+		$roll_id = $this->session->userdata('ROLL_ID');
+		if ($roll_id == 3) {
+			$url_view = '_main/_profile/form_vendor.php';
+		} else {
+			$url_view = '_main/_profile/form_user.php';
 		}
+		if (isset($_GET['id'])) {
+			$this->load->model('m_profile');
+			$id = explode('^', $_GET['id']);
+			$data = $this->m_profile->finddata($this->session->userdata('ROLL_ID'), $id);
+			// var_dump($data);
+			foreach ($data as $list) {
+				$arrdata = array();
+				$arrdata['data'] = $list;
+				$arrdata['route'] = site_url().'/profile/tools?action=store&id='.$list['ID'];
+				$html .= $this->load->view($url_view, $arrdata, true);
+			}
+		}else{
+			$arrdata = array();
+			$arrdata['route'] = site_url().'/profile/tools?action=store';
+			$html .= $this->load->view($url_view, $arrdata, true);
+		}
+		header('Content-Type: application/json');
+		echo json_encode(
+			array(
+				"response"=>true,
+				"result"=>$html
+			)
+		);
+	}
 
+	public function tools($data = null){
+		$this->load->model('m_profile');
+		$response = $this->m_profile->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+		$response['reload'] = true;
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}
 
+	public function changepass($data = null){
+		$id = explode('^', $_GET['id']);
+		echo $id;
+
+		header('Content-Type: application/json');
+		echo json_encode(
+			array(
+				"response"=>true,
+				"result"=>$id
+			)
+		);
+	}
 }

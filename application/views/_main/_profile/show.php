@@ -1,5 +1,3 @@
-<!-- <?php var_dump($detail); ?> -->
-
 <div class="x_panel">
 	<div class="x_title">
 		<h2>Activity : <?php echo $head['CREATED_DATE'] ?></h2>
