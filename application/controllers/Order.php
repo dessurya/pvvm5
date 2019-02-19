@@ -44,33 +44,23 @@ class Order extends CI_Controller {
 
 	public function show($data = null){
 		$response = array();
-		$roll_id = $this->session->userdata('ROLL_ID');
-		if($roll_id == 1 or $roll_id == 4) {
-			$urlview = '_main/_order/show.php';
-		}else if($roll_id == 2) {
-			$urlview = '_main/_order/shipping_agent.php';
-		}else if($roll_id == 3) {
-			$urlview = '_main/_order/show.php';
-		}
+		$urlview = '_main/_order/show.php';
 
 		if ($data == null) {
 			$response['response'] = false;
 		}else{
+			$roll_id = $this->session->userdata('ROLL_ID');
 			$send = array();
 			$this->load->model('m_order');
-			$find = $this->m_order->finddata($this->session->userdata('ROLL_ID'), $data);
+			$find = $this->m_order->finddata($roll_id, $data);
 			$find = $find[0];
 			$send['head'] = $find;
-			$send['detail'] = $this->m_order->finddatadetail($this->session->userdata('ROLL_ID'), $data);
-			$send['history'] = $this->m_order->history($this->session->userdata('ROLL_ID'), $data);
+			$send['detail'] = $this->m_order->finddatadetail($roll_id, $data);
+			$send['history'] = $this->m_order->history($roll_id, $data);
 			$response['response'] = true;
-			$response['name'] = 'Order Waste : '.$find['PKK_ID'];
+			$response['name'] = 'Order Waste : '.$find['PKK_NO'];
 			$response['result'] = $this->load->view($urlview, $send, true);
 			$response['reload'] = true;
-
-			if ($find['STATUS_ID'] == 101) {
-				$this->m_order->changestatus($this->session->userdata('ROLL_ID'), $find['PKK_ID'], $find['STATUS_ID'], 'open');
-			}
 		}
 
 		header('Content-Type: application/json');

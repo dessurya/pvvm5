@@ -29,29 +29,29 @@
 												<table id="datatable" class="table table-striped table-bordered no-footer">
 													<thead>
 														<tr>
-															<?php if ($tittle == 'Order List') { ?>
 															<th>No</th>
-															<th><input class="iCheckTrig flat" type="checkbox"></th>
+															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
 															<th>Created Date</th>
 															<th>PKK</th>
 															<th>No Layanan</th>
-															<th>Status</th>
 															<th>Pelabuhan</th>
-															<?php } else if($tittle == 'sdassadsad') { ?>
+															<?php if ($tittle == 'Order List') { ?>
+															<th>Vendor</th>
+															<th>Status</th>
 															<?php } ?>
 														</tr>
 													</thead>
 													<tfoot>
 														<tr>
-															<?php if ($tittle == 'Order List') { ?>
 															<th></th>
-															<th></th>
+															<!-- <th></th> -->
 															<th class="search">Created Date</th>
 															<th class="search">PKK</th>
 															<th class="search">No Layanan</th>
-															<th class="search autoComplete">Status</th>
 															<th class="search autoComplete">Pelabuhan</th>
-															<?php } else if($tittle == 'sdassadsad') { ?>
+															<?php if ($tittle == 'Order List') { ?>
+															<th class="search">Vendor</th>
+															<th class="search autoComplete">Status</th>
 															<?php } ?>
 														</tr>
 													</tfoot>
