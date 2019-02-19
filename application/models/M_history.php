@@ -18,54 +18,22 @@ class M_history extends CI_Model{
 		}
 
 		$this->datatables->select("
-			ATV.NAME AS ATVNAME,
-			ATE.NAME AS ATENAME,
-			ATA.USERNAME AS USERNAME,
-			ATHL.HISTORY_ID AS ID,
-			ATHL.HISTORY_ID AS HISTORY_ID,
-			TO_CHAR(ATHL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CREATED_DATE,
-			ATHL.AUTH_ID AS AUTH_ID,
-			ATAT.NAME AS ROLL,
-			ATHL.ACTION_TYPE AS ACTION_TYPE,
-			CASE ATHL.TABLE_NAME WHEN 'APWMS_TX_AUTH' THEN 'USER' WHEN 'APWMS_TX_VENDOR' THEN 'VENDOR' WHEN 'APWMS_TX_ORDER_LIST' THEN 'ORDER' END AS TABLE_NAME
+			BATCH_ID,
+			TO_CHAR(CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
+			DESCRIPTION,
+			STATUS
 		");
-        $this->datatables->from('APWMS_TX_HISTORY_LOG ATHL');
-        $this->datatables->join('APWMS_TX_AUTH ATA', 'ATHL.AUTH_ID = ATA.ID', 'left');
-        $this->datatables->join('APWMS_TR_AUTH_TYPE ATAT', 'ATA.TYPE = ATAT.ID', 'left');
-        $this->datatables->join('APWMS_TX_EMPLOYE ATE', 'ATHL.AUTH_ID = ATE.AUTH_ID', 'left');
-        $this->datatables->join('APWMS_TX_VENDOR ATV', 'ATHL.AUTH_ID = ATV.AUTH_ID', 'left');
+        $this->datatables->from('AAPWMS_TX_API_LOG');
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
         		$search = $list['val'];
-        		if ($list['key'] == 'CREATED_DATE') { $field = 'ATHL.CREATED_DATE'; }
-        		else if ($list['key'] == 'USERNAME') { $field = 'ATA.USERNAME'; }
-        		else if ($list['key'] == 'ACTION_TYPE') { $field = 'ATHL.ACTION_TYPE'; }
-        		else if ($list['key'] == 'ROLL') { $field = 'ATAT.NAME'; }
-        		else if ($list['key'] == 'TABLE_NAME') { 
-        			$field = 'ATHL.TABLE_NAME';
-        			if ($search == 'USER' ) { $search = 'APWMS_TX_AUTH'; }
-        			else if ($search == 'VENDOR' ) { $search = 'APWMS_TX_VENDOR'; }
-        			else if ($search == 'ORDER' ) { $search = 'APWMS_TX_ORDER_LIST'; }
-        		}
-        		else if ($list['key'] == 'NAME') {
-        			$this->datatables->or_like('UPPER(ATV.NAME)', strtoupper($search));
-        			$this->datatables->or_like('UPPER(ATE.NAME)', strtoupper($search));
-        		}
-
-        		if ($list['key'] != 'NAME') {
-	        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
-        		}
+        		if ($list['key'] == 'CREATED_DATE') { $field = 'CREATED_DATE'; }
+        		else if ($list['key'] == 'DESCRIPTION') { $field = 'DESCRIPTION'; }
+        		else if ($list['key'] == 'STATUS') { $field = 'STATUS'; }
+        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
         	}
         }
-
-		if($data != null){
-			if ($this->uri->segment(5) == 'vendor') {
-				$this->load->model('m_vendor');
-				$ven = $this->m_vendor->finddata($roll_id,$data);
-				$this->datatables->where_in('ATHL.AUTH_ID', $ven[0]['AUTH_ID']);
-			}
-		}
         return $this->datatables->generate();
 	}
 

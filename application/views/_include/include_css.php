@@ -9,7 +9,7 @@
 <link href="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.buttons.css' ?>" rel="stylesheet">
 <link href="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.nonblock.css' ?>" rel="stylesheet">
 
-<?php if ( in_array($this->uri->segment(1), array('vendor', 'order')) ) { ?>
+<?php if ( in_array($this->uri->segment(1), array('vendor', 'order', 'history')) ) { ?>
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">

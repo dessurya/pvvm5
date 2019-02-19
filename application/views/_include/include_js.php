@@ -11,7 +11,7 @@
 <script src="<?php echo base_url().'/_asset/gentelella/vendors/pnotify/dist/pnotify.callbacks.js' ?>"></script>
 <script src="<?php echo base_url().'/_asset/gentelella/vendors/Chart.js/dist/Chart.min.js' ?>"></script>
 
-<?php if ( in_array($this->uri->segment(1), array('vendor', 'order')) ) { ?>
+<?php if ( in_array($this->uri->segment(1), array('vendor', 'order', 'history')) ) { ?>
 	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
