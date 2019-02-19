@@ -30,8 +30,8 @@
 					<label>No.PKK</label>
 					<input 
 						readonly=""
-						name="PKK_ID" 
-						value="<?php echo $head['PKK_ID'] ?>" 
+						name="PKK_NO" 
+						value="<?php echo $head['PKK_NO'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -41,8 +41,8 @@
 					<label>No.Layanan</label>
 					<input 
 						readonly=""
-						name="NO_LAYANAN" 
-						value="<?php echo $head['NO_LAYANAN'] ?>" 
+						name="LAYANAN_NO" 
+						value="<?php echo $head['LAYANAN_NO'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -52,8 +52,8 @@
 					<label>Agent</label>
 					<input 
 						readonly=""
-						name="AGENT_NAME" 
-						value="<?php echo $head['AGENT_NAME'] ?>" 
+						name="PERUSAHAAN_NAMA" 
+						value="<?php echo $head['PERUSAHAAN_NAMA'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -63,19 +63,30 @@
 					<label>Pelabuhan</label>
 					<input 
 						readonly=""
-						name="KODE_PELABUHAN" 
-						value="<?php echo $head['KODE_PELABUHAN'] ?>" 
+						name="PELABUHAN_KODE" 
+						value="<?php echo $head['PELABUHAN_KODE'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-					<label>Created On</label>
+					<label>Tanggal Warta Kapal</label>
 					<input 
 						readonly=""
-						name="CREATED_DATE" 
-						value="<?php echo $head['CREATED_DATE'] ?>" 
+						name="WARTA_KAPAL_DATE" 
+						value="<?php echo $head['WARTA_KAPAL_DATE'] ?>" 
+						type="text" 
+						class="form-control">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Tanggal Pick Up Order</label>
+					<input 
+						readonly=""
+						name="ORDER_DATE" 
+						value="<?php echo $head['ORDER_DATE'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -83,15 +94,42 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label>Status</label>
+					<input type="hidden" name="STATUS_ID" value="<?php echo $head['STATUS_ID'] ?>">
 					<input 
 						readonly=""
-						name="STATUS" 
-						value="<?php echo $head['STATUS'] ?>" 
+						name="STATUS_NAMA" 
+						value="<?php echo $head['STATUS_NAMA'] ?>" 
+						type="text" 
+						class="form-control">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Tanggal Tongkang Pick Up</label>
+					<input 
+						<?php if($this->session->userdata('ROLL_ID') == 1 and $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						name="TONGKANG_PICKUP_DATE" 
+						value="<?php echo $head['TONGKANG_PICKUP_DATE'] ?>" 
+						type="text" 
+						class="form-control">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Tanggal Trucking Pick Up</label>
+					<input 
+						<?php if($this->session->userdata('ROLL_ID') == 1 and $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						name="TRUCKING_PICKUP_DATE" 
+						value="<?php echo $head['TRUCKING_PICKUP_DATE'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
 			</div>
 		</div>
+
+		<div class="ln_solid"></div>
+		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success pickupordersubmit">Get This Order</button>
+		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
 	</div>
 </div>
 
@@ -105,117 +143,82 @@
 			<table id="orderwastedetail" class="table table-striped table-bordered no-footer">
 				<thead>
 					<tr>
-						<th>Waste</th>
-						<th>Unit</th>
 						<th>Type</th>
-						<th>Max</th>
-						<th>Keep</th>
-						<th>Request</th>
-						<th>Total</th>
-						<th>Actual</th>
-						<th>Vendor</th>
+						<th>Waste</th>
+						<th width="80px">Max</th>
+						<th width="80px">Request</th>
+						<th width="80px">Actual Tongkang</th>
+						<th width="80px">Actual Trucking</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($detail as $list) { ?>
-					<tr data-pdi="<?php echo $list['PKK_DET_ID'] ?>" class="<?php echo 'roid_'.$this->session->userdata('ROLL_ID').' stid_'.$head['STATUS_ID'] ?>">
+					<tr data-dwi="<?php echo $list['DET_WARTA_IN_ID'] ?>">
 						<td>
-							<input type="hidden" name="STATUS_ID" value="<?php echo $list['STATUS_ID'] ?>">
-							<input type="hidden" name="PKK_ID" value="<?php echo $list['PKK_ID'] ?>">
-							<input type="hidden" name="PKK_DET_ID" value="<?php echo $list['PKK_DET_ID'] ?>">
-							<input value="<?php echo $list['WASTE_NAME'] ?>" data-id="<?php echo $list['WASTE_ID'] ?>" type="text" name="WASTE_NAME" class="form-control" <?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'WASTE_NAME')) ?>>
+							<input 
+								readonly=""
+								type="text" name="TYPE" class="form-control"
+								value="<?php echo $list['TYPE_NAME'] ?>" 
+								data-id="<?php echo $list['WASTE_ID'] ?>"
+								>
 						</td>
 						<td>
 							<input 
-								value="<?php echo $list['UM_NAME'] ?>" data-id="<?php echo $list['UM_ID'] ?>" 
-								type="text" 
-								name="UM_NAME" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'UM_NAME')) ?>>
+								readonly=""
+								type="text" name="WASTE" class="form-control" 
+								value="<?php echo $list['WASTE_NAME'] ?>" 
+								data-id="<?php echo $list['WASTE_ID'] ?>"
+								>
 						</td>
 						<td>
 							<input 
-								value="<?php echo $list['WASTE_TYPE_NAME'] ?>" 
-								data-id="<?php echo $list['WASTE_TYPE_ID'] ?>" 
-								type="text" 
-								name="WASTE_TYPE_NAME" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'WASTE_TYPE_NAME')) ?>>
+								readonly=""
+								type="text" name="MAX" class="form-control"
+								value="<?php echo $list['MAX_LOAD_QTY'] ?>"
+								>
 						</td>
 						<td>
 							<input 
-								value="<?php echo $list['MAX_LOAD_QTY'] ?>" 
-								type="text" 
-								name="MAX_LOAD_QTY" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'MAX_LOAD_QTY')) ?>>
+								readonly=""
+								type="text" name="REQUEST" class="form-control" 
+								value="<?php echo $list['REQUEST_QTY'] ?>"
+								>
 						</td>
 						<td>
 							<input 
-							value="<?php echo $list['KEEP_QTY'] ?>" 
-							type="text" name="KEEP_QTY" 
-							class="form-control" 
-							<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'KEEP_QTY')) ?>>
+								<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] == null) echo 'readonly=""'; ?>
+								type="text" name="TONGKANG" class="form-control" 
+								value="<?php echo $list['TONGKANG_QTY'] ?>"
+								>
 						</td>
 						<td>
 							<input 
-								value="<?php echo $list['REQUEST_QTY'] ?>" 
-								type="text" 
-								name="REQUEST_QTY"
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'REQUEST_QTY')) ?>>
-						</td>
-						<td>
-							<input 
-								value="<?php echo $list['TOTAL_QTY'] ?>" 
-								type="text" 
-								name="TOTAL_QTY" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'TOTAL_QTY')) ?>>
-						</td>
-						<td>
-							<input 
-								value="<?php echo $list['ACTUAL_REQUEST_QTY'] ?>" 
-								type="text" 
-								name="ACTUAL_REQUEST_QTY" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array('type'=>'ACTUAL_REQUEST_QTY')) ?>>
-						</td>
-						<td>
-							<select 
-								name="VENDOR_NAME" 
-								data-name="<?php echo $list['VENDOR_NAME'] ?>" 
-								data-id="<?php echo $list['VENDOR_ID'] ?>" 
-								class="form-control" 
-								<?php echo attr($head['STATUS_ID'], $this->session->userdata('ROLL_ID'), array("type"=>'VENDOR_NAME', "REQUEST_QTY"=>$list['REQUEST_QTY'])) ?>>
-							</select>
+								<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] == null) echo 'readonly=""'; ?>
+								type="text" name="TRUCKING" class="form-control" 
+								value="<?php echo $list['TRUCKING_QTY'] ?>"
+								>
 						</td>
 					</tr>
 					<?php } ?>
 				</tbody>
 			</table>
 		</div>
+		<?php if($head['ORDER_ID'] != null) { ?>
 		<div class="ln_solid"></div>
-
-		<?php if ((in_array($head['STATUS_ID'], array(101, 102))) and $this->session->userdata('ROLL_ID') == 4) { ?>
+		<?php if($this->session->userdata('ROLL_ID') != 1 and $head['ORDER_ID'] != null) { ?>
 		<button 
-			data-action="<?php echo site_url().'/order/tools/verifyvendor?pkk_id='.$head['PKK_ID'] ?>" 
-			id="verifyvendor" 
-			type="submit" 
-			class="btn btn-success">Verify Vendor</button>
-		<?php }else if ($head['STATUS_ID'] == 103 and $this->session->userdata('ROLL_ID') == 3) { ?>
-		<button 
-			data-action="<?php echo site_url().'/order/tools/saveact?pkk_id='.$head['PKK_ID'] ?>" 
+			data-action="<?php echo site_url().'/order/tools/saveact?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
 			id="saveact" 
 			type="submit" 
 			class="btn btn-success">Save</button>
 		<button 
-			data-action="<?php echo site_url().'/order/tools/submact?pkk_id='.$head['PKK_ID'] ?>" 
+			data-action="<?php echo site_url().'/order/tools/submact?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
 			id="submact" 
 			type="submit" 
 			class="btn btn-success">Submit</button>
 		<?php } ?>
-		<button data-id="<?php echo $head['PKK_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
+		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
+		<?php } ?>
 	</div>
 </div>
 
@@ -252,8 +255,8 @@
 					<label>Nomer Dokument</label>
 					<input 
 						readonly=""
-						name="NOMOR_DOKUMEN" 
-						value="<?php echo $head['NOMOR_DOKUMEN'] ?>" 
+						name="DOKUMEN_NO" 
+						value="<?php echo $head['DOKUMEN_NO'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -290,8 +293,8 @@
 				<tbody>
 					<?php foreach ($history as $list) { ?>
 						<tr>
-							<td><?php echo $list['CDATE'] ?></td>
-							<td><?php echo $list['USERDETAIL'] ?></td>
+							<td><?php echo $list['CREATED_DATE'] ?></td>
+							<td><?php echo $list['NAMA'] ?></td>
 							<td><?php echo $list['ACTION_TYPE'] ?></td>
 						</tr>
 					<?php } ?>

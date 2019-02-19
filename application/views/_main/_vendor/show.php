@@ -122,7 +122,7 @@
 				<div id="actionshow" class="row">
 					<div class="col-md-4">
 						<div class="form-group">
-							<a href="<?php echo site_url().'/order/index/'.$vendor['VENDOR_ID'].'/'.$vendor['NAMA'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
+							<a href="<?php echo site_url().'/order/index/for/'.$vendor['NAMA'].'/'.$vendor['VENDOR_ID'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
 								<i class="fa fa-file-text-o"></i> Show Order
 							</a>
 						</div>

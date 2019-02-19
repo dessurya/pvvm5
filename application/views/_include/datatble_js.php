@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
-	<?php if($this->uri->segment(3) != null) {?>
-		urlDataTable += "<?php echo '/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$this->uri->segment(5) ?>";
+	<?php if($this->uri->segment(1) == 'order') {?>
+		urlDataTable += "<?php echo '/'.$this->uri->segment(3) ?>";
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
@@ -27,20 +27,31 @@
 	    serverSide: true,
 	    // serverSide: false,
 	    ajax: {"url": urlDataTable, "type": "POST"},
-	    <?php if(in_array($this->uri->segment(1), array('order', 'history'))) {?>
+	    <?php  if($this->uri->segment(1) == 'order' and ($this->uri->segment(3) == 'list' or $this->uri->segment(3) == 'pickup')) { ?>
 		    aaSorting: [ [1,'desc'] ],
 		<?php } else if($this->uri->segment(1) == 'vendor') {?>
 		    aaSorting: [ [3,'asc'] ],
 		<?php }?>
 	    columns: [
-			<?php if($this->uri->segment(1) == 'order') {?>
-			{name: "NO", data: "PKK_ID", orderable: false, searchable:false},
-			{name: "CREATED_DATE", data: "CREATED_DATE"},
-			{name: "PKK_ID", data: "PKK_ID"},
+			<?php  if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'pickup') { ?>
+			{name: "NO", data: "ID", orderable: false, searchable:false},
+			// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+			{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
+			{name: "PKK_NO", data: "PKK_NO"},
 			{name: "NO_LAYANAN", data: "NO_LAYANAN"},
-			{name: "STATUS", data: "STATUS"},
+			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"}
+			<?php } else if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'list') { ?>
+			{name: "NO", data: "ID", orderable: false, searchable:false},
+			// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+			{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
+			{name: "PKK_NO", data: "PKK_NO"},
+			{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+			{name: "STATUS", data: function(data) { //name
+				if(data.STATUS == null){ return 'AVAILABLE'; }
+				else{ return data.STATUS; }
+			}},
 			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
-			{name: "AGENT_NAME", data: "AGENT_NAME"}
+			{name: "VENDOR_NAMA", data: "VENDOR_NAMA"}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 			{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
@@ -120,6 +131,8 @@
 			var index = page * length + (iDisplayIndex + 1);
 			<?php if($this->uri->segment(1) == 'vendor') { ?>
 			$(row).attr('id', data.VENDOR_ID);
+			<?php } else if($this->uri->segment(1) == 'order') { ?>
+			$(row).attr('id', data.ID);
 			<?php } ?>
 			$('td:eq(0)', row).html(index);
 		}
