@@ -31,29 +31,29 @@
 			return false;
 		});
 
-		function checkNotivication() {
-			$.ajax({
-				url: "<?PHP echo site_url().'/login/checkNotivication' ?>",
-				type: 'post',
-				dataType: 'json',
-				beforeSend: function() {
-					// $('#loading-page').show();
-				},
-				success: function(data) {
-					if (data.response == true) {
-						var dataPN = new Array();
-						dataPN['model'] = 'info';
-			            dataPN['title'] = 'New Order';
-			            dataPN['text'] = 'Halo, you got new order please check...';
-			            dataPN['type'] = 'success';
-			            showPNotify(dataPN);
-						$('.top_nav .nav_menu nav ul.navbar-nav li#notivication a span').show().html(data.notif);
-					}else if(data.response == false && data.response == 'You Log Out...'){
-						location.reload();
-					}
-				}
-			});
-		}
+		// function checkNotivication() {
+		// 	$.ajax({
+		// 		url: "<?PHP echo site_url().'/login/checkNotivication' ?>",
+		// 		type: 'post',
+		// 		dataType: 'json',
+		// 		beforeSend: function() {
+		// 			// $('#loading-page').show();
+		// 		},
+		// 		success: function(data) {
+		// 			if (data.response == true) {
+		// 				var dataPN = new Array();
+		// 				dataPN['model'] = 'info';
+		// 	            dataPN['title'] = 'New Order';
+		// 	            dataPN['text'] = 'Halo, you got new order please check...';
+		// 	            dataPN['type'] = 'success';
+		// 	            showPNotify(dataPN);
+		// 				$('.top_nav .nav_menu nav ul.navbar-nav li#notivication a span').show().html(data.notif);
+		// 			}else if(data.response == false && data.response == 'You Log Out...'){
+		// 				location.reload();
+		// 			}
+		// 		}
+		// 	});
+		// }
 
 		function logout(url){
 			$.ajax({

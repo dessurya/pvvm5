@@ -33,22 +33,32 @@ class M_order extends CI_Model{
 		");
         $this->datatables->from('ORDER_WARTA_KAPAL');
 	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
+
 	    if ($roll_id == 3 and $data == 'pickup') {
 	    	$this->datatables->where('VENDOR_ID', null);
+	    	$finddate = "WARTA_KAPAL_IN_DATE";
 	    } else if ($roll_id == 3 and $data == 'list') {
 	    	$this->datatables->where('VENDOR_ID', $this->session->userdata('VENDOR_ID'));
+	    	$finddate = "ORDER_DATE";
+	    }
+
+	    if($_POST['startDate'] != null and $_POST['endDate'] != null) {
+	    	$a = 'TO_DATE(';
+	    	$b = ', \'DD/MM/YYYY\')';
+	    	$start = $a.$_POST['startDate'].$b;
+	    	// $end = "TO_DATE(".$_POST['endDate'].", 'DD/MM/YYYY')";
+		    if ($_POST['startDate'] == $_POST['endDate']) {
+		    	$this->datatables->where($finddate, $start);
+		    }else{
+		    	$this->datatables->where($finddate." >= ", $start);
+		    	$this->datatables->where($finddate." <= ", $start);
+		    }
 	    }
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
         		$search = $list['val'];
-        		if ($list['key'] == 'CREATED_DATE') { $field = 'ATOL.CREATED_DATE'; }
-        		else if ($list['key'] == 'PKK_ID') { $field = 'ATOL.PKK_ID'; }
-        		else if ($list['key'] == 'NO_LAYANAN') { $field = 'ATOL.NO_LAYANAN'; }
-        		else if ($list['key'] == 'STATUS') { $field = 'ATSS.STATUS'; }
-        		else if ($list['key'] == 'KODE_PELABUHAN') { $field = 'ATOL.KODE_PELABUHAN'; }
-        		else if ($list['key'] == 'AGENT_NAME') { $field = 'ATOL.NAMA_PERUSAHAAN'; }
-        		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
+        		$this->datatables->like('UPPER('.$list['key'].')', strtoupper($search));
         	}
         }
         return $this->datatables->generate();

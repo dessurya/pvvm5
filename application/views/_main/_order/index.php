@@ -20,6 +20,12 @@
 							<div class="x_panel">
 								<div class="x_title">
 									<h2>Data <small><?php echo $tittle; ?></small></h2>
+									<div id="action" class="nav navbar-right panel_toolbox">
+										<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+											<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+											<span></span> <b class="caret"></b>
+				                        </div>
+				                    </div>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -45,7 +51,7 @@
 														<tr>
 															<th></th>
 															<!-- <th></th> -->
-															<th class="search">Created Date</th>
+															<th></th>
 															<th class="search">PKK</th>
 															<th class="search">No Layanan</th>
 															<th class="search autoComplete">Pelabuhan</th>

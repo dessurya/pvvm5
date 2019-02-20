@@ -22,4 +22,5 @@
 <?php } if ($this->uri->segment(1) == 'order') { ?>
 	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/moment/moment.js"></script>
 	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <?php } ?>

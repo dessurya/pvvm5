@@ -15,6 +15,8 @@
 	<link href="<?php echo base_url(); ?>/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">
 <?php } if ($this->uri->segment(1) == 'order') { ?>
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+	
+	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
 	<style type="text/css">
 		#orderwastedetail input,
