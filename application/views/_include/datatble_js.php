@@ -45,7 +45,7 @@
 			<?php } else if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'list') { ?>
 			{name: "NO", data: "ID", orderable: false, searchable:false},
 			// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
-			{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
+			{name: "ORDER_DATE", data: "ORDER_DATE"},
 			{name: "PKK_NO", data: "PKK_NO"},
 			{name: "NO_LAYANAN", data: "NO_LAYANAN"},
 			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
@@ -215,8 +215,9 @@
 	            $('.x_content .tab-content #tab_open').html(data.result);
 				$('ul.nav-tabs li.tab_open').show();
 	        	$('ul.nav-tabs.bar_tabs a[href=#tab_open]').tab('show').html(data.name);
-	        	<?php if( in_array($this->uri->segment(1), array('order'))){?>
-				callVendor();
+	        	<?php if( in_array($this->uri->segment(1), array('order')) ){ ?>
+				calldattime('input[name=TONGKANG_PICKUP_DATE]');
+				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>
 	            $('#loading-page').hide();
 	            dtableReload();

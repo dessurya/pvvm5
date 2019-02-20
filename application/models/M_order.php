@@ -33,8 +33,9 @@ class M_order extends CI_Model{
 		");
         $this->datatables->from('ORDER_WARTA_KAPAL');
 	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
-
-	    if ($roll_id == 3 and $data == 'list') {
+	    if ($roll_id == 3 and $data == 'pickup') {
+	    	$this->datatables->where('VENDOR_ID', null);
+	    } else if ($roll_id == 3 and $data == 'list') {
 	    	$this->datatables->where('VENDOR_ID', $this->session->userdata('VENDOR_ID'));
 	    }
 
@@ -50,34 +51,6 @@ class M_order extends CI_Model{
         		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
         	}
         }
-
-		// if($roll_id == 3 or $data != null){
-		// 	if ($data == null and $roll_id == 3) {
-		// 		$venid = $this->session->userdata('DETAIL_ID');
-		// 	}else{
-		// 		$venid = $data;
-		// 	}
-		// 	$query="
-		// 		SELECT
-		// 			DISTINCT(ATOL.PKK_ID) AS PKK_ID
-		// 		FROM
-		// 			APWMS_TX_ORDER_LIST_DET ATOLD
-		// 		JOIN
-		// 			APWMS_TX_ORDER_LIST ATOL
-		// 			ON ATOL.PKK_ID = ATOLD.PKK_ID
-		// 		WHERE ATOLD.STATUS_ID <> 201 AND VENDOR_ID = ".$venid;
-		// 	$runQuery = $this->db->query($query);
-		// 	$arrdata = $runQuery->result_array();
-		// 	if ($arrdata) {
-		// 		function ret($data){
-		// 			return $data['PKK_ID'];
-		// 		}
-		// 		$inid = array_map("ret", $arrdata);
-		// 	}else{
-		// 		$inid = array(0);
-		// 	}
-		// 	$this->datatables->where_in('ATOL.PKK_ID', $inid);
-		// }
         return $this->datatables->generate();
 	}
 
@@ -104,8 +77,8 @@ class M_order extends CI_Model{
 				WK.SUMBER_LIMBAH AS SUMBER_LIMBAH,
 				WO.ORDER_ID AS ORDER_ID,
 				TO_CHAR(WO.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS ORDER_DATE, 
-				TO_CHAR(WO.TONGKANG_PICKUP_DATE, 'YYYY/MM/DD HH24:MI:SS') AS TONGKANG_PICKUP_DATE, 
-				TO_CHAR(WO.TRUCKING_PICKUP_DATE, 'YYYY/MM/DD HH24:MI:SS') AS TRUCKING_PICKUP_DATE, 
+				TO_CHAR(WO.TONGKANG_PICKUP_DATE, 'YYYY/MM/DD') AS TONGKANG_PICKUP_DATE, 
+				TO_CHAR(WO.TRUCKING_PICKUP_DATE, 'YYYY/MM/DD') AS TRUCKING_PICKUP_DATE, 
 				WO.VENDOR_ID AS VENDOR_ID,
 				WV.NAMA AS VENDOR_NAMA,
 				CASE WHEN WO.STATUS_ID IS NULL THEN 0 ELSE WO.STATUS_ID END AS STATUS_ID,
@@ -172,27 +145,6 @@ class M_order extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function changestatus($roll_id, $id, $stid, $act){
-		if (in_array($stid, array(101, 102, 103))) {
-			$table = 'APWMS_TX_ORDER_LIST';
-			$wid = 'PKK_ID';
-		}else{
-			$table = 'APWMS_TX_ORDER_LIST_DET';
-			$wid = 'PKK_DET_ID';
-		}
-
-		if ($stid == 101 and $act == 'open') {
-			$this->db->set('STATUS_ID',  102);
-		}else if ($stid == 102 and $act == 'verifyvendor'){
-			$this->db->set('STATUS_ID',  103);
-		}else if($stid == 201 and $act == 'verifyvendor'){
-			$this->db->set('STATUS_ID',  202);
-		}
-		$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-		$this->db->where($wid,  $id);
-		$this->db->update($table);
-	}
-
 	public function verifyvendor($roll_id, $data){
 		foreach ($data['post'] as $list) {
 			$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
@@ -217,41 +169,50 @@ class M_order extends CI_Model{
 		// record history
 	}
 
-	public function saveact($roll_id, $data){
+	public function store($roll_id, $data){
 		foreach ($data['post'] as $list) {
 			if ($list != null or $list != undefined) {
-				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
-				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
-				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
-				$this->db->update('APWMS_TX_ORDER_LIST_DET');
+				$this->db->set('TONGKANG_QTY',  $list['TONGKANG_QTY']);
+				$this->db->set('TRUCKING_QTY',  $list['TRUCKING_QTY']);
+				$this->db->where('DET_WARTA_IN_ID', $list['DET_WARTA_IN_ID']);
+				$this->db->update('AAPWMS_TX_SHIP_WASTE_IN');
 			}
 		}
+		if ($data['get']['type'] == 'save') {
+			$this->db->set('STATUS_ID',  2);
+		}else if ($data['get']['type'] == 'submit'){
+			$this->db->set('STATUS_ID',  3);
+		}
+		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
+		$this->db->update('AAPWMS_TR_WASTE_ORDER');
+
 		// record history
 			$object = array();
-			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
-			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
 			$json = json_encode($object);
-			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+			$this->recordhistory('AAPWMS_TR_WARTA_KAPAL_IN', $data['get']['type'].' actual order', 'Success '.$data['get']['type'].' actual order on order PKK : '.$object['head'][0]['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
 	}
 
-	public function submact($roll_id, $data){
-		foreach ($data['post'] as $list) {
-			if ($list != null or $list != undefined) {
-				$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-				$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
-				$this->db->set('ACTUAL_REQUEST_QTY',  $list['ACTUAL_REQUEST_QTY']);
-				$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
-				$this->db->update('APWMS_TX_ORDER_LIST_DET');
-			}
-		}
+	public function pickupordersubmit($roll_id, $data){
+
+		$this->db->set('VENDOR_ID',  $this->session->userdata('VENDOR_ID'));
+		$this->db->set('STATUS_ID',  1);
+		$this->db->set('PKK_NO',  $data['post']['PKK_NO']);
+		$this->db->set('WARTA_KAPAL_IN_ID',  $data['get']['warta_kapal_in_id']);
+		$this->db->set('CREATED_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
+		$this->db->set('TONGKANG_PICKUP_DATE', "TO_DATE('".$data['post']['TONGKANG_PICKUP_DATE']."','DD/MM/YYYY')", false);
+		$this->db->set('TRUCKING_PICKUP_DATE', "TO_DATE('".$data['post']['TRUCKING_PICKUP_DATE']."','DD/MM/YYYY')", false);
+
+		$this->db->insert('AAPWMS_TR_WASTE_ORDER');
+
 		// record history
 			$object = array();
-			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
-			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
+			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
 			$json = json_encode($object);
-			$this->recordhistory('APWMS_TX_ORDER_LIST', 'save actual order', 'Success save actual order on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
+			$this->recordhistory('AAPWMS_TR_WARTA_KAPAL_IN', 'pick up order', 'Success to pick up order on PKK : '.$data['post']['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
 	}
 
