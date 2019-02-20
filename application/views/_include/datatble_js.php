@@ -31,6 +31,8 @@
 		    aaSorting: [ [1,'desc'] ],
 		<?php } else if($this->uri->segment(1) == 'vendor') {?>
 		    aaSorting: [ [3,'asc'] ],
+		<?php } else if($this->uri->segment(1) == 'history') {?>
+		    aaSorting: [ [1,'asc'] ],
 		<?php }?>
 	    columns: [
 			<?php  if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'pickup') { ?>
@@ -43,15 +45,15 @@
 			<?php } else if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'list') { ?>
 			{name: "NO", data: "ID", orderable: false, searchable:false},
 			// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
-			{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
+			{name: "ORDER_DATE", data: "ORDER_DATE"},
 			{name: "PKK_NO", data: "PKK_NO"},
 			{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
+			{name: "VENDOR_NAMA", data: "VENDOR_NAMA"},
 			{name: "STATUS", data: function(data) { //name
 				if(data.STATUS == null){ return 'AVAILABLE'; }
 				else{ return data.STATUS; }
-			}},
-			{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
-			{name: "VENDOR_NAMA", data: "VENDOR_NAMA"}
+			}}
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 			{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
@@ -71,23 +73,10 @@
 			{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"},
 			{name: "LAST_LOGIN", data: "LAST_LOGIN"}
 			<?php } else if($this->uri->segment(1) == 'history') {?>
-			{name: "NO", data: "HISTORY_ID", orderable: false, searchable:false},
+			{name: "NO", data: "BATCH_ID", orderable: false, searchable:false},
 			{name: "CREATED_DATE", data: "CREATED_DATE"},
-			{name: "TABLE_NAME", data: "TABLE_NAME"},
-			{name: "ACTION_TYPE", data: "ACTION_TYPE"},
-			{name: "USERNAME", data: "USERNAME"},
-			{name: "NAME", data: function(data) { //name
-				if(data.ATVNAME != null){ return data.ATVNAME; }
-				else if(data.ATENAME != null){ return data.ATENAME; }
-			} },
-			{name: "ROLL", data: "ROLL"}
-			<?php } else if($this->uri->segment(1) == 'profile') {?>
-			{name: "NO", data: "HISTORY_ID", orderable: false},
-			{name: "CREATED_DATE", data: "CREATED_DATE"},
-			{name: "TABLE_NAME", data: "TABLE_NAME"},
-			{name: "ACTION_TYPE", data: "ACTION_TYPE"},
-			{name: "USERNAME", data: "USERNAME"},
-			{name: "ROLL", data: "ROLL"}
+			{name: "DESCRIPTION", data: "DESCRIPTION"},
+			{name: "STATUS", data: "STATUS"}
 			<?php }?>
 	    ],
 	    initComplete: function () {
@@ -226,8 +215,9 @@
 	            $('.x_content .tab-content #tab_open').html(data.result);
 				$('ul.nav-tabs li.tab_open').show();
 	        	$('ul.nav-tabs.bar_tabs a[href=#tab_open]').tab('show').html(data.name);
-	        	<?php if( in_array($this->uri->segment(1), array('order'))){?>
-				callVendor();
+	        	<?php if( in_array($this->uri->segment(1), array('order')) ){ ?>
+				calldattime('input[name=TONGKANG_PICKUP_DATE]');
+				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>
 	            $('#loading-page').hide();
 	            dtableReload();

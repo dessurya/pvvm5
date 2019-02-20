@@ -12,36 +12,14 @@ class History extends CI_Controller {
 		}
     }
 
-	public function index($data = null){
+	public function index($data){
 		$urlview = '_main/_history/index.php';
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | History";
-		if ($data != null) {
-			if ($this->uri->segment(5) == 'vendor') {
-				$this->load->model('m_vendor');
-				$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
-				if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
-					redirect(base_url().'index.php/order', 'refresh');
-				}
-				$viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
-			}
-		}
+		$viewComp['_tittle_'] = "IPWMS | HISTORY ".strtoupper($data);
+		
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
-
-		$viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">';
-	    $viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>';
-
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/gentelella/vendors/iCheck/icheck.js"></script>';
-
-	    $viewComp['_link_css_'] .= '<link href="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">';
-		$viewComp['_link_js_'] .= '<script src="'.base_url().'/_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>';
-
 
 		$this->parser->parse('_main/index', $viewComp);
 	}
