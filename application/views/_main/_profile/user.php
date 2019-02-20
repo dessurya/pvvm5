@@ -94,23 +94,23 @@
 											</div>
 											<div class="col-md-6 col-sm-12">
 												<div class="form-group">
-													<label>EMAIL</label>
-													<input 
-													readonly
-													name="EMAIL" 
-													value="<?php echo $detailProfile['EMAIL'] ?>" 
-													type="email" 
-													class="form-control">
-												</div>
-											</div>
-											<div class="col-md-6 col-sm-12">
-												<div class="form-group">
 													<label>PHONE</label>
 													<input 
 													readonly
 													name="PHONE" 
 													value="<?php echo $detailProfile['PHONE'] ?>" 
 													type="text" 
+													class="form-control">
+												</div>
+											</div>
+											<div class="col-md-6 col-sm-12">
+												<div class="form-group">
+													<label>EMAIL</label>
+													<input 
+													readonly
+													name="EMAIL" 
+													value="<?php echo $detailProfile['EMAIL'] ?>" 
+													type="email" 
 													class="form-control">
 												</div>
 											</div>
@@ -179,6 +179,13 @@
 													</button>
 												</div>
 											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target=".bs-example-modal-sm">
+														<i class="fa fa-lock"></i> Change Password
+													</button>
+												</div>
+											</div> 
 										</div>
 									</div>
 								</div>
@@ -199,3 +206,83 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel2">Change Password</h4>
+			</div>
+			<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label>Old Password</label>
+								<input 
+								name="password" 
+								value="" 
+								type="password" 
+								class="form-control" 
+								placeholder="Enter Old Password"
+								required="">
+								<small>Masukkan password anda.</small>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label>New Password</label>
+								<input 
+								name="npassword" 
+								value="" 
+								type="password" 
+								class="form-control npassword" 
+								placeholder="Enter New Password"
+								required="">
+								<small>Minimum 6 karakter.</small>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label>Confirm New Password</label>
+								<input 
+								name="cnpassword" 
+								value="" 
+								type="password" 
+								class="form-control cnpassword" 
+								placeholder="Confirm New Password"
+								required="">
+								<div class="passmsg">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i> Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$(".npassword, .cnpassword").keyup(checkPasswordMatch);
+		$(':button[type="submit"]').prop('disabled', true);
+	});
+	function checkPasswordMatch() {
+		var password = $(".npassword").val();
+		var confirmPassword = $(".cnpassword").val();
+
+		if (password != confirmPassword){
+			$(".passmsg").html("Passwords do not match!");
+			$(':button[type="submit"]').prop('disabled', true);
+		}
+		else{	
+			$(".passmsg").html("Passwords match.");
+			$(':button[type="submit"]').prop('disabled', false);
+		}
+	}
+</script>

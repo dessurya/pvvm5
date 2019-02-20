@@ -95,6 +95,12 @@
 				        dataPN['title'] = 'Success';
 				        dataPN['text'] = data.msg;
 				        dataPN['type'] = 'success';
+				        if(data.title !== null && data.title !== "" && data.title !== undefined){
+	            			dataPN['title'] = data.title;	
+	            		}
+	            		if(data.type !== null && data.type !== "" && data.type !== undefined){
+	            			dataPN['type'] = data.type;	
+	            		}
 		                showPNotify(dataPN);
 	            	}
 	                if (data.type == "add") {

@@ -8,12 +8,12 @@
 			</div>
 			<div class="x_content">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>Username</label>
+							<label>USERNAME</label>
 							<input 
 								name="username" 
-								value="<?php if(isset($data)) { echo $data['USERNAME']; } ?>" 
+								value="<?php echo $data['USERNAME'] ?>" 
 								type="text" 
 								class="form-control" 
 								placeholder="Enter USERNAME"
@@ -21,66 +21,63 @@
 								readonly="">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<label>ROLL</label>
+								<input 
+								readonly
+								name="roll" 
+								value="<?php echo $data['ROLL'] ?>" 
+								type="email" 
+								class="form-control">
+							</div>
+						</div>
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>Name</label>
+							<label>NAMA</label>
 							<input 
 								name="name" 
-								value="<?php if(isset($data)) { echo $data['NAME']; } ?>" 
+								value="<?php echo $data['NAMA'] ?>" 
 								type="text" 
 								class="form-control" 
 								placeholder="Enter Name"
 								required="">
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Email</label>
-							<input 
-								name="email" 
-								value="<?php if(isset($data)) { echo $data['EMAIL']; } ?>" 
-								type="text" 
-								class="form-control" 
-								placeholder="Enter Email"
-								required="">
-						</div>
-					</div>
-					<div class="col-md-6">
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>Phone</label>
 							<input 
 								name="phone" 
-								value="<?php if(isset($data)) { echo $data['PHONE']; } ?>" 
+								value="<?php echo $data['PHONE'] ?>" 
 								type="text" 
 								class="form-control" 
 								placeholder="Enter Phone"
 								required="">
 						</div>
 					</div>
-					<!-- <div class="col-md-6">
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>Password</label>
+							<label>Email</label>
 							<input 
-								name="password" 
-								value="" 
+								name="email" 
+								value="<?php echo $data['EMAIL'] ?>" 
 								type="text" 
 								class="form-control" 
-								placeholder="Enter Password"
+								placeholder="Enter Email"
 								required="">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>Confirm Password</label>
+							<label>NPWP</label>
 							<input 
-								name="password" 
-								value="" 
-								type="text" 
-								class="form-control" 
-								placeholder="Enter Password"
-								required="">
+							name="npwp" 
+							value="<?php echo $data['NPWP'] ?>" 
+							type="text" 
+							class="form-control">
 						</div>
-					</div> -->
+					</div>
 				</div>
 				<div class="ln_solid"></div>
 				<div class="form-group">

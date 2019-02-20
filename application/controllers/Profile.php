@@ -37,6 +37,8 @@ class Profile extends CI_Controller {
 	private function getContent(){
 		$this->load->model('m_profile');
 		$roll_id = $this->session->userdata('ROLL_ID');
+		// var_dump($this->session->userdata('AUTH_ID'));
+		// exit();
 		//old query
 		// $query = "SELECT * FROM ".$this->session->userdata('TABLE_NAME')." WHERE AUTH_ID=".$this->session->userdata('AUTH_ID');
 		// $runQuery = $this->db->query($query);
@@ -44,7 +46,7 @@ class Profile extends CI_Controller {
 		$detailProfile = $this->m_profile->getdetail($this->session->userdata('ROLL_ID'), $this->session->userdata('AUTH_ID'));
 		$arrdata = array();
 		$arrdata['detailProfile'] = $detailProfile[0];
-		$arrdata['route'] = site_url().'/profile/changepass/id='.$detailProfile[0]['ID'];
+		$arrdata['route'] = site_url().'/profile/changepass?username='.$detailProfile[0]['USERNAME'].'&auth_id='.$detailProfile[0]['AUTH_ID'];
 		if ($roll_id == 1) { // ipc cabang
 			return $this->load->view('_main/_profile/user.php', $arrdata, true);
 		}else if($roll_id == 2) { // shipping agent
@@ -120,15 +122,10 @@ class Profile extends CI_Controller {
 	}
 
 	public function changepass($data = null){
-		$id = explode('^', $_GET['id']);
-		echo $id;
-
+		$this->load->model('m_profile');
+		$response = $this->m_profile->changepass($this->session->userdata('USERNAME'), $_GET, $_POST);
+		$response['reload'] = true;
 		header('Content-Type: application/json');
-		echo json_encode(
-			array(
-				"response"=>true,
-				"result"=>$id
-			)
-		);
+		echo json_encode( $response );
 	}
 }
