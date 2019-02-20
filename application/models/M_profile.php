@@ -232,6 +232,7 @@ class M_profile extends CI_Model{
 		}
 
 		$result['response'] = true;
+		$result['title'] = $rtitle;
 		$result['msg'] = $result_msg;
 		$result['type'] = $rtype;
 		return $result;
