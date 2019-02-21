@@ -2,13 +2,14 @@
 
 	init_daterangepicker();
 	$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-		console.log(picker.startDate.format('D/M/Y') + " -- " + picker.endDate.format('D/M/Y'));
+		// console.log(picker.startDate.format('D/M/Y') + " -- " + picker.endDate.format('D/M/Y'));
 		$('#reportrange, #reportrange span').css('background', '#26b99a').css('color', 'white');
 		$('#datatable').DataTable().destroy();
 		callDatatable(picker.startDate.format('D/M/Y'), picker.endDate.format('D/M/Y'));
 	});
 	$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 		$('#reportrange, #reportrange span').css('background', '#fff').css('color', '#73879c');
+		$('#reportrange span').html('Filter Date');
 		$('#datatable').DataTable().destroy();
 		callDatatable();
 	});

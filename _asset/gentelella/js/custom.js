@@ -1584,9 +1584,9 @@ if (typeof NProgress != 'undefined') {
 			  startDate: moment().subtract(29, 'days'),
 			  endDate: moment(),
 			  minDate: '01/01/2019',
-			  dateLimit: {
-				days: 60
-			  },
+			 //  dateLimit: {
+				// days: 60
+			 //  },
 			  showDropdowns: true,
 			  showWeekNumbers: true,
 			  timePicker: false,
@@ -1618,7 +1618,8 @@ if (typeof NProgress != 'undefined') {
 			  }
 			};
 			
-			$('#reportrange span').html(moment().subtract(29, 'days').format('D/M/YYYY') + ' - ' + moment().format('D/M/YYYY'));
+			$('#reportrange span').html('Filter Date');
+			// $('#reportrange span').html(moment().subtract(29, 'days').format('D/M/YYYY') + ' - ' + moment().format('D/M/YYYY'));
 			$('#reportrange').daterangepicker(optionSet1, cb);
 			// $('#reportrange').on('show.daterangepicker', function() {
 			//   console.log("show event fired");

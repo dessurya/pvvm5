@@ -17,7 +17,7 @@
 			});
 		}
 
-		checkNotivication();
+		// checkNotivication();
 		setInterval(function(){
 			checkNotivication();
 		}, 300000); // 5 menit = 300000 | 30 second = 30000

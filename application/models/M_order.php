@@ -36,22 +36,20 @@ class M_order extends CI_Model{
 
 	    if ($roll_id == 3 and $data == 'pickup') {
 	    	$this->datatables->where('VENDOR_ID', null);
-	    	$finddate = "WARTA_KAPAL_IN_DATE";
+	    	$finddate = 'TO_DATE(TO_CHAR("WARTA_KAPAL_IN_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
 	    } else if ($roll_id == 3 and $data == 'list') {
 	    	$this->datatables->where('VENDOR_ID', $this->session->userdata('VENDOR_ID'));
-	    	$finddate = "ORDER_DATE";
+	    	$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
 	    }
 
 	    if($_POST['startDate'] != null and $_POST['endDate'] != null) {
-	    	$a = 'TO_DATE(';
-	    	$b = ', \'DD/MM/YYYY\')';
-	    	$start = $a.$_POST['startDate'].$b;
-	    	// $end = "TO_DATE(".$_POST['endDate'].", 'DD/MM/YYYY')";
+	    	$start = "TO_DATE('".$_POST['startDate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['endDate']."', 'DD/MM/YYYY')";
 		    if ($_POST['startDate'] == $_POST['endDate']) {
-		    	$this->datatables->where($finddate, $start);
+		    	$this->datatables->where($finddate." = ", $start, false);
 		    }else{
-		    	$this->datatables->where($finddate." >= ", $start);
-		    	$this->datatables->where($finddate." <= ", $start);
+		    	$this->datatables->where($finddate." >= ", $start, false);
+		    	$this->datatables->where($finddate." <= ", $end, false);
 		    }
 	    }
 
