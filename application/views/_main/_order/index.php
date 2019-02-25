@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2><?php echo $tittle; ?></h2>
+				<h2><?php echo $tittle; echo isset($showNama) ? ' '.$showNama : ''; ?></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -36,10 +36,13 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<!-- <th><input class="iCheckTrig flat" type="checkbox"></th> -->
-															<th>Created Date</th>
+															<th>Order Date</th>
+															<?php if ($tittle == 'Order List') { ?>
+															<th>Pick Up Date</th>
+															<?php } ?>
 															<th>PKK</th>
 															<th>No Layanan</th>
+															<th>Agent</th>
 															<th>Pelabuhan</th>
 															<?php if ($tittle == 'Order List') { ?>
 															<th>Vendor</th>
@@ -50,10 +53,13 @@
 													<tfoot>
 														<tr>
 															<th></th>
-															<!-- <th></th> -->
 															<th></th>
+															<?php if ($tittle == 'Order List') { ?>
+															<th></th>
+															<?php } ?>
 															<th class="search">PKK</th>
 															<th class="search">No Layanan</th>
+															<th class="search">Agent</th>
 															<th class="search autoComplete">Pelabuhan</th>
 															<?php if ($tittle == 'Order List') { ?>
 															<th class="search">Vendor</th>

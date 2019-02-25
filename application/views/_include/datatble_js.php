@@ -2,6 +2,9 @@
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
 	<?php if($this->uri->segment(1) == 'order') {?>
 		urlDataTable += "<?php echo '/'.$this->uri->segment(3) ?>";
+	<?php if($this->uri->segment(3) == 'list' and $this->uri->segment(4) == 'for') {?>
+		urlDataTable += "<?php echo '/'.$this->uri->segment(4).'/'.$this->uri->segment(5) ?>";
+	<?php } ?>
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
@@ -46,17 +49,18 @@
 		    columns: [
 				<?php  if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'pickup') { ?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},
-				// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
 				{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
 				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
 				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"}
 				<?php } else if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'list') { ?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},
-				// {name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+				{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
 				{name: "ORDER_DATE", data: "ORDER_DATE"},
 				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
 				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
 				{name: "VENDOR_NAMA", data: "VENDOR_NAMA"},
 				{name: "STATUS", data: function(data) { //name

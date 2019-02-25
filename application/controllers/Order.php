@@ -12,7 +12,7 @@ class Order extends CI_Controller {
 		}
     }
 
-	public function index($data){
+	public function index($data, $show = null){
 		$urlview = '_main/_order/index.php';
 		if ($data == 'list') {
 			$tittle = 'Order List';
@@ -22,13 +22,14 @@ class Order extends CI_Controller {
 		$send['tittle'] = $tittle;
 		$viewComp = array();
 		$viewComp['_tittle_'] = "IPWMS | ".$tittle;
-		if ($data == 'for') {
-			// $this->load->model('m_vendor');
-			// $result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
-			// if ($result == null or $result[0]['NAME'] != $this->uri->segment(4)) {
-			// 	redirect(base_url().'index.php/order', 'refresh');
-			// }
-			// $viewComp['_tittle_'] .= " : ".strtoupper($this->uri->segment(4));
+		if ($show == 'for') {
+			$this->load->model('m_vendor');
+			$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $this->uri->segment(5));
+			if ($result == null and $result[0]['VENDOR_ID'] != $this->uri->segment(5)) {
+				redirect(base_url().'index.php/order', 'refresh');
+			}
+			$viewComp['_tittle_'] .= " : ".strtoupper($result[0]['NAMA']);
+			$send['showNama'] = strtoupper($result[0]['NAMA']);
 		}
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
@@ -86,5 +87,62 @@ class Order extends CI_Controller {
 
 		header('Content-Type: application/json');
 		echo json_encode( $response );
+	}
+
+	public function testReport(){
+		$this->load->library('PHPExcel');
+		$fileName = 'ok'.date('ymd');
+		$cellArray = array(
+            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+            'Q','R','S','T','U','V','W','X','Y','Z',
+            'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP',
+            'AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
+            'BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN','BO','BP',
+            'BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ',
+            'CA','CB','CC','CD','CE','CF','CG','CH','CI','CJ','CK','CL','CM','CN','CO','CP',
+            'CQ','CR','CS','CT','CU','CV','CW','CX','CY','CZ',
+            'DA','DB','DC','DD','DE','DF','DG','DH','DI','DJ','DK','DL','DM','DN','DO','DP',
+            'DQ','DR','DS','DT','DU','DV','DW','DX','DY','DZ',
+            'EA','EB','EC','ED','EE','EF','EG','EH','EI','EJ','EK','EL','EM','EN','EO','EP',
+            'EQ','ER','ES','ET','EU','EV','EW','EX','EY','EZ',
+            'FA','FB','FC','FD','FE','FF','FG','FH','FI','FJ','FK','FL','FM','FN','FO','FP',
+            'FQ','FR','FS','FT','FU','FV','FW','FX','FY','FZ',
+            'GA','GB','GC','GD','GE','GF','GG','GH','GI','GJ','GK','GL','GM','GN','GO','GP',
+            'GQ','GR','GS','GT','GU','GV','GW','GX','GY','GZ',
+            'HA','HB','HC','HD','HE','HF','HG','HH','HI','HJ','HK','HL','HM','HN','HO','HP',
+            'HQ','HR','HS','HT','HU','HV','HW','HX','HY','HZ',
+            'IA','IB','IC','ID','IE','IF','IG','IH','II','IJ','IK','IL','IM','IN','IO','IP',
+            'IQ','IR','IS','IT','IU','IV','IW','IX','IY','IZ',
+            'JA','JB','JC','JD','JE','JF','JG','JH','JI','JJ','JK','JL','JM','JN','JO','JP',
+            'JQ','JR','JS','JT','JU','JV','JW','JX','JY','JZ',
+            'KA','KB','KC','KD','KE','KF','KG','KH','KI','KJ','KK','KL','KM','KN','KO','KP',
+            'KQ','KR','KS','KT','KU','KV','KW','KX','KY','KZ',
+            'LA','LB','LC','LD','LE','LF','LG','LH','LI','LJ','LK','LL','LM','LN','LO','LP',
+            'LQ','LR','LS','LT','LU','LV','LW','LX','LY','LZ',
+            'MA','MB','MC','MD','ME','MF','MG','MH','MI','MJ','MK','ML','MM','MN','MO','MP',
+            'MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ'
+        );
+		$new = new PHPExcel();
+
+        $new->createSheet(0)
+	        ->setTitle('Report')
+	        ->setCellValue('A1', 'Order Date')
+	        ->setCellValue('B1', 'Pick Up Date')
+	        ->setCellValue('C1', 'PKK NO')
+	        ->setCellValue('D1', 'NO Layanan')
+	        ->setCellValue('E1', 'Agent')
+	        ->setCellValue('F1', 'Pelabuhan')
+	        ->setCellValue('G1', 'Vendor')
+	        ->setCellValue('H1', 'Status')
+	        ->setCellValue('I1', 'Order Waste Detail')
+	        ->setCellValue('J2', 'Order Waste Detail');
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'.$fileName.'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $newWriter = PHPExcel_IOFactory::createWriter($new, 'Excel2007');
+        $newWriter->save('php://output');
+        exit;
 	}
 }

@@ -34,15 +34,24 @@ class M_order extends CI_Model{
         $this->datatables->from('ORDER_WARTA_KAPAL');
 	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
 
-	    if ($roll_id == 3 and $data == 'pickup') {
-	    	$this->datatables->where('VENDOR_ID', null);
-	    	$finddate = 'TO_DATE(TO_CHAR("WARTA_KAPAL_IN_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
-	    } else if ($roll_id == 3 and $data == 'list') {
-	    	$this->datatables->where('VENDOR_ID', $this->session->userdata('VENDOR_ID'));
-	    	$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+	    if ($roll_id == 3) {
+	    	if ($data == 'pickup') {
+		    	$this->datatables->where('VENDOR_ID', null);
+	    	} else if ($data == 'list') {
+		    	$this->datatables->where('VENDOR_ID', $this->session->userdata('VENDOR_ID'));
+		    }
+	    } else if ($roll_id == 1 and $this->uri->segment(4) == 'for') {
+	    	$this->datatables->where('VENDOR_ID', $this->uri->segment(5));
 	    }
 
+
 	    if($_POST['startDate'] != null and $_POST['endDate'] != null) {
+		    if ($data == 'pickup') {
+		    	$finddate = 'TO_DATE(TO_CHAR("WARTA_KAPAL_IN_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+		    } else if ($data == 'list') {
+		    	$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+		    }
+
 	    	$start = "TO_DATE('".$_POST['startDate']."', 'DD/MM/YYYY')";
 	    	$end = "TO_DATE('".$_POST['endDate']."', 'DD/MM/YYYY')";
 		    if ($_POST['startDate'] == $_POST['endDate']) {

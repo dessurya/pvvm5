@@ -72,12 +72,12 @@
 										<li><a id="logout" href="<?php echo site_url().'/login/signout' ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
 									</ul>
 								</li>
-								<li id="notivication" role="presentation" class="dropdown">
+								<?php /*<li id="notivication" role="presentation" class="dropdown">
 									<a href="<?php echo site_url().'/order' ?>" class="info-number">
 										<i class="fa fa-anchor"></i>
 										<span class="badge bg-green"></span>
 									</a>
-								</li>
+								</li>*/ ?>
 							</ul>
 						</nav>
 					</div>

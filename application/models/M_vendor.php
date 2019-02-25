@@ -122,7 +122,7 @@ class M_vendor extends CI_Model{
 			FROM
 				AAPWMS_TR_WASTE_ORDER
 			WHERE
-				STATUS_ID NOT LIKE 4
+				STATUS_ID NOT LIKE 3
 				AND VENDOR_ID = ".$id;
 		$rfdone = $this->db->query($fdone);
 		$arfdone = $rfdone->result_array();
@@ -133,7 +133,7 @@ class M_vendor extends CI_Model{
 			FROM
 				AAPWMS_TR_WASTE_ORDER
 			WHERE
-				STATUS_ID = 4
+				STATUS_ID = 3
 				AND VENDOR_ID = ".$id;
 		$rtdone = $this->db->query($tdone);
 		$artdone = $rtdone->result_array();
