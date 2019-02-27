@@ -14,6 +14,10 @@ class M_report extends CI_Model{
 			ORDER BY WL.TYPE_ID, WASTE_NAME ASC
 		";
 
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
 	public function getTotalOrder(){
 		$this->db->select("*");
 		$this->db->from("ORDER_WARTA_KAPAL");
