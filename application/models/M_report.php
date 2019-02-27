@@ -129,9 +129,9 @@ class M_report extends CI_Model{
 			LEFT JOIN AAPWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID";
 		$query .= " 
 			WHERE 
-				TO_DATE(TO_CHAR(WK.WARTA_KAPAL_IN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE(".$start.", 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
 				AND
-				TO_DATE(TO_CHAR(WK.WARTA_KAPAL_IN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE(".$end.", 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
 			";
 		if ($roll_id == 3) {
 			$query .= " AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
