@@ -107,6 +107,7 @@ class M_api extends CI_Model{
 			else
 			{
 			    $this->db->trans_commit();
+			    oci_commit($this->db->conn_id);
 			}
 
 			
@@ -206,8 +207,6 @@ class M_api extends CI_Model{
 
 		}
 
-		return $dataReturn;
-		
-		
+		return $dataReturn;	
 	}
 }
