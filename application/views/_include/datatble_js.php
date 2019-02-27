@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
-	<?php if($this->uri->segment(1) == 'order') {?>
+	<?php if(in_array($this->uri->segment(1), array('order', 'report'))) {?>
 		urlDataTable += "<?php echo '/'.$this->uri->segment(3) ?>";
 	<?php if($this->uri->segment(3) == 'list' and $this->uri->segment(4) == 'for') {?>
 		urlDataTable += "<?php echo '/'.$this->uri->segment(4).'/'.$this->uri->segment(5) ?>";
@@ -39,7 +39,7 @@
 		    	"type": "POST", 
 		    	"data":{ startDate:mindate, endDate:maxdate }
 		    },
-		    <?php  if($this->uri->segment(1) == 'order') { ?>
+		    <?php  if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
 			    aaSorting: [ [1,'desc'] ],
 			<?php } else if($this->uri->segment(1) == 'vendor') {?>
 			    aaSorting: [ [3,'asc'] ],
@@ -47,14 +47,14 @@
 			    aaSorting: [ [1,'asc'] ],
 			<?php }?>
 		    columns: [
-				<?php  if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'pickup') { ?>
+				<?php  if(in_array($this->uri->segment(1), array('order', 'report')) and $this->uri->segment(3) == 'pickup') { ?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},
 				{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
 				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
 				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
 				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"}
-				<?php } else if($this->uri->segment(1) == 'order' and $this->uri->segment(3) == 'list') { ?>
+				<?php } else if(in_array($this->uri->segment(1), array('order', 'report')) and $this->uri->segment(3) == 'list') { ?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},
 				{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
 				{name: "ORDER_DATE", data: "ORDER_DATE"},
@@ -133,7 +133,7 @@
 				var index = page * length + (iDisplayIndex + 1);
 				<?php if($this->uri->segment(1) == 'vendor') { ?>
 				$(row).attr('id', data.VENDOR_ID);
-				<?php } else if($this->uri->segment(1) == 'order') { ?>
+				<?php } else if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
 				$(row).attr('id', data.ID);
 				<?php } ?>
 				$('td:eq(0)', row).html(index);
@@ -257,7 +257,7 @@
 	            $('.x_content .tab-content #tab_open').html(data.result);
 				$('ul.nav-tabs li.tab_open').show();
 	        	$('ul.nav-tabs.bar_tabs a[href=#tab_open]').tab('show').html(data.name);
-	        	<?php if( in_array($this->uri->segment(1), array('order')) ){ ?>
+	        	<?php if( in_array($this->uri->segment(1), array('order', 'report')) ){ ?>
 				calldattime('input[name=TONGKANG_PICKUP_DATE]');
 				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>

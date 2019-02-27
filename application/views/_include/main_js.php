@@ -118,6 +118,11 @@
 				                showPNotify(dataPN);
 			                }, timeadd);
 	                	});
+	                } else if (data.type == "getreport"){
+	                	$('#total_order').html(data.order);
+	                	$('#total_vendor').html(data.vendor);
+	                	$('#total_request_qty').html(data.request_qty);
+	                	$('#total_act_request_qty').html(data.act_request_qty);
 	                }
 	                if (data.reload == true) {
 		                dtableReload();
@@ -185,8 +190,8 @@
 		if( in_array($this->uri->segment(1), array('order'))){
 			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
 		}
-		if( in_array($this->uri->segment(1), array('dashboard'))){
-			echo substr($this->load->view('_include/dashboard_js.php', '', true), 31 );
+		if( in_array($this->uri->segment(1), array('report', 'dashboard'))){
+			echo substr($this->load->view('_include/report_js.php', '', true), 31 );
 		}
 		?>
     });
