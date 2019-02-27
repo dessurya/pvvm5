@@ -13,8 +13,96 @@ class M_report extends CI_Model{
 			LEFT JOIN AAPWMS_TR_WASTE_TYPE WT ON WL.TYPE_ID = WT.TYPE_ID
 			ORDER BY WL.TYPE_ID, WASTE_NAME ASC
 		";
-		$runQuery = $this->db->query($query);
-		return $arrdata = $runQuery->result_array();
+
+	public function getTotalOrder(){
+		$this->db->select("*");
+		$this->db->from("ORDER_WARTA_KAPAL");
+
+		if($_POST['sdate'] != null and $_POST['edate'] != null) {
+			$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+
+	    	$start = "TO_DATE('".$_POST['sdate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['edate']."', 'DD/MM/YYYY')";
+		    if ($_POST['sdate'] == $_POST['edate']) {
+		    	$this->db->where($finddate." = ", $start, false);
+		    }else{
+		    	$this->db->where($finddate." >= ", $start, false);
+		    	$this->db->where($finddate." <= ", $end, false);
+		    }
+	    }
+	    $query = $this->db->get();
+	    $arrdata = $query->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
+	}
+
+	public function getOrderNew(){
+		$this->db->select("*");
+		$this->db->from("ORDER_WARTA_KAPAL");
+
+		if($_POST['sdate'] != null and $_POST['edate'] != null) {
+			$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+
+	    	$start = "TO_DATE('".$_POST['sdate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['edate']."', 'DD/MM/YYYY')";
+		    if ($_POST['sdate'] == $_POST['edate']) {
+		    	$this->db->where($finddate." = ", $start, false);
+		    }else{
+		    	$this->db->where($finddate." >= ", $start, false);
+		    	$this->db->where($finddate." <= ", $end, false);
+		    }
+	    }
+	    $this->db->where('STATUS_ID', 1);
+	    $query = $this->db->get();
+	    $arrdata = $query->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
+	}
+
+	public function getOrderOnProgress(){
+		$this->db->select("*");
+		$this->db->from("ORDER_WARTA_KAPAL");
+
+		if($_POST['sdate'] != null and $_POST['edate'] != null) {
+			$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+
+	    	$start = "TO_DATE('".$_POST['sdate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['edate']."', 'DD/MM/YYYY')";
+		    if ($_POST['sdate'] == $_POST['edate']) {
+		    	$this->db->where($finddate." = ", $start, false);
+		    }else{
+		    	$this->db->where($finddate." >= ", $start, false);
+		    	$this->db->where($finddate." <= ", $end, false);
+		    }
+	    }
+	    $this->db->where('STATUS_ID', 2);
+	    $query = $this->db->get();
+	    $arrdata = $query->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
+	}
+
+	public function getOrderDone(){
+		$this->db->select("*");
+		$this->db->from("ORDER_WARTA_KAPAL");
+
+		if($_POST['sdate'] != null and $_POST['edate'] != null) {
+			$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+
+	    	$start = "TO_DATE('".$_POST['sdate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['edate']."', 'DD/MM/YYYY')";
+		    if ($_POST['sdate'] == $_POST['edate']) {
+		    	$this->db->where($finddate." = ", $start, false);
+		    }else{
+		    	$this->db->where($finddate." >= ", $start, false);
+		    	$this->db->where($finddate." <= ", $end, false);
+		    }
+	    }
+	    $this->db->where('STATUS_ID', 3);
+	    $query = $this->db->get();
+	    $arrdata = $query->result_array();
+		$num_rows = count($arrdata);
+		return $num_rows;
 	}
 
 	public function lists($roll_id, $start, $end){
@@ -64,5 +152,5 @@ class M_report extends CI_Model{
 			return false;
 		}
 	}
-}
+
 ?>

@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Report extends CI_Controller {
 
 	public $content;
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('datatables');
-		$this->load->model('m_dashboard');
+		$this->load->model('m_report');
 		if(!$this->session->userdata('LOGGED')) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
@@ -16,11 +16,11 @@ class Dashboard extends CI_Controller {
 	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
 		if($roll_id == 1) {
-			$urlview = '_main/_dashboard/ipc_cabang.php';
+			$urlview = '_main/_report/user.php';
 		}else if($roll_id == 2) {
-			$urlview = '_main/_dashboard/shipping_agent.php';
+			$urlview = '_main/_report/shipping_agent.php';
 		}else if($roll_id == 3) {
-			$urlview = '_main/_dashboard/vendor.php';
+			$urlview = '_main/_report/vendor.php';
 		}
 
 		$viewComp = array();
@@ -45,22 +45,24 @@ class Dashboard extends CI_Controller {
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
-	public function getDetailDashboard(){
+	public function getReport(){
 		$result = array();
-		$dateS = $_POST['sdate'];
-		$dateS = $_POST['edate'];
-		echo json_encode($_POST);
-		die;
+		if ($_POST) {
+			$sdate = $_POST['sdate'];
+			$edate = $_POST['edate'];
+		}
+		// echo json_encode($_POST);
+		// die;
 		if(!$this->session->userdata('LOGGED')) {
 			$result['response'] = false;
 			$result['msg'] = "You Log Out...";
 		}
 		$result['response'] = true;
-		$result['msg'] = "Success to get detail dashboard...";
-		$result['order'] = $this->m_dashboard->getTotalOrder();
-		$result['vendor'] = $this->m_dashboard->getTotalVendor();
-		$result['request_qty'] = $this->m_dashboard->getTotalRequestQty();
-		$result['act_request_qty'] = $this->m_dashboard->getTotalActRequestQty();
+		$result['msg'] = "Success get Report...";
+		$result['total_order'] = $this->m_report->getTotalOrder();
+		$result['new_order'] = $this->m_report->getOrderNew();
+		$result['order_on_progress'] = $this->m_report->getOrderOnProgress();
+		$result['done_order'] = $this->m_report->getOrderDone();
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
