@@ -1,30 +1,62 @@
 <div class="row">
-	<div id="action" class="nav navbar-right panel_toolbox">
-		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-			<span></span> <b class="caret"></b>
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="x_panel">
+			<div class="row">
+				<div class="x_title">
+					<h2>Report</h2>
+					<div id="action" class="nav navbar-right panel_toolbox">
+						<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+							<span></span> <b class="caret"></b>
+						</div>
+					</div>
+				<div class="clearfix"></div>
+			</div>
+			</div>
+			<br>	
+			<div class="row top_tiles">
+				<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="tile-stats">
+						<div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+						<div id="total_order" class="count">-</div>
+						<h3>Total Order</h3>
+						<!-- <p>Lorem ipsum psdea itgum rixt.</p> -->
+					</div>
+				</div>
+				<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="tile-stats">
+						<div class="icon"><i class="fa fa-comments-o"></i></div>
+						<div id="new_order" class="count">-</div>
+						<h3>New Order</h3>
+						<!-- <p>Lorem ipsum psdea itgum rixt.</p> -->
+					</div>
+				</div>
+				<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="tile-stats">
+						<div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
+						<div id="order_on_progress" class="count">-</div>
+						<h3>On Progress</h3>
+						<!-- <p>Lorem ipsum psdea itgum rixt.</p> -->
+					</div>
+				</div>
+				<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="tile-stats">
+						<div class="icon"><i class="fa fa-check-square-o"></i></div>
+						<div id="done_order" class="count">-</div>
+						<h3>Done</h3>
+						<!-- <p>Lorem ipsum psdea itgum rixt.</p> -->
+					</div>
+				</div>
+			</div>
+			<div id="viewdetail" class="table-responsive">
+				<div class="alert alert-success">
+					<ul class="fa-ul">
+						<li>
+							<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Select the date</code>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-<div class="row tile_count">
-	<div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-		<span class="count_top"><i class="fa fa-reorder"></i> Total Order</span>
-		<div id="total_order" class="count">-</div>
-		<!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-	</div>
-	<div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-		<span class="count_top"><i class="fa fa-arrow-down"></i> New Order</span>
-		<div id="new_order" class="count">-</div>
-		<!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-	</div>
-	<div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-		<span class="count_top"><i class="fa fa-building"></i> Order On Progress</span>
-		<div id="order_on_progress" class="count">-</div>
-		<!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span> -->
-	</div>
-	<div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-		<span class="count_top"><i class="fa fa-building"></i> Order Done</span>
-		<div id="done_order" class="count">-</div>
-		<!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
 	</div>
 </div>
