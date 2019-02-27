@@ -63,10 +63,52 @@ class Report extends CI_Controller {
 		$result['new_order'] = $this->m_report->getOrderNew();
 		$result['order_on_progress'] = $this->m_report->getOrderOnProgress();
 		$result['done_order'] = $this->m_report->getOrderDone();
+		$wr = $this->m_report->getWasteReport();
+		$view = '<table class="table table-striped jambo_table bulk_action">
+					<thead>
+						<tr>
+							<th style="text-align:center;">WASTE NAME</th>
+							<th style="text-align:center;"">REQUEST QUANTITY</th>
+							<th style="text-align:center;"">TONGKANG QUANTITY</th>
+							<th style="text-align:center;"">TRUCKING QUANTITY</th>
+						</tr>
+					</thead>
+					<tbody>';
+				
+		if (!empty($wr)) {
+			//ada data
+			foreach ($wr as $list) {
+				$view .= 
+						'<tr>
+							<td align="left">'.$list['WASTE_NAME'].'</td>
+							<td align="center">'.$list['REQUEST_QTY'].'</td>
+							<td align="center">'.$list['TONGKANG_QTY'].'</td>
+							<td align="center">'.$list['TRUCKING_QTY'].'</td>
+						</tr>';
+			}
+		} else {
+			//no data
+			$view .= 
+					'<tr>
+						<td align="center" colspan="4">no data</td>
+					</tr>';
+		}
+		$view .= '
+					</tbody>
+				</table>';
+
+		$result['waste_report'] = $view;
+		
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
+	public function wasteReport(){
+		$result['response'] = true;
+		$result['msg'] = "Success get Report...";
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
 
 	public function getdata($data = null){
 		$this->load->model('m_vendor');

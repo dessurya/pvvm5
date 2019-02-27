@@ -57,7 +57,7 @@
 		});
 	}
 
-	function get_report(sdate = null, edate = null){
+	function get_report(sdate, edate){
 		var input = {};
 		input['sdate'] = sdate;
 		input['edate'] = edate;
@@ -84,102 +84,46 @@
 		$('#new_order').html('-');
 		$('#order_on_progress').html('-');
 		$('#done_order').html('-');
+		$('#viewdetail').html('NO DATA');
 	});
 
 	function get_detail_report(dataAction) {
-			var dataPN = new Array();
-	        $.ajax({
-	            url: dataAction.url,
-	            type: 'post',
-	            dataType: 'json',
-	            data: dataAction.input,
-	            // processData:false,
-	            // contentType:false,
-	            beforeSend: function(data) {
-	                $('#loading-page').show();
-	            },
-	            error: function(data) {
-	                $('#loading-page').hide();
-	                // location.reload();
-	            },
-	            success: function(data) {
-	            	$('#total_order').html(data.total_order);
-					$('#new_order').html(data.new_order);
-					$('#order_on_progress').html(data.order_on_progress);
-					$('#done_order').html(data.done_order);
-	                $('#loading-page').hide();
-	            	if (data.msg !== null && data.msg !== "" && data.msg !== undefined) {
-		                dataPN['model'] = 'info';
-				        dataPN['title'] = 'Success';
-				        dataPN['text'] = data.msg;
-				        dataPN['type'] = 'success';
-				        if(data.title !== null && data.title !== "" && data.title !== undefined){
-	            			dataPN['title'] = data.title;	
-	            		}
-	            		if(data.type !== null && data.type !== "" && data.type !== undefined){
-	            			dataPN['type'] = data.type;	
-	            		}
-		                showPNotify(dataPN);
-	            	}
-	            }
-	        });
+		var dataPN = new Array();
+        $.ajax({
+            url: dataAction.url,
+            type: 'post',
+            dataType: 'json',
+            data: dataAction.input,
+            // processData:false,
+            // contentType:false,
+            beforeSend: function(data) {
+                $('#loading-page').show();
+            },
+            error: function(data) {
+                $('#loading-page').hide();
+                // location.reload();
+            },
+            success: function(data) {
+            	$('#total_order').html(data.total_order);
+				$('#new_order').html(data.new_order);
+				$('#order_on_progress').html(data.order_on_progress);
+				$('#done_order').html(data.done_order);
+				$('#viewdetail').html(data.waste_report);
+				
+                $('#loading-page').hide();
+            	if (data.msg !== null && data.msg !== "" && data.msg !== undefined) {
+	                dataPN['model'] = 'info';
+			        dataPN['title'] = 'Success';
+			        dataPN['text'] = data.msg;
+			        dataPN['type'] = 'success';
+			        if(data.title !== null && data.title !== "" && data.title !== undefined){
+            			dataPN['title'] = data.title;	
+            		}
+            		if(data.type !== null && data.type !== "" && data.type !== undefined){
+            			dataPN['type'] = data.type;	
+            		}
+	                showPNotify(dataPN);
+            	}
+            }
+        });
     }
-
- //    callCanvasDoughnut();
-	// function callCanvasDoughnut() {
-	// 	init_chart_doughnut();
-	// }
-	init_chart_doughnut();
-	function init_chart_doughnut(){
-				
-		if( typeof (Chart) === 'undefined'){ return; }
-		
-		console.log('init_chart_doughnut');
-	 
-		if ($('.canvasDoughnut').length){
-			
-		var chart_doughnut_settings = {
-				type: 'doughnut',
-				tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-				data: {
-					labels: [
-						"Others",
-						"SEWAGE",
-						"Others 2",
-						"OILY SLUGE",
-						"BILGE WATER"
-					],
-					datasets: [{
-						data: [15, 20, 30, 10, 30],
-						backgroundColor: [
-							"#BDC3C7",
-							"#9B59B6",
-							"#E74C3C",
-							"#26B99A",
-							"#3498DB"
-						],
-						hoverBackgroundColor: [
-							"#CFD4D8",
-							"#B370CF",
-							"#E95E4F",
-							"#36CAAB",
-							"#49A9EA"
-						]
-					}]
-				},
-				options: { 
-					legend: false, 
-					responsive: false 
-				}
-			}
-		
-			$('.canvasDoughnut').each(function(){
-				
-				var chart_element = $(this);
-				var chart_doughnut = new Chart( chart_element, chart_doughnut_settings);
-				
-			});			
-		
-		}  
-	   
-	}
