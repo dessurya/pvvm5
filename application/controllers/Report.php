@@ -53,6 +53,7 @@ class Report extends CI_Controller {
 		$view = '<table class="table table-bordered">
 					<thead>
 						<tr>
+							<th style="text-align:center;">WASTE TYPE</th>
 							<th style="text-align:center;">WASTE NAME</th>
 							<th style="text-align:center;"">REQUEST QUANTITY</th>
 							<th style="text-align:center;"">TONGKANG QUANTITY</th>
@@ -66,17 +67,18 @@ class Report extends CI_Controller {
 			foreach ($wr as $list) {
 				$view .= 
 						'<tr>
+							<td align="left">'.$list['TYPE_NAME'].'</td>
 							<td align="left">'.$list['WASTE_NAME'].'</td>
-							<td align="center">'.$list['REQUEST_QTY'].'</td>
-							<td align="center">'.$list['TONGKANG_QTY'].'</td>
-							<td align="center">'.$list['TRUCKING_QTY'].'</td>
+							<td align="center">'.$list['REQUEST_QTY'].' '.$list['UM_NAME'].'</td>
+							<td align="center">'.$list['TONGKANG_QTY'].' '.$list['UM_NAME'].'</td>
+							<td align="center">'.$list['TRUCKING_QTY'].' '.$list['UM_NAME'].'</td>
 						</tr>';
 			}
 		} else {
 			//no data
 			$view .= 
 					'<tr>
-						<td align="center" colspan="4">no data</td>
+						<td align="center" colspan="5">no data</td>
 					</tr>';
 		}
 		$view .= '
