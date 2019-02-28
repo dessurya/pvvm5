@@ -3,7 +3,7 @@
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['USERNAME']; } else { echo 'Add'; } ?></small></h2>
+				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['USERNAME']; }?></small></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -99,7 +99,7 @@
 				<div class="alert alert-success">
 					<ul class="fa-ul">
 						<li>
-							<i class="fa fa-info-circle fa-lg fa-li"></i> For open data please <code>Right Click On Row Of Table</code>
+							<i class="fa fa-info-circle fa-lg fa-li"></i> For update data please <code>Click Update Button</code>
 						</li>
 					</ul>
 				</div>

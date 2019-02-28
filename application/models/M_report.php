@@ -161,9 +161,13 @@ class M_report extends CI_Model{
 		$start = $_POST['sdate'];
 		$end = $_POST['edate'];
 		$query = "
+		SELECT 
+			* 
+		FROM (
 			SELECT
 				SW.WASTE_ID AS WASTE_ID,
 				WL.WASTE_NAME AS WASTE_NAME,
+				WT.TYPE_ID AS TYPE_ID,
 				SUM(REQUEST_QTY) AS REQUEST_QTY,
 				SUM(TONGKANG_QTY) AS TONGKANG_QTY,
 				SUM(TRUCKING_QTY) AS TRUCKING_QTY
@@ -177,7 +181,10 @@ class M_report extends CI_Model{
 				ON SW.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
 			LEFT JOIN
 				AAPWMS_TR_WARTA_KAPAL_IN WK
-				ON SW.WARTA_KAPAL_IN_ID = WK.WARTA_KAPAL_IN_ID 
+				ON SW.WARTA_KAPAL_IN_ID = WK.WARTA_KAPAL_IN_ID
+			LEFT JOIN
+	    		AAPWMS_TR_WASTE_TYPE WT
+	    		ON WL.TYPE_ID = WT.TYPE_ID
 			WHERE
 				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
 				AND
@@ -186,7 +193,8 @@ class M_report extends CI_Model{
 			if ($this->session->userdata('ROLL_ID') == 3) {
 				$query .= "AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
 			}
-			$query .= "GROUP BY SW.WASTE_ID, WL.WASTE_NAME";
+			$query .= "GROUP BY SW.WASTE_ID, WL.WASTE_NAME, WT.TYPE_ID ) ORDER BY TYPE_ID, WASTE_ID ASC";
+			
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}

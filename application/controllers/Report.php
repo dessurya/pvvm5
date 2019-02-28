@@ -50,7 +50,7 @@ class Report extends CI_Controller {
 		$result['order_on_progress'] = $this->m_report->getOrderOnProgress();
 		$result['done_order'] = $this->m_report->getOrderDone();
 		$wr = $this->m_report->getWasteReport();
-		$view = '<table class="table table-striped jambo_table bulk_action">
+		$view = '<table class="table table-bordered">
 					<thead>
 						<tr>
 							<th style="text-align:center;">WASTE NAME</th>
