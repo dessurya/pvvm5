@@ -2,12 +2,17 @@
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<div class="x_panel">
 			<div class="row">
-				<div id="action" class="nav navbar-right panel_toolbox">
-					<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-						<span></span> <b class="caret"></b>
+				<div class="x_title">
+					<h2>Report</h2>
+					<div id="action" class="nav navbar-right panel_toolbox">
+						<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+							<span></span> <b class="caret"></b>
+						</div>
+						<div id="btn-export" class="pull-right"></div>
 					</div>
-				</div>
+				<div class="clearfix"></div>
+			</div>
 			</div>
 			<br>	
 			<div class="row top_tiles">

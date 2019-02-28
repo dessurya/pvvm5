@@ -80,11 +80,9 @@
 	$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 		$('#reportrange, #reportrange span').css('background', '#fff').css('color', '#73879c');
 		$('#reportrange span').html('Filter Date');
-		$('#total_order').html('-');
-		$('#new_order').html('-');
-		$('#order_on_progress').html('-');
-		$('#done_order').html('-');
-		$('#viewdetail').html('NO DATA');
+		$('#total_order, #new_order, #order_on_progress, #done_order').html('-');
+		$('#btn-export').html('');
+		$('tbody').html('<tr><td colspan="4" class="text-center">NO DATA</td></tr>');
 	});
 
 	function get_detail_report(dataAction) {
@@ -109,6 +107,7 @@
 				$('#order_on_progress').html(data.order_on_progress);
 				$('#done_order').html(data.done_order);
 				$('#viewdetail').html(data.waste_report);
+				$('#btn-export').html(data.btn_export);
 				
                 $('#loading-page').hide();
             	if (data.msg !== null && data.msg !== "" && data.msg !== undefined) {

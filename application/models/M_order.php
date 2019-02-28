@@ -195,9 +195,14 @@ class M_order extends CI_Model{
 				$this->db->update('AAPWMS_TX_SHIP_WASTE_IN');
 			}
 		}
-		if ($data['get']['type'] == 'save') {
+		$status_id = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
+		if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 1) {
+			$this->db->set('STATUS_ID',  1);
+		}else if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  2);
-		}else if ($data['get']['type'] == 'submit'){
+		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 1) {
+			$this->db->set('STATUS_ID',  2);
+		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  3);
 		}
 		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
