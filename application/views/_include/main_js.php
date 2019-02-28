@@ -18,9 +18,9 @@
 		}
 
 		// checkNotivication();
-		setInterval(function(){
-			checkNotivication();
-		}, 300000); // 5 menit = 300000 | 30 second = 30000
+		// setInterval(function(){
+		// 	checkNotivication();
+		// }, 300000); // 5 menit = 300000 | 30 second = 30000
 		
 		var urisegment1 = "<?php echo $this->uri->segment(1) ?>";
 		var urlTools = "<?php echo site_url().'/' ?>"+urisegment1+"/tools";
