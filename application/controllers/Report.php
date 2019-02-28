@@ -86,7 +86,7 @@ class Report extends CI_Controller {
 				</table>';
 
 		$result['waste_report'] = $view;
-		$result['btn_export'] = '<a class="btn btn-success" href="'.site_url().'/report/exportRawDataReport/'.str_replace('/','_',$_POST['sdate']).'/'.str_replace('/','_',$_POST['edate']).'">Export Row Data</a>';
+		$result['btn_export'] = '<a class="btn btn-info" href="'.site_url().'/report/exportRawDataReport/'.str_replace('/','_',$_POST['sdate']).'/'.str_replace('/','_',$_POST['edate']).'">Export Row Data</a>';
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
