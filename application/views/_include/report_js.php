@@ -9,7 +9,7 @@
 		};
 
 		var optionSet1 = {
-		  startDate: moment().subtract(29, 'days'),
+		  startDate: moment().subtract(-1, 'days'),
 		  endDate: moment(),
 		  minDate: '01/01/2019',
 		  showDropdowns: true,

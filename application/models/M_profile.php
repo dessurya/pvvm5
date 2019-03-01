@@ -140,29 +140,9 @@ class M_profile extends CI_Model{
 
 	private function store($roll_id, $get, $post){
 		$result = array();
-		if (isset($get['id'])) {
-			$ID = $get['id'];
-			$AUTH_ID = $this->finddata($roll_id,$ID);
-			var_dump($AUTH_ID);
-			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
-			// $PASSWORD = $AUTH_ID[0]['PASSWORD'];
-		}else{
-			$this->load->model('m_sequences');
-			$AUTH_ID = $this->m_sequences->getNextVal("APWMS_TX_AUTH_ID_SEQ");
-			$VENDOR_ID = $this->m_sequences->getNextVal("APWMS_TX_VENDOR_ID_SEQ");
-		}
-
-		$this->db->set('ID',  $AUTH_ID);
-		$this->db->set('USERNAME',  $post['username']);
-		// $this->db->set('USERNAME',  '_nev'.$AUTH_ID.$VENDOR_ID);
-		// $this->db->set('PASSWORD',  md5("123"));
-		// $this->db->set('TYPE',  3);
-		if (isset($get['id'])) { 
-			$this->db->where('ID',  $AUTH_ID); 
-			$this->db->update('APWMS_TX_AUTH'); 
-		} else {
-			$this->db->insert('APWMS_TX_AUTH'); 
-		}
+		$ID = $get['id'];
+		$AUTH_ID = $this->finddata($roll_id,$ID);
+		$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 
 		if ($roll_id == 1) {
 			$this->db->set('USER_ID',  $ID);
@@ -202,16 +182,10 @@ class M_profile extends CI_Model{
 			$result['msg'] = "Success, add new  ".$post['name'];
 			$result['type'] = "add";
 		}
-
-		// record history
-			// $json = json_encode($this->finddata($roll_id, $ID));
-			// $this->recordhistory('APWMS_TX_VENDOR', $result['type'], $result['msg'], $ID, $json);
-		// record history
 		return $result;
 	}
 
 	public function changepass($username, $get, $post){
-		// $result['response'] = false;
 		$auth_id = $get['auth_id'];
 		$oldpass = md5($post['password']);
 		$newpass = md5($post['npassword']);
@@ -219,7 +193,6 @@ class M_profile extends CI_Model{
 
 		if (!is_null($is_exist)) {
 			$this->db->set('PASSWORD',  $newpass);
-			// $this->db->where('AUTH_ID',  $auth_id);
 			$this->db->where('USERNAME',  $username);
 			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
 			$rtitle = "Success";
