@@ -14,7 +14,7 @@ class M_api extends CI_Model{
 
 		$this->db->select('PKK_NO');
 		$this->db->where('PKK_NO',$dataInsert['PKK_ID']);
-		$query = $this->db->get('AAPWMS_TR_WARTA_KAPAL_IN');
+		$query = $this->db->get('PWMS_TR_WARTA_KAPAL_IN');
 		$raw_json = $rawJson;
 		if(count($query->result()) < 1 ){
 			$this->db->trans_begin();
@@ -80,7 +80,7 @@ class M_api extends CI_Model{
 				
 				
 				
-				$sqlInsert = "INSERT INTO AAPWMS_TX_SHIP_WASTE_IN (
+				$sqlInsert = "INSERT INTO PWMS_TX_SHIP_WASTE_IN (
 						WARTA_KAPAL_IN_ID, 
 						WASTE_ID, 
 						MAX_LOAD_QTY, 
@@ -176,7 +176,7 @@ class M_api extends CI_Model{
 				
 				
 				
-				$sqlInsert = "INSERT INTO AAPWMS_TX_SHIP_WASTE_OUT (
+				$sqlInsert = "INSERT INTO PWMS_TX_SHIP_WASTE_OUT (
 						WARTA_KAPAL_OUT_ID, 
 						WASTE_ID, 
 						MAX_LOAD_QTY, 

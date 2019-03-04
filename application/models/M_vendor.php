@@ -4,6 +4,7 @@ class M_vendor extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function getdata($roll_id, $data){
@@ -27,8 +28,8 @@ class M_vendor extends CI_Model{
 				NPWP,
 				CASE FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			");
-		    $this->datatables->from('AAPWMS_TR_WASTE_VENDOR ATWV');
-		    $this->datatables->join('AAPWMS_TX_SYSTEM_AUTH ATSA', 'ATSA.AUTH_ID = ATWV.AUTH_ID', 'left');
+		    $this->datatables->from('PWMS_TR_WASTE_VENDOR ATWV');
+		    $this->datatables->join('PWMS_TX_SYSTEM_AUTH ATSA', 'ATSA.AUTH_ID = ATWV.AUTH_ID', 'left');
 		    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'VENDOR_ID');
 
 		    if (count($newpost) >= 1) {
@@ -54,9 +55,9 @@ class M_vendor extends CI_Model{
 					LOWER(NAME) AS VENDOR_NAME, 
 					TV.ID AS VENDOR_ID
 				FROM 
-					APWMS_TX_VENDOR TV
+					PWMS_TX_VENDOR TV
 				LEFT JOIN
-					APWMS_TX_AUTH TA
+					PWMS_TX_AUTH TA
 					ON TA.ID = TV.AUTH_ID
 				WHERE TA.FLAG_ACTIVE = 'Y' AND TA.TYPE <> 5";
 			$runQuery = $this->db->query($query);
@@ -86,9 +87,9 @@ class M_vendor extends CI_Model{
 				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
 				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			FROM 
-				AAPWMS_TR_WASTE_VENDOR TV
+				PWMS_TR_WASTE_VENDOR TV
 			LEFT JOIN
-				AAPWMS_TX_SYSTEM_AUTH TA
+				PWMS_TX_SYSTEM_AUTH TA
 				ON TA.AUTH_ID = TV.AUTH_ID
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
@@ -103,12 +104,12 @@ class M_vendor extends CI_Model{
 				ACTION_TYPE,
 				WU.NAMA||WV.NAMA||' - '||USERNAME||' - '||AUTH_TYPE_NAME AS NAMA,
 				TABLE_ID
-			FROM AAPWMS_TX_HISTORY_LOG HL
-			LEFT JOIN AAPWMS_TX_SYSTEM_AUTH TA ON HL.AUTH_ID = TA.AUTH_ID
-			LEFT JOIN AAPWMS_TR_WASTE_USER WU ON HL.AUTH_ID = WU.AUTH_ID
-			LEFT JOIN AAPWMS_TR_WASTE_VENDOR WV ON HL.AUTH_ID = WV.AUTH_ID
-			LEFT JOIN AAPWMS_TR_AUTH_TYPE AT ON TA.AUTH_TYPE_ID = AT.AUTH_TYPE_ID
-			WHERE HL.TABLE_NAME = 'AAPWMS_TR_WASTE_VENDOR' AND HL.TABLE_ID = ".$id."
+			FROM PWMS_TX_HISTORY_LOG HL
+			LEFT JOIN PWMS_TX_SYSTEM_AUTH TA ON HL.AUTH_ID = TA.AUTH_ID
+			LEFT JOIN PWMS_TR_WASTE_USER WU ON HL.AUTH_ID = WU.AUTH_ID
+			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON HL.AUTH_ID = WV.AUTH_ID
+			LEFT JOIN PWMS_TR_AUTH_TYPE AT ON TA.AUTH_TYPE_ID = AT.AUTH_TYPE_ID
+			WHERE HL.TABLE_NAME = 'PWMS_TR_WASTE_VENDOR' AND HL.TABLE_ID = ".$id."
 			ORDER BY HL.CREATED_DATE DESC";
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
@@ -120,7 +121,7 @@ class M_vendor extends CI_Model{
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				AAPWMS_TR_WASTE_ORDER
+				PWMS_TR_WASTE_ORDER
 			WHERE
 				STATUS_ID NOT LIKE 3
 				AND VENDOR_ID = ".$id;
@@ -131,7 +132,7 @@ class M_vendor extends CI_Model{
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				AAPWMS_TR_WASTE_ORDER
+				PWMS_TR_WASTE_ORDER
 			WHERE
 				STATUS_ID = 3
 				AND VENDOR_ID = ".$id;
@@ -156,45 +157,65 @@ class M_vendor extends CI_Model{
 
 	private function store($roll_id, $get, $post){
 		$result = array();
+		$result['response'] = true;
 		if (isset($get['id'])) {
 			$VENDOR_ID = $get['id'];
 			$AUTH_ID = $this->finddata($roll_id,$VENDOR_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+			$result['type'] = "update";
 		}else{
 			$this->load->model('m_sequences');
 			$AUTH_ID = $this->m_sequences->getNextVal("AUTH_ID");
 			$VENDOR_ID = $this->m_sequences->getNextVal("VENDOR_ID");
+			$result['type'] = "add";
 		}
+
+		$result['msg'] = "Success, ".$result['type']." vendor ".$post['name'];
+
+		if ($this->uniqUsername($post['username'], $result['type']) == false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause username is exist...!";
+			return $result;
+		}
+
+
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('USERNAME',  $post['username']);
 		$this->db->set('PASSWORD',  md5("123"));
 		$this->db->set('AUTH_TYPE_ID',  3);
-		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('AAPWMS_TX_SYSTEM_AUTH'); }
-		else{ $this->db->insert('AAPWMS_TX_SYSTEM_AUTH'); }
+		$this->db->set('FLAG_ACTIVE',  'N');
+		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }
+		else{ $this->db->insert('PWMS_TX_SYSTEM_AUTH'); }
 		$this->db->set('VENDOR_ID',  $VENDOR_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAMA',  $post['name']);
 		$this->db->set('EMAIL',  $post['email']);
 		$this->db->set('PHONE',  $post['phone']);
 		$this->db->set('NPWP',  $post['npwp']);
-		if (isset($get['id'])) { $this->db->where('VENDOR_ID',  $VENDOR_ID); $this->db->update('AAPWMS_TR_WASTE_VENDOR'); }
-		else{ $this->db->insert('AAPWMS_TR_WASTE_VENDOR'); }
-
-		$result['response'] = true;
-		if (isset($get['id'])) { 
-			$result['msg'] = "Success, update vendor ".$post['name'];
-			$result['type'] = "update";
-		}
-		else{ 
-			$result['msg'] = "Success, add new vendor ".$post['name'];
-			$result['type'] = "add";
-		}
+		if (isset($get['id'])) { $this->db->where('VENDOR_ID',  $VENDOR_ID); $this->db->update('PWMS_TR_WASTE_VENDOR'); }
+		else{ $this->db->insert('PWMS_TR_WASTE_VENDOR'); }
 
 		// record history
 			$json = json_encode($this->finddata($roll_id, $VENDOR_ID));
-			$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
+			$this->recordhistory('PWMS_TR_WASTE_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
 		// record history
 		return $result;
+	}
+
+	public function uniqUsername($usrnm, $type){
+		$query = "
+			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
+			WHERE USERNAME = '".$usrnm."'";
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		if (
+			(count($arrdata) >= 1 and $type == "add") or 
+			(count($arrdata) >= 2 and $type == "update")
+		) {
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
 	private function delete($roll_id, $id){
@@ -207,14 +228,14 @@ class M_vendor extends CI_Model{
 			$vendor .= $finddata['NAMA'].', ';
 			if ($finddata['AUTH_ID'] != null) {
 				$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
-				$this->db->delete('AAPWMS_TX_SYSTEM_AUTH');
+				$this->db->delete('PWMS_TX_SYSTEM_AUTH');
 			}
 			// record history
 				$json = json_encode($finddata);
-				$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', 'delete', 'Success delete vendor '.$finddata['NAMA'], $finddata['VENDOR_ID'], $json);
+				$this->recordhistory('PWMS_TR_WASTE_VENDOR', 'delete', 'Success delete vendor '.$finddata['NAMA'], $finddata['VENDOR_ID'], $json);
 			// record history
 			$this->db->where('VENDOR_ID', $idr);
-			$this->db->delete('AAPWMS_TR_WASTE_VENDOR');
+			$this->db->delete('PWMS_TR_WASTE_VENDOR');
 		}
 		$result['response'] = true;
 		$result['type'] = "delete";
@@ -232,10 +253,10 @@ class M_vendor extends CI_Model{
 			$vendor .= $finddata['NAMA'].', ';
 			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
 			$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
-			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
+			$this->db->update('PWMS_TX_SYSTEM_AUTH');
 			// record history
 				$json = json_encode($finddata);
-				$this->recordhistory('AAPWMS_TR_WASTE_VENDOR', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAMA'], $idr, $json);
+				$this->recordhistory('PWMS_TR_WASTE_VENDOR', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAMA'], $idr, $json);
 			// record history
 		}
 		$result['response'] = true;

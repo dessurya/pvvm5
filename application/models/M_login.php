@@ -5,6 +5,7 @@ class M_login extends CI_Model{
 	public function __construct(){
 		parent::__construct();
 		$this->load->library('session');
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function signin($username, $password){
@@ -45,13 +46,13 @@ class M_login extends CI_Model{
 		$result['response'] = false;
 		$result['data'] = null;
 		$result['active'] = null;
-		$query = "SELECT * FROM AAPWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$password;
+		$query = "SELECT * FROM PWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$password;
 		$runQuery = $this->db->query($query);
 		if ($runQuery->num_rows() > 0) {
 			$arrdata = $runQuery->result_array();
 			$this->db->set('LAST_LOGIN', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
 			$this->db->where('AUTH_ID', $arrdata[0]['AUTH_ID']);
-			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
+			$this->db->update('PWMS_TX_SYSTEM_AUTH');
 			$getdetailauth = $this->getdetailauth($arrdata[0]['AUTH_ID'], $arrdata[0]['AUTH_TYPE_ID']);
 			$result['response'] = true;
 			$result['data'] = $getdetailauth;
@@ -62,7 +63,7 @@ class M_login extends CI_Model{
 
 	public function getdetailauth($id, $type){
 		$result = array();
-		$query = "SELECT * FROM AAPWMS_TR_AUTH_TYPE WHERE AUTH_TYPE_ID=".$type;
+		$query = "SELECT * FROM PWMS_TR_AUTH_TYPE WHERE AUTH_TYPE_ID=".$type;
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		
@@ -90,9 +91,9 @@ class M_login extends CI_Model{
 		SELECT
 			COUNT(DISTINCT(ATOL.PKK_ID)) AS CPI
 		FROM
-			APWMS_TX_ORDER_LIST_DET ATOLD
+			PWMS_TX_ORDER_LIST_DET ATOLD
 		JOIN
-			APWMS_TX_ORDER_LIST ATOL
+			PWMS_TX_ORDER_LIST ATOL
 			ON ATOL.PKK_ID = ATOLD.PKK_ID
 		WHERE".$addwhere;
 		$run = $this->db->query($sql);

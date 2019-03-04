@@ -4,6 +4,7 @@ class M_history extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function getdata($roll_id, $data){
@@ -23,7 +24,7 @@ class M_history extends CI_Model{
 			DESCRIPTION,
 			STATUS
 		");
-        $this->datatables->from('AAPWMS_TX_API_LOG');
+        $this->datatables->from('PWMS_TX_API_LOG');
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
@@ -57,14 +58,14 @@ class M_history extends CI_Model{
 				ATHL.ACTION_TYPE AS ACTION_TYPE,
 				ATHL.DESCRIPTION AS DESCRIPTION,
 				ATHL.JSON AS JSON,
-				CASE ATHL.TABLE_NAME WHEN 'APWMS_TX_AUTH' THEN 'USER' WHEN 'APWMS_TX_VENDOR' THEN 'VENDOR' WHEN 'APWMS_TX_ORDER_LIST' THEN 'ORDER' END AS TABLE_NAME
+				CASE ATHL.TABLE_NAME WHEN 'PWMS_TX_AUTH' THEN 'USER' WHEN 'PWMS_TX_VENDOR' THEN 'VENDOR' WHEN 'PWMS_TX_ORDER_LIST' THEN 'ORDER' END AS TABLE_NAME
 			FROM 
-				APWMS_TX_HISTORY_LOG ATHL
+				PWMS_TX_HISTORY_LOG ATHL
 			LEFT JOIN
-				APWMS_TX_AUTH ATA
+				PWMS_TX_AUTH ATA
 				ON ATHL.AUTH_ID = ATA.ID
 			LEFT JOIN
-				APWMS_TR_AUTH_TYPE ATAT
+				PWMS_TR_AUTH_TYPE ATAT
 				ON ATA.TYPE = ATAT.ID
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
@@ -84,7 +85,7 @@ class M_history extends CI_Model{
 		$this->db->set('AUTH_ID', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_BY', $this->session->userdata('AUTH_ID'));
 		$this->db->set('CREATED_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-		$this->db->insert('AAPWMS_TX_HISTORY_LOG');
+		$this->db->insert('PWMS_TX_HISTORY_LOG');
 	}
 }
 ?>

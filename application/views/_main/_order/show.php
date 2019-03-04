@@ -142,7 +142,7 @@
 				</thead>
 				<tbody>
 					<?php foreach ($detail as $list) { ?>
-					<tr data-dwi="<?php echo $list['DET_WARTA_IN_ID'] ?>">
+					<tr data-dwi="<?php echo $list['DET_WARTA_KAPAL_IN_ID'] ?>">
 						<td>
 							<input 
 								readonly="" tabindex="-1"
@@ -276,13 +276,19 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($history as $list) { ?>
+					<?php 
+					if (count($history) == 0) {
+						echo "<tr><td colspan='3'>No Data</td></tr>";
+					}
+					else{
+					foreach ($history as $list) { 
+					?>
 						<tr>
 							<td><?php echo $list['CREATED_DATE'] ?></td>
 							<td><?php echo $list['NAMA'] ?></td>
 							<td><?php echo $list['ACTION_TYPE'] ?></td>
 						</tr>
-					<?php } ?>
+					<?php } } ?>
 				</tbody>
 			</table>
 		</div>

@@ -4,6 +4,7 @@ class M_menu extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function getMenu($roll_id){
@@ -11,9 +12,9 @@ class M_menu extends CI_Model{
 			SELECT
 				*
 			FROM 
-				AAPWMS_TR_AUTH_TYPE_MENU ATM
+				PWMS_TR_AUTH_TYPE_MENU ATM
 			INNER JOIN
-				AAPWMS_TR_SYSTEM_MENU TSM
+				PWMS_TR_SYSTEM_MENU TSM
 				ON ATM.MENU_ID = TSM.MENU_ID
 			WHERE 
 				TSM.TYPE_MENU = 'P'
@@ -57,7 +58,7 @@ class M_menu extends CI_Model{
 			SELECT
 				*
 			FROM 
-				AAPWMS_TR_SYSTEM_MENU
+				PWMS_TR_SYSTEM_MENU
 			WHERE 
 				ID_PARENT = ".$id."
 			ORDER BY SORT_NUMBER ASC

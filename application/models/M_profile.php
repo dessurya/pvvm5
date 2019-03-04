@@ -4,6 +4,7 @@ class M_profile extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function finddata($roll_id, $id){
@@ -28,12 +29,12 @@ class M_profile extends CI_Model{
 					TO_CHAR(ATWV.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
-					AAPWMS_TR_WASTE_VENDOR ATWV
+					PWMS_TR_WASTE_VENDOR ATWV
 				LEFT JOIN
-					AAPWMS_TX_SYSTEM_AUTH ATSA
+					PWMS_TX_SYSTEM_AUTH ATSA
 					ON ATWV.AUTH_ID = ATSA.AUTH_ID
 				LEFT JOIN 
-					AAPWMS_TR_AUTH_TYPE ATAT
+					PWMS_TR_AUTH_TYPE ATAT
 					ON ATAT.AUTH_TYPE_ID = ATSA.AUTH_TYPE_ID
 				WHERE ".$where;
 		} else {
@@ -58,12 +59,12 @@ class M_profile extends CI_Model{
 					ATWU.NPWP AS NPWP,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
-					AAPWMS_TR_WASTE_USER ATWU
+					PWMS_TR_WASTE_USER ATWU
 				LEFT JOIN
-					AAPWMS_TX_SYSTEM_AUTH ATSA
+					PWMS_TX_SYSTEM_AUTH ATSA
 					ON ATWU.AUTH_ID = ATSA.AUTH_ID
 				LEFT JOIN 
-					AAPWMS_TR_AUTH_TYPE ATAT
+					PWMS_TR_AUTH_TYPE ATAT
 					ON ATAT.AUTH_TYPE_ID = ATSA.AUTH_TYPE_ID
 				WHERE ".$where;
 		}
@@ -86,12 +87,12 @@ class M_profile extends CI_Model{
 					ATAT.AUTH_TYPE_NAME AS ROLL,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
-					AAPWMS_TR_WASTE_VENDOR ATWV
+					PWMS_TR_WASTE_VENDOR ATWV
 				LEFT JOIN
-					AAPWMS_TX_SYSTEM_AUTH ATSA
+					PWMS_TX_SYSTEM_AUTH ATSA
 					ON ATWV.AUTH_ID = ATSA.AUTH_ID
 				LEFT JOIN
-					AAPWMS_TR_AUTH_TYPE ATAT
+					PWMS_TR_AUTH_TYPE ATAT
 					ON ATSA.AUTH_TYPE_ID = ATAT.AUTH_TYPE_ID
 				WHERE 
 					ATWV.AUTH_ID = ".$auth_id."";
@@ -112,12 +113,12 @@ class M_profile extends CI_Model{
 					ATAT.AUTH_TYPE_NAME AS ROLL,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
-					AAPWMS_TR_WASTE_USER ATWU
+					PWMS_TR_WASTE_USER ATWU
 				LEFT JOIN
-					AAPWMS_TX_SYSTEM_AUTH ATSA
+					PWMS_TX_SYSTEM_AUTH ATSA
 					ON ATWU.AUTH_ID = ATSA.AUTH_ID
 				LEFT JOIN
-					AAPWMS_TR_AUTH_TYPE ATAT
+					PWMS_TR_AUTH_TYPE ATAT
 					ON ATSA.AUTH_TYPE_ID = ATAT.AUTH_TYPE_ID
 				WHERE 
 					ATWU.AUTH_ID = ".$auth_id."";
@@ -155,9 +156,9 @@ class M_profile extends CI_Model{
 			$this->db->set('NPWP',  $post['npwp']);
 			if (isset($get['id'])) { 
 				$this->db->where('USER_ID',  $ID); 
-				$this->db->update('AAPWMS_TR_WASTE_USER'); 
+				$this->db->update('PWMS_TR_WASTE_USER'); 
 			} else { 
-				$this->db->insert('AAPWMS_TR_WASTE_USER'); 
+				$this->db->insert('PWMS_TR_WASTE_USER'); 
 			}
 		} else if ($roll_id == 3) {
 			$this->db->set('VENDOR_ID',  $ID);
@@ -167,9 +168,9 @@ class M_profile extends CI_Model{
 			$this->db->set('NPWP',  $post['npwp']);
 			if (isset($get['id'])) { 
 				$this->db->where('VENDOR_ID',  $ID); 
-				$this->db->update('AAPWMS_TR_WASTE_VENDOR'); 
+				$this->db->update('PWMS_TR_WASTE_VENDOR'); 
 			} else { 
-				$this->db->insert('APWMS_TR_WASTE_VENDOR'); 
+				$this->db->insert('PWMS_TR_WASTE_VENDOR'); 
 			}
 		}
 
@@ -182,10 +183,12 @@ class M_profile extends CI_Model{
 			$result['msg'] = "Success, add new  ".$post['name'];
 			$result['type'] = "add";
 		}
+
 		return $result;
 	}
 
 	public function changepass($username, $get, $post){
+		// $result['response'] = false;
 		$auth_id = $get['auth_id'];
 		$oldpass = md5($post['password']);
 		$newpass = md5($post['npassword']);
@@ -193,8 +196,9 @@ class M_profile extends CI_Model{
 
 		if (!is_null($is_exist)) {
 			$this->db->set('PASSWORD',  $newpass);
+			// $this->db->where('AUTH_ID',  $auth_id);
 			$this->db->where('USERNAME',  $username);
-			$this->db->update('AAPWMS_TX_SYSTEM_AUTH');
+			$this->db->update('PWMS_TX_SYSTEM_AUTH');
 			$rtitle = "Success";
 			$result_msg = "Success, update password ".$username;
 			$rtype = "success";
@@ -212,7 +216,7 @@ class M_profile extends CI_Model{
 	}
 
 	private function checkpass($username,$oldpass){
-		$query_cekpass = "SELECT * FROM AAPWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$oldpass."";
+		$query_cekpass = "SELECT * FROM PWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$oldpass."";
 		$runQuery = $this->db->query($query_cekpass);
 		if ($runQuery->num_rows() > 0) {
 			$result = $runQuery->result_array();

@@ -17,11 +17,6 @@
 			});
 		}
 
-		// checkNotivication();
-		// setInterval(function(){
-		// 	checkNotivication();
-		// }, 300000); // 5 menit = 300000 | 30 second = 30000
-		
 		var urisegment1 = "<?php echo $this->uri->segment(1) ?>";
 		var urlTools = "<?php echo site_url().'/' ?>"+urisegment1+"/tools";
 
@@ -30,30 +25,6 @@
 			logout(logouturl);
 			return false;
 		});
-
-		// function checkNotivication() {
-		// 	$.ajax({
-		// 		url: "<?PHP echo site_url().'/login/checkNotivication' ?>",
-		// 		type: 'post',
-		// 		dataType: 'json',
-		// 		beforeSend: function() {
-		// 			// $('#loading-page').show();
-		// 		},
-		// 		success: function(data) {
-		// 			if (data.response == true) {
-		// 				var dataPN = new Array();
-		// 				dataPN['model'] = 'info';
-		// 	            dataPN['title'] = 'New Order';
-		// 	            dataPN['text'] = 'Halo, you got new order please check...';
-		// 	            dataPN['type'] = 'success';
-		// 	            showPNotify(dataPN);
-		// 				$('.top_nav .nav_menu nav ul.navbar-nav li#notivication a span').show().html(data.notif);
-		// 			}else if(data.response == false && data.response == 'You Log Out...'){
-		// 				location.reload();
-		// 			}
-		// 		}
-		// 	});
-		// }
 
 		function logout(url){
 			$.ajax({
@@ -73,7 +44,6 @@
 		}
 
 		function action(dataAction) {
-			var dataPN = new Array();
 	        $.ajax({
 	            url: dataAction.url,
 	            type: 'post',
@@ -89,46 +59,59 @@
 	                // location.reload();
 	            },
 	            success: function(data) {
-	                $('#loading-page').hide();
-	            	if (data.msg !== null && data.msg !== "" && data.msg !== undefined) {
-		                dataPN['model'] = 'info';
-				        dataPN['title'] = 'Success';
-				        dataPN['text'] = data.msg;
-				        dataPN['type'] = 'success';
-				        if(data.title !== null && data.title !== "" && data.title !== undefined){
-	            			dataPN['title'] = data.title;	
-	            		}
-	            		if(data.type !== null && data.type !== "" && data.type !== undefined){
-	            			dataPN['type'] = data.type;	
-	            		}
-		                showPNotify(dataPN);
-	            	}
-	                if (data.type == "add") {
-	                	callForm(urlForm);
-	                }else if(data.type == "orderrecalldetail"){
-	                	openDetailData(data.url);
-	                }else if(data.type == "info"){
-	                	$(data.info).each(function(index, value){
-	                		var timeadd = index*2000;
-	                		window.setTimeout(function() {
-		                		dataPN['model'] = 'info';
-						        dataPN['title'] = 'Info';
-						        dataPN['text'] = value;
-						        dataPN['type'] = 'info';
-				                showPNotify(dataPN);
-			                }, timeadd);
-	                	});
-	                } else if (data.type == "getreport"){
-	                	$('#total_order').html(data.order);
-	                	$('#total_vendor').html(data.vendor);
-	                	$('#total_request_qty').html(data.request_qty);
-	                	$('#total_act_request_qty').html(data.act_request_qty);
-	                }
-	                if (data.reload == true) {
-		                dtableReload();
-	                }
+	                actionResponse(data);
 	            }
 	        });
+	    }
+
+	    function actionResponse(data) {
+	    	var dataPN = new Array();
+	    	$('#loading-page').hide();
+        	if (data.response == true && data.msg !== null && data.msg !== "" && data.msg !== undefined) {
+                dataPN['model'] = 'info';
+		        dataPN['title'] = 'Success';
+		        dataPN['text'] = data.msg;
+		        dataPN['type'] = 'success';
+		        if(data.title !== null && data.title !== "" && data.title !== undefined){
+        			dataPN['title'] = data.title;	
+        		}
+        		if(data.type !== null && data.type !== "" && data.type !== undefined){
+        			dataPN['type'] = data.type;	
+        		}
+                showPNotify(dataPN);
+        	}
+            if (data.type == "add") {
+            	if (data.response == true) {
+	            	callForm(urlForm);
+            	}else if (data.response == false) {
+            		dataPN['model'] = 'info';
+			        dataPN['title'] = 'Error';
+			        dataPN['text'] = data.msg;
+			        dataPN['type'] = 'error';
+	                showPNotify(dataPN);
+            	}
+            }else if(data.type == "orderrecalldetail"){
+            	openDetailData(data.url);
+            }else if(data.type == "info"){
+            	$(data.info).each(function(index, value){
+            		var timeadd = index*2000;
+            		window.setTimeout(function() {
+                		dataPN['model'] = 'info';
+				        dataPN['title'] = 'Info';
+				        dataPN['text'] = value;
+				        dataPN['type'] = 'info';
+		                showPNotify(dataPN);
+	                }, timeadd);
+            	});
+            } else if (data.type == "getreport"){
+            	$('#total_order').html(data.order);
+            	$('#total_vendor').html(data.vendor);
+            	$('#total_request_qty').html(data.request_qty);
+            	$('#total_act_request_qty').html(data.act_request_qty);
+            }
+            if (data.reload == true) {
+                dtableReload();
+            }
 	    }
 
 		function showPNotify(dataPN, dataAction=null){

@@ -4,6 +4,7 @@ class M_order extends CI_Model{
 
 	public function __construct(){
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	public function getdata($roll_id, $data){
@@ -54,12 +55,9 @@ class M_order extends CI_Model{
 
 	    	$start = "TO_DATE('".$_POST['startDate']."', 'DD/MM/YYYY')";
 	    	$end = "TO_DATE('".$_POST['endDate']."', 'DD/MM/YYYY')";
-		    if ($_POST['startDate'] == $_POST['endDate']) {
-		    	$this->datatables->where($finddate." = ", $start, false);
-		    }else{
-		    	$this->datatables->where($finddate." >= ", $start, false);
-		    	$this->datatables->where($finddate." <= ", $end, false);
-		    }
+		    
+	    	$this->datatables->where($finddate." >= ", $start, false);
+	    	$this->datatables->where($finddate." <= ", $end, false);
 	    }
 
         if (count($newpost) >= 1) {
@@ -83,7 +81,6 @@ class M_order extends CI_Model{
 			SELECT 
 				WK.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
 				TO_CHAR(WK.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS WARTA_KAPAL_DATE, 
-				WK.BATCH_ID AS BATCH_ID,
 				WK.PKK_NO AS PKK_NO,
 				WK.NO_LAYANAN AS LAYANAN_NO,
 				WK.NAMA_PERUSAHAAN AS PERUSAHAAN_NAMA,
@@ -100,10 +97,10 @@ class M_order extends CI_Model{
 				WV.NAMA AS VENDOR_NAMA,
 				CASE WHEN WO.STATUS_ID IS NULL THEN 0 ELSE WO.STATUS_ID END AS STATUS_ID,
 				CASE WHEN OS.STATUS IS NULL THEN 'AVAILABLE' ELSE OS.STATUS END AS STATUS_NAMA
-			FROM AAPWMS_TR_WARTA_KAPAL_IN WK
-			LEFT JOIN AAPWMS_TR_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
-			LEFT JOIN AAPWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID
-			LEFT JOIN AAPWMS_TR_ORDER_STATUS OS ON WO.STATUS_ID = OS.STATUS_ID
+			FROM PWMS_TR_WARTA_KAPAL_IN WK
+			LEFT JOIN PWMS_TR_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
+			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID
+			LEFT JOIN PWMS_TR_ORDER_STATUS OS ON WO.STATUS_ID = OS.STATUS_ID
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
@@ -120,7 +117,7 @@ class M_order extends CI_Model{
 		$query = "
 			SELECT 
 				SWI.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
-				SWI.DET_WARTA_IN_ID AS DET_WARTA_IN_ID,
+				SWI.DET_WARTA_KAPAL_IN_ID AS DET_WARTA_KAPAL_IN_ID,
 				SWI.MAX_LOAD_QTY AS MAX_LOAD_QTY,
 				SWI.KEEP_QTY AS KEEP_QTY,
 				SWI.REQUEST_QTY AS REQUEST_QTY,
@@ -133,17 +130,17 @@ class M_order extends CI_Model{
 				WT.TYPE_NAME AS TYPE_NAME,
 				WL.UM_ID AS UM_ID,
 				WU.UM_NAME AS UM_NAME
-			FROM AAPWMS_TX_SHIP_WASTE_IN SWI
-			LEFT JOIN AAPWMS_TR_WASTE_LIST WL ON SWI.WASTE_ID = WL.WASTE_ID
-			LEFT JOIN AAPWMS_TR_WASTE_TYPE WT ON WL.TYPE_ID = WT.TYPE_ID
-			LEFT JOIN AAPWMS_TR_WASTE_UM WU ON WL.UM_ID = WU.UM_ID
+			FROM PWMS_TX_SHIP_WASTE_IN SWI
+			LEFT JOIN PWMS_TR_WASTE_LIST WL ON SWI.WASTE_ID = WL.WASTE_ID
+			LEFT JOIN PWMS_TR_WASTE_TYPE WT ON WL.TYPE_ID = WT.TYPE_ID
+			LEFT JOIN PWMS_TR_WASTE_UM WU ON WL.UM_ID = WU.UM_ID
 			WHERE ".$where." ORDER BY WL.TYPE_ID ASC";
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}
 
 	public function history($roll_id, $id){
-		$queryadd = " HL.TABLE_NAME = 'AAPWMS_TR_WARTA_KAPAL_IN' AND HL.TABLE_ID =  ".$id;
+		$queryadd = " HL.TABLE_NAME = 'PWMS_TR_WARTA_KAPAL_IN' AND HL.TABLE_ID =  ".$id;
 		$queryadd .= " ORDER BY HL.CREATED_DATE DESC";
 		$query = "
 			SELECT 
@@ -152,38 +149,14 @@ class M_order extends CI_Model{
 				ACTION_TYPE,
 				WU.NAMA||WV.NAMA||' - '||USERNAME||' - '||AUTH_TYPE_NAME AS NAMA,
 				TABLE_ID
-			FROM AAPWMS_TX_HISTORY_LOG HL
-			LEFT JOIN AAPWMS_TX_SYSTEM_AUTH TA ON HL.AUTH_ID = TA.AUTH_ID
-			LEFT JOIN AAPWMS_TR_WASTE_USER WU ON HL.AUTH_ID = WU.AUTH_ID
-			LEFT JOIN AAPWMS_TR_WASTE_VENDOR WV ON HL.AUTH_ID = WV.AUTH_ID
-			LEFT JOIN AAPWMS_TR_AUTH_TYPE AT ON TA.AUTH_TYPE_ID = AT.AUTH_TYPE_ID
+			FROM PWMS_TX_HISTORY_LOG HL
+			LEFT JOIN PWMS_TX_SYSTEM_AUTH TA ON HL.AUTH_ID = TA.AUTH_ID
+			LEFT JOIN PWMS_TR_WASTE_USER WU ON HL.AUTH_ID = WU.AUTH_ID
+			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON HL.AUTH_ID = WV.AUTH_ID
+			LEFT JOIN PWMS_TR_AUTH_TYPE AT ON TA.AUTH_TYPE_ID = AT.AUTH_TYPE_ID
 			WHERE ".$queryadd;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
-	}
-
-	public function verifyvendor($roll_id, $data){
-		foreach ($data['post'] as $list) {
-			$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-			$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
-			$this->db->set('VENDOR_ID',  $list['VENDOR_ID']);
-			$this->db->where('PKK_DET_ID', $list['PKK_DET_ID']);
-			$this->db->update('APWMS_TX_ORDER_LIST_DET');
-			$this->changestatus($roll_id, $list['PKK_DET_ID'], $list['STATUS_ID'], 'verifyvendor');
-		}
-		$this->db->set('MODIFY_DATE', "TO_DATE('".date("d/m/Y H:i:s")."','DD/MM/YYYY HH24:MI:SS')", false);
-		$this->db->set('MODIFY_BY',  $this->session->userdata('AUTH_ID'));
-		$this->db->where('PKK_ID', $data['get']['pkk_id']);
-		$this->db->update('APWMS_TX_ORDER_LIST');
-		$this->changestatus($roll_id, $data['get']['pkk_id'], 102, 'verifyvendor');
-
-		// record history
-			$object = array();
-			$object['head'] = $this->finddata($roll_id, $data['get']['pkk_id']);
-			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['pkk_id']);
-			$json = json_encode($object);
-			$this->recordhistory('APWMS_TX_ORDER_LIST', 'verify vendor', 'Success verify vendor on order PKK : '.$data['get']['pkk_id'], $data['get']['pkk_id'], $json);
-		// record history
 	}
 
 	public function store($roll_id, $data){
@@ -191,29 +164,33 @@ class M_order extends CI_Model{
 			if ($list != null or $list != undefined) {
 				$this->db->set('TONGKANG_QTY',  $list['TONGKANG_QTY']);
 				$this->db->set('TRUCKING_QTY',  $list['TRUCKING_QTY']);
-				$this->db->where('DET_WARTA_IN_ID', $list['DET_WARTA_IN_ID']);
-				$this->db->update('AAPWMS_TX_SHIP_WASTE_IN');
+				$this->db->where('DET_WARTA_KAPAL_IN_ID', $list['DET_WARTA_KAPAL_IN_ID']);
+				$this->db->update('PWMS_TX_SHIP_WASTE_IN');
 			}
 		}
 		$status_id = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
 		if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 1) {
 			$this->db->set('STATUS_ID',  1);
+			$act = "save actual tongkang";
 		}else if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  2);
+			$act = "submit actual tongkang";
 		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 1) {
 			$this->db->set('STATUS_ID',  2);
+			$act = "save actual trucking";
 		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  3);
+			$act = "submit actual trucking";
 		}
 		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
-		$this->db->update('AAPWMS_TR_WASTE_ORDER');
+		$this->db->update('PWMS_TR_WASTE_ORDER');
 
 		// record history
 			$object = array();
 			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
 			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
 			$json = json_encode($object);
-			$this->recordhistory('AAPWMS_TR_WARTA_KAPAL_IN', $data['get']['type'].' actual order', 'Success '.$data['get']['type'].' actual order on order PKK : '.$object['head'][0]['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
+			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', $act, 'Success '.$act.'  on order PKK : '.$object['head'][0]['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
 	}
 
@@ -227,14 +204,14 @@ class M_order extends CI_Model{
 		$this->db->set('TONGKANG_PICKUP_DATE', "TO_DATE('".$data['post']['TONGKANG_PICKUP_DATE']."','DD/MM/YYYY')", false);
 		$this->db->set('TRUCKING_PICKUP_DATE', "TO_DATE('".$data['post']['TRUCKING_PICKUP_DATE']."','DD/MM/YYYY')", false);
 
-		$this->db->insert('AAPWMS_TR_WASTE_ORDER');
+		$this->db->insert('PWMS_TR_WASTE_ORDER');
 
 		// record history
 			$object = array();
 			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
 			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
 			$json = json_encode($object);
-			$this->recordhistory('AAPWMS_TR_WARTA_KAPAL_IN', 'pick up order', 'Success to pick up order on PKK : '.$data['post']['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
+			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'pick up order', 'Success to pick up order on PKK : '.$data['post']['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
 	}
 

@@ -118,7 +118,7 @@
 			if ($(this).data('dwi') == undefined) {
 				return false;
 			}
-			json['DET_WARTA_IN_ID'] = $(this).data('dwi');
+			json['DET_WARTA_KAPAL_IN_ID'] = $(this).data('dwi');
 			json['WASTE_NAME'] = $(this).find('input[name=WASTE]').val();
 			json['WASTE_ID'] = $(this).find('input[name=WASTE]').data('id');
 			json['TONGKANG_QTY'] = $(this).find('input[name=TONGKANG]').val();
