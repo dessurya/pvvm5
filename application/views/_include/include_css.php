@@ -54,4 +54,7 @@
 	}
 	table#datatable tfoot { display: table-header-group; }
 	table#datatable tfoot input { margin: 0; }
+	.dataTables_wrapper .dataTables_filter{
+		display: none;
+	}
 </style>

@@ -222,6 +222,7 @@
 	    if ($(this).hasClass('delete')) { var action = 'delete' }
 	    else if ($(this).hasClass('deactived')) { var action = 'deactived' }
 	    else if($(this).hasClass('actived')) { var action = 'actived' }
+	    else if($(this).hasClass('reset')) { var action = 'reset_password' }
 	    if (dataId == null || dataId == "" || dataId == undefined) {
 	    	dataPN['model'] = 'info';
 	        dataPN['title'] = 'Sorry!';

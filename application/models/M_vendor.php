@@ -150,7 +150,8 @@ class M_vendor extends CI_Model{
 			$result = $this->delete($roll_id, $get['id']);
 		}else if($action == 'deactived' or $action == 'actived'){
 			$result = $this->activedeactive($roll_id, $get);
-			// $result = array('response' => false, 'type' => 'actived/deactived', 'msg' => 'not finished function');
+		}else if($action == 'reset_password'){
+			$result = $this->resetPassword($roll_id, $get);
 		}
 		return $result;
 	}
@@ -172,15 +173,15 @@ class M_vendor extends CI_Model{
 
 		$result['msg'] = "Success, ".$result['type']." vendor ".$post['name'];
 
-		if ($this->uniqUsername($post['username'], $result['type']) == false) {
+		if ($this->uniqUsername($post['email'], $result['type']) == false) {
 			$result['response'] = false;
-			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause username is exist...!";
+			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
 			return $result;
 		}
 
 
 		$this->db->set('AUTH_ID',  $AUTH_ID);
-		$this->db->set('USERNAME',  $post['username']);
+		$this->db->set('USERNAME',  $post['email']);
 		$this->db->set('PASSWORD',  md5("123"));
 		$this->db->set('AUTH_TYPE_ID',  3);
 		$this->db->set('FLAG_ACTIVE',  'N');
@@ -252,6 +253,28 @@ class M_vendor extends CI_Model{
 			$finddata = $finddata[0];
 			$vendor .= $finddata['NAMA'].', ';
 			$this->db->set('FLAG_ACTIVE',  $get['action'] == 'actived' ? 'Y' : 'N');
+			$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
+			$this->db->update('PWMS_TX_SYSTEM_AUTH');
+			// record history
+				$json = json_encode($finddata);
+				$this->recordhistory('PWMS_TR_WASTE_VENDOR', $get['action'], 'Success '.$get['action'].' vendor '.$finddata['USERNAME'].'/'.$finddata['NAMA'], $idr, $json);
+			// record history
+		}
+		$result['response'] = true;
+		$result['type'] = $get['action'];
+		$result['msg'] = "Success, ".$get['action']." vendor ".substr($vendor, 0, -2);
+		return $result;
+	}
+
+	private function resetPassword($roll_id, $get){
+		$arrid = explode('^', $get['id']);
+		$result = array();
+		$vendor = "";
+		foreach ($arrid as $idr) {
+			$finddata = $this->finddata($roll_id,$idr);
+			$finddata = $finddata[0];
+			$vendor .= $finddata['NAMA'].', ';
+			$this->db->set('PASSWORD',  md5("123"));
 			$this->db->where('AUTH_ID', $finddata['AUTH_ID']);
 			$this->db->update('PWMS_TX_SYSTEM_AUTH');
 			// record history
