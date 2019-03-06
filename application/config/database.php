@@ -4,9 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['default']['hostname'] = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.5.187)(PORT=1521))(CONNECT_DATA=(SID=EQUIPMENT)))";
-$db['default']['username'] = "GCG"; //username database oracle kamu
-$db['default']['password'] = "GeCeGe"; //password database oracle kamu
+$db['default']['hostname'] = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.88.48.103)(PORT=1521))(CONNECT_DATA=(SID=PWMSDBD)))";
+$db['default']['username'] = "PWMS"; //username database oracle kamu
+$db['default']['password'] = "pwms"; //password database oracle kamu
 $db['default']['database'] = '';
 $db['default']['dbdriver'] = 'oci8';  //secara default udah terisi mysql
 // $db['default']['dbprefix'] = '';

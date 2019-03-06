@@ -80,13 +80,19 @@ class Order extends CI_Controller {
 		$send['get'] = $_GET;
 		$this->load->model('m_order');
 		if ($data == 'store') {
-			$this->m_order->store($this->session->userdata('ROLL_ID'), $send);
+			$fbck = $this->m_order->store($this->session->userdata('ROLL_ID'), $send);
 		}else if($data == 'pickupordersubmit') {
-			$this->m_order->pickupordersubmit($this->session->userdata('ROLL_ID'), $send);
+			$fbck = $this->m_order->pickupordersubmit($this->session->userdata('ROLL_ID'), $send);
 		}
 
-		header('Content-Type: application/json');
-		echo json_encode( $response );
+		if ($fbck == null) {
+			header('Content-Type: application/json');
+			echo json_encode( $response );
+		}else if ($fbck == 'sendapi') {
+			$response['id'] = $_GET['warta_kapal_in_id'];
+			$this->session->set_flashdata('send',$response);
+			redirect(base_url().'index.php/api/sendapi');
+		}
 	}
 
 }

@@ -69,7 +69,7 @@ class M_order extends CI_Model{
         return $this->datatables->generate();
 	}
 
-	public function finddata($roll_id, $id){
+	public function finddata($roll_id, $id, $type = null){
 		if (is_array($id)) {
 			$id = implode(',', $id);
 			$where = 'WK.WARTA_KAPAL_IN_ID IN ('.$id.')';
@@ -77,8 +77,8 @@ class M_order extends CI_Model{
 			$where = "WK.WARTA_KAPAL_IN_ID = ".$id;
 		}
 
-		$query = "
-			SELECT 
+		if ($type == null) {
+			$select = "
 				WK.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
 				TO_CHAR(WK.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS WARTA_KAPAL_DATE, 
 				WK.PKK_NO AS PKK_NO,
@@ -96,7 +96,19 @@ class M_order extends CI_Model{
 				WO.VENDOR_ID AS VENDOR_ID,
 				WV.NAMA AS VENDOR_NAMA,
 				CASE WHEN WO.STATUS_ID IS NULL THEN 0 ELSE WO.STATUS_ID END AS STATUS_ID,
-				CASE WHEN OS.STATUS IS NULL THEN 'AVAILABLE' ELSE OS.STATUS END AS STATUS_NAMA
+				CASE WHEN OS.STATUS IS NULL THEN 'AVAILABLE' ELSE OS.STATUS END AS STATUS_NAMA";
+		}else if ($type == 'detailapisubmitforsend') {
+			$select="
+				WK.PKK_NO AS PKK_NO,
+				WK.NO_LAYANAN AS LAYANAN_NO,
+				WK.NAMA_PERUSAHAAN AS PERUSAHAAN_NAMA,
+				WK.KODE_PELABUHAN AS PELABUHAN_KODE,
+				TO_CHAR(WO.CREATED_DATE, 'YYYY-MM-DD') AS ORDER_DATE
+			";
+		}
+
+		$query = "
+			SELECT ".$select."
 			FROM PWMS_TR_WARTA_KAPAL_IN WK
 			LEFT JOIN PWMS_TR_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
 			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID
@@ -106,7 +118,7 @@ class M_order extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function finddatadetail($roll_id, $id){
+	public function finddatadetail($roll_id, $id, $type = null){
 		if (is_array($id)) {
 			$id = implode(',', $id);
 			$where = 'SWI.WARTA_KAPAL_IN_ID IN ('.$id.')';
@@ -114,8 +126,8 @@ class M_order extends CI_Model{
 			$where = "SWI.WARTA_KAPAL_IN_ID = '".$id."'";
 		}
 
-		$query = "
-			SELECT 
+		if ($type == null) {
+			$select = "
 				SWI.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
 				SWI.DET_WARTA_KAPAL_IN_ID AS DET_WARTA_KAPAL_IN_ID,
 				SWI.MAX_LOAD_QTY AS MAX_LOAD_QTY,
@@ -129,7 +141,20 @@ class M_order extends CI_Model{
 				WL.TYPE_ID AS TYPE_ID,
 				WT.TYPE_NAME AS TYPE_NAME,
 				WL.UM_ID AS UM_ID,
-				WU.UM_NAME AS UM_NAME
+				WU.UM_NAME AS UM_NAME";
+		}else if ($type == 'detailapisubmitforsend') {
+			$select="
+				WL.WASTE_NAME AS name,
+				WT.TYPE_NAME AS type,
+				WU.UM_NAME AS unit,
+				SWI.MAX_LOAD_QTY AS kapasitas_tangki_penyimpanan,
+				SWI.TONGKANG_QTY AS jumlah_limbah_dibongkar,
+				SWI.KEEP_QTY AS jumlah_limbah_disimpan
+			";
+		}
+
+		$query = "
+			SELECT ".$select."
 			FROM PWMS_TX_SHIP_WASTE_IN SWI
 			LEFT JOIN PWMS_TR_WASTE_LIST WL ON SWI.WASTE_ID = WL.WASTE_ID
 			LEFT JOIN PWMS_TR_WASTE_TYPE WT ON WL.TYPE_ID = WT.TYPE_ID
@@ -160,6 +185,7 @@ class M_order extends CI_Model{
 	}
 
 	public function store($roll_id, $data){
+		$response = null;
 		foreach ($data['post'] as $list) {
 			if ($list != null or $list != undefined) {
 				$this->db->set('TONGKANG_QTY',  $list['TONGKANG_QTY']);
@@ -174,10 +200,11 @@ class M_order extends CI_Model{
 			$act = "save actual tongkang";
 		}else if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  2);
-			$act = "submit actual tongkang";
+			$act = "save actual trucking";
 		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 1) {
 			$this->db->set('STATUS_ID',  2);
-			$act = "save actual trucking";
+			$act = "submit actual tongkang";
+			$response = 'sendapi';
 		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  3);
 			$act = "submit actual trucking";
@@ -192,10 +219,12 @@ class M_order extends CI_Model{
 			$json = json_encode($object);
 			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', $act, 'Success '.$act.'  on order PKK : '.$object['head'][0]['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
+
+		return $response;
 	}
 
 	public function pickupordersubmit($roll_id, $data){
-
+		$response = null;
 		$this->db->set('VENDOR_ID',  $this->session->userdata('VENDOR_ID'));
 		$this->db->set('STATUS_ID',  1);
 		$this->db->set('PKK_NO',  $data['post']['PKK_NO']);
@@ -213,6 +242,7 @@ class M_order extends CI_Model{
 			$json = json_encode($object);
 			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'pick up order', 'Success to pick up order on PKK : '.$data['post']['PKK_NO'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
+		return $response;
 	}
 
 	private function recordhistory($tabname, $acttyp, $descrp, $tablid, $json){

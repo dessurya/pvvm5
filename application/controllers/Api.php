@@ -7,6 +7,7 @@ class Api extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('m_api');
+		date_default_timezone_set('Asia/Jakarta');
     }
 
 	public function index(){
@@ -50,18 +51,14 @@ class Api extends CI_Controller {
 		$dataJson["status"] = 200;
 		$dataJson["message"] = $return["message"];
 
-		echo json_encode( $dataJson );
-		
+		echo json_encode( $dataJson );	
 	}
 
-	public function testsend($id){
-		// $this->load->model('m_order');
-		// $test = $this->m_order->
-
+	public function sendapi(){
+		$send = $this->session->flashdata('send');
 		$curl = curl_init();
-
 		$data = array();
-		$data[CURLOPT_URL] = "http://localhost/pvvm5_reb/index.php/api";
+		$data[CURLOPT_URL] = "http://10.88.48.102/pwms/index.php/api";
 		$data[CURLOPT_RETURNTRANSFER] = true;
 		$data[CURLOPT_ENCODING] = "";
 		$data[CURLOPT_MAXREDIRS] = 10;
@@ -69,85 +66,27 @@ class Api extends CI_Controller {
 		$data[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
 		$data[CURLOPT_CUSTOMREQUEST] = "POST";
 
-		// $senddata = {};
-		$senddata = '{
-				    "nomor_pkk": "PKK.DN.IDBPN.1812.000604",
-				    "nama_kapal": "FERY XII",
-				    "nomor_layanan": "BDN.IDBPN.1812.000608",
-				    "kode_pelabuhan": null,
-				    "nama_perusahaan": "PT. PERTAMINA TRANS KONTINENTAL",
-				    "pelabuhan_bongkar_terakhir": "-",
-				    "tanggal_bongkar_terakhir": "2018-12-14",
-				    "nomor_dokumen": "-",
-				    "sumber_limbah": "-",
-				    "waste": [
-				        {
-				            "name": "BILGE WATER",
-				            "type": "OILY WASTE",
-				            "unit": "m3",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "OILY SLUDGE",
-				            "type": "OILY WASTE",
-				            "unit": "m3",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "SEWAGE",
-				            "type": "SEWAGE",
-				            "unit": "m3",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "PLASTIC",
-				            "type": "GARBAGE",
-				            "unit": "kg",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "FLOATING DUNNAGE",
-				            "type": "GARBAGE",
-				            "unit": "kg",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "PAPER PRODUCTS",
-				            "type": "GARBAGE",
-				            "unit": "kg",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "INCINERATOR ASH",
-				            "type": "GARBAGE",
-				            "unit": "kg",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        },
-				        {
-				            "name": "FOOD WASTE",
-				            "type": "GARBAGE",
-				            "unit": "kg",
-				            "kapasitas_tangki_penyimpanan": 0,
-				            "jumlah_limbah_dibongkar": 0,
-				            "jumlah_limbah_disimpan": 0
-				        }
-				    ]
-				}';
-		$data[CURLOPT_POSTFIELDS] = $senddata;
+		$senddata = array();
+
+		$this->load->model('m_order');
+		$heaer = $this->m_order->finddata($this->session->userdata('ROLL_ID'), $send['id'], 'detailapisubmitforsend');
+		$heaer = $heaer[0];
+		$senddata['nomor_pkk'] = 'PKK.DN.IDBPN.0'.rand(100,999).'.0'.rand(10000,99999);
+		$senddata['nama_kapal'] = '-';
+		$senddata['nomor_layanan'] = $heaer['LAYANAN_NO'];
+		$senddata['kode_pelabuhan'] = $heaer['PELABUHAN_KODE'];
+		$senddata['nama_perusahaan'] = $heaer['PERUSAHAAN_NAMA'];
+
+		$senddata['pelabuhan_bongkar_terakhir'] = '-';
+		$senddata['tanggal_bongkar_terakhir'] = $heaer['ORDER_DATE'];
+		$senddata['nomor_dokumen'] = '-';
+		$senddata['sumber_limbah'] = '-';
+
+		$senddata['waste'] = $this->m_order->finddatadetail($this->session->userdata('ROLL_ID'), $send['id'], 'detailapisubmitforsend');
+		$senddata['waste'] = strtolower(json_encode($senddata['waste']));
+		$senddata['waste'] = json_decode($senddata['waste']);
+		
+		$data[CURLOPT_POSTFIELDS] = json_encode($senddata);
 
 		curl_setopt_array($curl,$data);
 		$response = curl_exec($curl);
@@ -156,40 +95,12 @@ class Api extends CI_Controller {
 		curl_close($curl);
 
 		if ($err) {
-			echo "cURL Error #:" . $err;
+			$send['apires'] = "cURL Error #:" . $err;
 		} else {
-			echo $response;
+			$send['apires'] = $response;
 		}
-	}
 
-	public function sendpostman(){
-		$curl = curl_init();
-
-		curl_setopt_array($curl, array(
-		  CURLOPT_URL => "http://localhost/pvvm5_reb/index.php/api",
-		  CURLOPT_RETURNTRANSFER => true,
-		  CURLOPT_ENCODING => "",
-		  CURLOPT_MAXREDIRS => 10,
-		  CURLOPT_TIMEOUT => 30,
-		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		  CURLOPT_CUSTOMREQUEST => "POST",
-		  CURLOPT_POSTFIELDS => "{\n    \"nomor_pkk\": \"PKK.DN.IDBPN.1812.000604\",\n    \"nama_kapal\": \"FERY XII\",\n    \"nomor_layanan\": \"BDN.IDBPN.1812.000608\",\n    \"kode_pelabuhan\": null,\n    \"nama_perusahaan\": \"PT. PERTAMINA TRANS KONTINENTAL\",\n    \"pelabuhan_bongkar_terakhir\": \"-\",\n    \"tanggal_bongkar_terakhir\": \"2018-12-14\",\n    \"nomor_dokumen\": \"-\",\n    \"sumber_limbah\": \"-\",\n    \"waste\": [\n        {\n            \"name\": \"BILGE WATER\",\n            \"type\": \"OILY WASTE\",\n            \"unit\": \"m3\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"OILY SLUDGE\",\n            \"type\": \"OILY WASTE\",\n            \"unit\": \"m3\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"SEWAGE\",\n            \"type\": \"SEWAGE\",\n            \"unit\": \"m3\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"PLASTIC\",\n            \"type\": \"GARBAGE\",\n            \"unit\": \"kg\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"FLOATING DUNNAGE\",\n            \"type\": \"GARBAGE\",\n            \"unit\": \"kg\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"PAPER PRODUCTS\",\n            \"type\": \"GARBAGE\",\n            \"unit\": \"kg\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"INCINERATOR ASH\",\n            \"type\": \"GARBAGE\",\n            \"unit\": \"kg\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        },\n        {\n            \"name\": \"FOOD WASTE\",\n            \"type\": \"GARBAGE\",\n            \"unit\": \"kg\",\n            \"kapasitas_tangki_penyimpanan\": 0,\n            \"jumlah_limbah_dibongkar\": 0,\n            \"jumlah_limbah_disimpan\": 0\n        }\n    ]\n} ",
-		  CURLOPT_HTTPHEADER => array(
-		    "Content-Type: application/json",
-		    "Postman-Token: 4c1b50db-85de-4451-add0-0706993a2e9d",
-		    "cache-control: no-cache"
-		  ),
-		));
-
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-
-		curl_close($curl);
-
-		if ($err) {
-		  echo "cURL Error #:" . $err;
-		} else {
-		  echo $response;
-		}
+		header('Content-Type: application/json');
+		echo json_encode( $send );
 	}
 }
