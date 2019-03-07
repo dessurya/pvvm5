@@ -65,4 +65,7 @@
 		padding: 1px 5px 6px;
 		margin-bottom: 10px;
 	}
+	.dataTables_wrapper .dataTables_filter{
+		display: none;
+	}
 </style>

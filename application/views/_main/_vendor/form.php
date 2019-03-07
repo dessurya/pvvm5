@@ -9,18 +9,6 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<label>Username</label>
-							<input 
-								name="username" 
-								value="<?php if(isset($data)) { echo $data['USERNAME']; } ?>" 
-								type="text" 
-								class="form-control" 
-								placeholder="Enter Username"
-								required="">
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group">
 							<label>Nama</label>
 							<input 
 								name="name" 
@@ -35,6 +23,8 @@
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
+								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
+								title="format must be xx.xxx.xxx.x-xxx.xxx"
 								name="npwp" 
 								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>" 
 								type="text" 
@@ -49,7 +39,7 @@
 							<input 
 								name="email" 
 								value="<?php if(isset($data)) { echo $data['EMAIL']; } ?>" 
-								type="text" 
+								type="email" 
 								class="form-control" 
 								placeholder="Enter Email"
 								required="">
@@ -62,7 +52,7 @@
 								name="phone" 
 								value="<?php if(isset($data)) { echo $data['PHONE']; } ?>" 
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter Phone"
 								required="">
 						</div>

@@ -85,15 +85,25 @@
 	}
 
 	$(document).on('click', '#tab_open button#pickupordersubmit', function () {
+		var tongkangdate = $('input[name=TONGKANG_PICKUP_DATE]').val();
+		var truckingdate = $('input[name=TRUCKING_PICKUP_DATE]').val();
 		var input = {};
 		input['PKK_NO'] = $('input[name=PKK_NO]').val();
-		input['TONGKANG_PICKUP_DATE'] = $('input[name=TONGKANG_PICKUP_DATE]').val();
-		input['TRUCKING_PICKUP_DATE'] = $('input[name=TRUCKING_PICKUP_DATE]').val();
-		if ($('input[name=TONGKANG_PICKUP_DATE]').val() == '' && $('input[name=TRUCKING_PICKUP_DATE]').val() == '') {
-			var dataPN = new Array();
+		input['TONGKANG_PICKUP_DATE'] = tongkangdate;
+		input['TRUCKING_PICKUP_DATE'] = truckingdate;
+		var dataPN = new Array();
+		if (tongkangdate == '' && truckingdate == '') {
 			dataPN['model'] = 'info';
 		    dataPN['title'] = 'Error';
 		    dataPN['text'] = 'Required Tanggal Tongkang Pick Up and Tanggal Trucking Pick Up';
+		    dataPN['type'] = 'error';
+		    showPNotify(dataPN);
+		    return false;
+		}
+		if (tongkangdate > truckingdate) {
+			dataPN['model'] = 'info';
+		    dataPN['title'] = 'Error';
+		    dataPN['text'] = 'Tanggal Trucking Pick Up Must Higher Than Tanggal Tongkang Pick Up';
 		    dataPN['type'] = 'error';
 		    showPNotify(dataPN);
 		    return false;
@@ -147,9 +157,4 @@
 	    dataPN['type'] = 'warning';
 	    showPNotify(dataPN, data);
 	    return false;
-	});
-
-	$(document).on('keypress keyup blur', '.number', function (event) {    
-		$(this).val($(this).val().replace(/[^\d].+/, ""));
-		if ((event.which < 48 || event.which > 57)) { event.preventDefault(); }
 	});

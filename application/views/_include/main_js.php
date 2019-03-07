@@ -26,6 +26,11 @@
 			return false;
 		});
 
+		$(document).on('keypress keyup blur', 'input.number', function (event) {    
+			$(this).val($(this).val().replace(/[^\d].+/, ""));
+			if ((event.which < 48 || event.which > 57)) { event.preventDefault(); }
+		});
+
 		function logout(url){
 			$.ajax({
 				url: url,

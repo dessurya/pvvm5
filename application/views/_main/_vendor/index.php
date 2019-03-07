@@ -32,6 +32,11 @@
 		                            <i class="fa fa-ban"></i> Deactived
                     			</a>
                     		</li>
+                    		<li>
+                    			<a class="reset tools" href="#">
+		                            <i class="fa fa-history"></i> Reset Password
+                    			</a>
+                    		</li>
                     		<?php /*
                     		<li>
                     			<a class="delete tools" href="#">
