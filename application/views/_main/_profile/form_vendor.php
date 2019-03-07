@@ -3,7 +3,7 @@
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['USERNAME']; }?></small></h2>
+				<h2>Update</h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -23,7 +23,7 @@
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
 							<div class="form-group">
-								<label>ROLL</label>
+								<label>ROLE</label>
 								<input 
 								readonly
 								name="roll" 
@@ -90,7 +90,7 @@
 <?php } else { ?>
 <div class="x_panel">
 	<div class="x_title">
-		<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['NAME']; } else { echo 'Add'; } ?></small></h2>
+		<h2>Update</h2>
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content">

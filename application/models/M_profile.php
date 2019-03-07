@@ -26,6 +26,7 @@ class M_profile extends CI_Model{
 					ATWV.PHONE AS PHONE, 
 					ATWV.EMAIL AS EMAIL, 
 					ATWV.NPWP AS NPWP,
+					ATWV.PHOTO AS PHOTO,
 					TO_CHAR(ATWV.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
@@ -57,6 +58,7 @@ class M_profile extends CI_Model{
 					ATWU.POSISI AS POSISI,
 					ATWU.ORGANISASI AS ORGANISASI,
 					ATWU.NPWP AS NPWP,
+					ATWU.PHOTO AS PHOTO,
 					CASE ATSA.FLAG_ACTIVE WHEN 'N' THEN 'DEACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 				FROM 
 					PWMS_TR_WASTE_USER ATWU
@@ -82,6 +84,7 @@ class M_profile extends CI_Model{
 					ATWV.PHONE AS PHONE,
 					ATWV.EMAIL AS EMAIL,
 					ATWV.NPWP AS NPWP,
+					ATWV.PHOTO AS PHOTO,
 					TO_CHAR(ATWV.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
 					ATSA.USERNAME AS USERNAME,
 					ATAT.AUTH_TYPE_NAME AS ROLL,
@@ -108,6 +111,7 @@ class M_profile extends CI_Model{
 					ATWU.PHONE AS PHONE,
 					ATWU.EMAIL AS EMAIL,
 					ATWU.NPWP AS NPWP,
+					ATWU.PHOTO AS PHOTO,
 					TO_CHAR(ATWU.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
 					ATSA.USERNAME AS USERNAME,
 					ATAT.AUTH_TYPE_NAME AS ROLL,
@@ -230,5 +234,31 @@ class M_profile extends CI_Model{
 		$this->load->model('m_history');
 		$this->m_history->record($tabname, $acttyp, $descrp, $tablid, $json);
 	}
+
+	public function save_upload($image){
+		$table_name = $this->session->userdata('TABLE_NAME');
+		$auth_id = $this->session->userdata('AUTH_ID');
+		
+		$this->db->where('AUTH_ID',  $auth_id);
+		$this->db->set('PHOTO',  $image);
+	    $upload = $this->db->update($table_name);
+	    // var_dump($upload);
+	    if ($upload) {
+			$rtitle = "Success";
+			$result_msg = "Success, upload new photo";
+			$rtype = "success";
+		} else {
+			$rtitle = "Error";
+			$result_msg = "Failed...!";
+			$rtype = "error";
+		}
+
+		$result['response'] = true;
+		$result['title'] = $rtitle;
+		$result['msg'] = $result_msg;
+		$result['type'] = $rtype;
+		return $result;
+	}
+
 }
 ?>

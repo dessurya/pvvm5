@@ -161,6 +161,7 @@ class M_report extends CI_Model{
 	public function getWasteReport(){
 		$start = $_POST['sdate'];
 		$end = $_POST['edate'];
+
 		$query = "
 		SELECT 
 			* 
@@ -175,7 +176,7 @@ class M_report extends CI_Model{
 				SUM(TONGKANG_QTY) AS TONGKANG_QTY,
 				SUM(TRUCKING_QTY) AS TRUCKING_QTY
 			FROM 
-				PWMS_TX_SHIP_WASTE_IN SW
+				PWMS_TX_SHIP_WASTE_INs SW
 			LEFT JOIN 
 				PWMS_TR_WASTE_LIST WL 
 				ON SW.WASTE_ID = WL.WASTE_ID
@@ -192,9 +193,9 @@ class M_report extends CI_Model{
 	    		PWMS_TR_WASTE_UM WU
 	    		ON WL.UM_ID = WU.UM_ID
 			WHERE
-				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WO.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
 				AND
-				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WO.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
 			";
 			if ($this->session->userdata('ROLL_ID') == 3) {
 				$query .= "AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');

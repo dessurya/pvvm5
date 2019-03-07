@@ -15,7 +15,9 @@
 			</div>
 			</div>
 			<br>
-			<h2 style="width: 30%;">Order Summary</h2>	
+			<div class="x_judul">
+				<h2 style="width: 30%;">Order Summary</h2>	
+			</div>
 			<div class="row top_tiles">
 				<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-6">
 					<div class="tile-stats">
@@ -51,7 +53,9 @@
 				</div>
 			</div>
 			<br>
-			<h2 style="width: 30%;">Waste Summary</h2>
+			<div class="x_judul">
+				<h2 style="width: 30%;">Waste Summary</h2>	
+			</div>
 			<div id="viewdetail" class="table-responsive">
 				<div class="alert alert-success">
 					<ul class="fa-ul">

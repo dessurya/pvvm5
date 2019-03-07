@@ -128,4 +128,38 @@ class Profile extends CI_Controller {
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}
+
+	public function do_upload(){
+		$this->load->model('m_profile');
+        $config['upload_path']="./upload/profile";
+        $config['allowed_types']='gif|jpg|png';
+        $config['encrypt_name'] = TRUE;
+        
+        $this->load->library('upload',$config);
+	    if($this->upload->do_upload("file")){
+	        $data = $this->upload->data();
+
+	        //Resize and Compress Image
+            $config['image_library']='gd2';
+            $config['source_image']='./upload/profile/'.$data['file_name'];
+            $config['create_thumb']= FALSE;
+            $config['maintain_ratio']= FALSE;
+            $config['quality']= '60%';
+            $config['width']= 256;
+            $config['height']= 256;
+            $config['new_image']= './upload/profile/'.$data['file_name'];
+            $this->load->library('image_lib', $config);
+            $this->image_lib->resize();
+            // var_dump($this->session->userdata());
+	        // $title= $this->input->post('title');
+	        $image= $data['file_name']; 
+	        
+	        $response= $this->m_profile->save_upload($image);
+		
+	        // $response['reload'] = true;
+	        header('Content-Type: application/json');
+	        echo json_encode( $response );
+        }
+
+    }
 }
