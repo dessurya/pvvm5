@@ -54,6 +54,17 @@
 	}
 	table#datatable tfoot { display: table-header-group; }
 	table#datatable tfoot input { margin: 0; }
+	.profile_details .profile_view {
+		/*background: #f5f7fa;*/
+	}
+	.m-b-15{
+		margin-bottom: 15px;
+	}
+	.x_judul{
+		border-bottom: 2px solid #E6E9ED;
+		padding: 1px 5px 6px;
+		margin-bottom: 10px;
+	}
 	.dataTables_wrapper .dataTables_filter{
 		display: none;
 	}

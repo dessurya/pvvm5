@@ -184,6 +184,9 @@
 		if( in_array($this->uri->segment(1), array('order', 'history'))){
 			echo substr($this->load->view('_include/datatble_daterange_js.php', '', true), 31 );
 		}
+		if( in_array($this->uri->segment(1), array('profile'))){
+			echo substr($this->load->view('_include/profile_js.php', '', true), 31 );
+		}
 		?>
     });
 </script>

@@ -3,7 +3,7 @@
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['USERNAME']; } ?></small></h2>
+				<h2>Update</h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -21,7 +21,7 @@
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>ROLL</label>
+							<label>ROLE</label>
 							<input 
 							readonly
 							name="roll" 
@@ -110,23 +110,23 @@
 	</form>
 </div>
 <?php } else { ?>
-	<div class="x_panel">
-		<div class="x_title">
-			<h2>Form <small><?php if(isset($data)) { echo 'Update '.$data['USERNAME']; }?></small></h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content">
-			<div class="row">
-				<div class="col-md-12 col-sm-12 col-xs-12">
-					<div class="alert alert-success">
-						<ul class="fa-ul">
-							<li>
-								<i class="fa fa-info-circle fa-lg fa-li"></i> For update data please <code>Click Update Button</code>
-							</li>
-						</ul>
-					</div>
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Update</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="alert alert-success">
+					<ul class="fa-ul">
+						<li>
+							<i class="fa fa-info-circle fa-lg fa-li"></i> For update data please <code>Click Update Button</code>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	<?php } ?>
+</div>
+<?php } ?>

@@ -45,6 +45,8 @@ class Report extends CI_Controller {
 		$result['order_on_progress'] = $this->m_report->getOrderOnProgress();
 		$result['done_order'] = $this->m_report->getOrderDone();
 		$wr = $this->m_report->getWasteReport();
+		// var_dump($wr);
+		// exit();
 		$view = '<table class="table table-bordered">
 					<thead>
 						<tr>
@@ -60,13 +62,30 @@ class Report extends CI_Controller {
 		if (!empty($wr)) {
 			//ada data
 			foreach ($wr as $list) {
+				//format value if null and so
+				if (is_null($list['TONGKANG_QTY'])) {
+					$tong_val = " - ";
+				} else {
+					$tong_val = $list['TONGKANG_QTY'].' '.$list['UM_NAME'];
+				}
+				if (is_null($list['REQUEST_QTY'])) {
+					$req_val = " - ";
+				} else {
+					$req_val = $list['REQUEST_QTY'].' '.$list['UM_NAME'];
+				}
+				if (is_null($list['TRUCKING_QTY'])) {
+					$truk_val = " - ";
+				} else {
+					$truk_val = $list['TRUCKING_QTY'].' '.$list['UM_NAME'];
+				}
+
 				$view .= 
 						'<tr>
 							<td align="left">'.$list['TYPE_NAME'].'</td>
 							<td align="left">'.$list['WASTE_NAME'].'</td>
-							<td align="center">'.$list['REQUEST_QTY'].' '.$list['UM_NAME'].'</td>
-							<td align="center">'.$list['TONGKANG_QTY'].' '.$list['UM_NAME'].'</td>
-							<td align="center">'.$list['TRUCKING_QTY'].' '.$list['UM_NAME'].'</td>
+							<td align="center">'.$req_val.'</td>
+							<td align="center">'.$tong_val.'</td>
+							<td align="center">'.$truk_val.'</td>
 						</tr>';
 			}
 		} else {
