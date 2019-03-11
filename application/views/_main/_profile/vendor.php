@@ -17,12 +17,12 @@
 				<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 					<div class="x_panel">
 						<div class="x_content">
-							<div class="row">
-								<div class="col-md-3 col-sm-4 col-xs-12 profile_details">
-									<div class="well profile_view">
+							<div class="row profile_details">
+								<div class="col-md-3 col-sm-4 col-xs-12 well profile_view">
+									<div class="row">
 										<div class="col-sm-12">
 											<div class="right col-xs-12 text-center">
-												<img id="profile_picture" src="<?php echo base_url('upload/profile/').$detailProfile['PHOTO']; ?>" alt="" class="img-circle img-responsive" style="display: inline-block;">
+												<img id="profile_picture" src="<?php if($detailProfile['PHOTO']==null){ echo base_url().'_asset/gentelella/images/img.jpg'; } else { echo base_url('upload/profile/').$detailProfile['PHOTO']; } ?>" alt="" class="img-circle img-responsive" style="display: inline-block;">
 											</div>
 											<div class="left col-xs-12">
 												<form class="form-horizontal form-label-left" id="submit" method="post">

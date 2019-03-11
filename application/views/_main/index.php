@@ -17,7 +17,13 @@
 	<div class="container body">
 		<div class="container body">
 			<div class="main_container">
-
+				<?php 
+					if ($this->session->userdata('PHOTO') == null ) {
+						$profile_img = base_url().'_asset/gentelella/images/img.jpg';
+					} else {
+						$profile_img = base_url('upload/profile/').$this->session->userdata('PHOTO');
+					}
+				?>
 				<?php // navbar ?>
 				<div class="col-md-3 left_col">
 					<div class="left_col scroll-view">
@@ -30,7 +36,7 @@
 							<?php // menu profile quick info ?>
 							<div class="profile clearfix">
 								<div class="profile_pic">
-									<img src="<?php echo base_url().'_asset/gentelella/images/img.jpg' ?>" alt="..." class="img-circle profile_img">
+									<img src="<?php echo $profile_img ?>" alt="..." class="img-circle profile_img">
 								</div>
 								<div class="profile_info">
 									<span>Welcome,</span>
@@ -64,7 +70,7 @@
 							<ul class="nav navbar-nav navbar-right">
 								<li class="">
 									<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-										<img src="<?php echo base_url().'_asset/gentelella/images/img.jpg' ?>" alt=""><?php echo $this->session->userdata('NAME') ?>
+										<img src="<?php echo $profile_img ?>" alt=""><?php echo $this->session->userdata('NAME') ?>
 										<span class=" fa fa-angle-down"></span>
 									</a>
 									<ul class="dropdown-menu dropdown-usermenu pull-right">

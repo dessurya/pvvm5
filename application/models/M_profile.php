@@ -178,6 +178,10 @@ class M_profile extends CI_Model{
 			}
 		}
 
+		$setsesion['NAME'] = $post['name'];
+		$setsesion['EMAIL'] = $post['email'];
+		$this->session->set_userdata($setsesion);
+
 		$result['response'] = true;
 		if (isset($get['id'])) { 
 			$result['msg'] = "Success, update profile ".$post['name'];
@@ -252,6 +256,9 @@ class M_profile extends CI_Model{
 			$result_msg = "Failed...!";
 			$rtype = "error";
 		}
+
+		$setsesion['PHOTO'] = $image;
+		$this->session->set_userdata($setsesion);
 
 		$result['response'] = true;
 		$result['title'] = $rtitle;

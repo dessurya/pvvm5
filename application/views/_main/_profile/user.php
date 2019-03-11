@@ -19,10 +19,10 @@
 						<div class="x_content">
 							<div class="row profile_details">
 								<div class="col-md-3 col-sm-4 col-xs-12 well profile_view">
-									<div class="">
+									<div class="row">
 										<div class="col-sm-12">
 											<div class="right col-xs-12 text-center">
-												<img id="profile_picture" src="<?php echo base_url('upload/profile/').$detailProfile['PHOTO']; ?>" alt="" class="img-circle img-responsive" style="display: inline-block;">											</div>
+												<img id="profile_picture" src="<?php if (is_null($detailProfile['PHOTO'])){ echo base_url().'_asset/gentelella/images/img.jpg'; } else {echo base_url('upload/profile/').$detailProfile['PHOTO'];} ?>" alt="" class="img-circle img-responsive" style="display: inline-block;">											</div>
 											<div class="left col-xs-12 m-b-15">
 												<form class="form-horizontal form-label-left" id="submit" method="post">
 													<!-- <div class="form-group">
@@ -144,6 +144,8 @@
 											<div class="form-group">
 												<label>NPWP</label>
 												<input 
+												pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
+												title="format must be xx.xxx.xxx.x-xxx.xxx"
 												readonly
 												name="NPWP" 
 												value="<?php echo $detailProfile['NPWP'] ?>" 
