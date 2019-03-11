@@ -88,6 +88,7 @@
 				<?php } else if($this->uri->segment(1) == 'history') {?>
 				{name: "NO", data: "BATCH_ID", orderable: false, searchable:false},
 				{name: "CREATED_DATE", data: "CREATED_DATE"},
+				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "DESCRIPTION", data: "DESCRIPTION"},
 				{name: "STATUS", data: "STATUS"}
 				<?php }?>

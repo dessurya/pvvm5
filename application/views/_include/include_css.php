@@ -13,7 +13,7 @@
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>/_asset/jQuery-autoComplete-master/jquery.auto-complete.css" rel="stylesheet">
-<?php } if (in_array($this->uri->segment(1), array('order', 'report'))) { ?>
+<?php } if (in_array($this->uri->segment(1), array('order', 'history', 'report'))) { ?>
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 	
 	<link href="<?php echo base_url(); ?>/_asset/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">

@@ -20,18 +20,29 @@ class M_history extends CI_Model{
 
 		$this->datatables->select("
 			BATCH_ID,
+			WARTA_KAPAL_IN_ID,
+			WARTA_KAPAL_OUT_ID,
 			TO_CHAR(CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS CREATED_DATE,
+			PKK_NO,
 			DESCRIPTION,
 			STATUS
 		");
-        $this->datatables->from('PWMS_TX_API_LOG');
+        $this->datatables->from('INAPORTNET_LOG');
+
+        if($_POST['startDate'] != null and $_POST['endDate'] != null) {
+	    	$finddate = 'TO_DATE(TO_CHAR("CREATED_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
+
+	    	$start = "TO_DATE('".$_POST['startDate']."', 'DD/MM/YYYY')";
+	    	$end = "TO_DATE('".$_POST['endDate']."', 'DD/MM/YYYY')";
+		    
+	    	$this->datatables->where($finddate." >= ", $start, false);
+	    	$this->datatables->where($finddate." <= ", $end, false);
+	    }
 
         if (count($newpost) >= 1) {
         	foreach ($newpost as $list) {
         		$search = $list['val'];
-        		if ($list['key'] == 'CREATED_DATE') { $field = 'CREATED_DATE'; }
-        		else if ($list['key'] == 'DESCRIPTION') { $field = 'DESCRIPTION'; }
-        		else if ($list['key'] == 'STATUS') { $field = 'STATUS'; }
+        		$field = $list['key'];
         		$this->datatables->like('UPPER('.$field.')', strtoupper($search));
         	}
         }

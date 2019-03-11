@@ -17,6 +17,12 @@
 							<div class="x_panel">
 								<div class="x_title">
 									<h2>Data <small>History</small></h2>
+									<div id="action" class="nav navbar-right panel_toolbox">
+										<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+											<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+											<span></span> <b class="caret"></b>
+				                        </div>
+				                    </div>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -28,6 +34,7 @@
 														<tr>
 															<th>No</th>
 															<th>Date</th>
+															<th>PKK NO</th>
 															<th>Description</th>
 															<th>Status</th>
 														</tr>
@@ -35,7 +42,8 @@
 													<tfoot>
 														<tr>
 															<th></th>
-															<th class="search">Date</th>
+															<th></th>
+															<th class="search">PKK NO</th>
 															<th class="search">Description</th>
 															<th class="search autoComplete">Status</th>
 														</tr>

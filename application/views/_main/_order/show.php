@@ -125,6 +125,9 @@
 <div class="x_panel">
 	<div class="x_title">
 		<h2>Order Waste Detail</h2>
+		<div id="action" class="nav navbar-right panel_toolbox">
+			<?php echo $head['STATUS_NAMA'] ?>
+		</div>
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content">
