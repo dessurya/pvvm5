@@ -29,7 +29,7 @@
 														<input type="file" name="file" class="btn btn-secondary">
 													</div> -->
 													<label class="btn btn-info btn-block" for="my-file-selector">
-														<input id="my-file-selector" type="file" name="file" style="display:none;">
+														<input id="my-file-selector" type="file" name="file" accept=".png,.jpg,.jpeg" style="display:none;">
 														Choose Photo
 													</label>
 													<div class="form-group">

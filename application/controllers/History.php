@@ -10,6 +10,10 @@ class History extends CI_Controller {
 		if(!$this->session->userdata('LOGGED') or !in_array($this->session->userdata('ROLL_ID'), array(1,4))) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
+		$this->load->model('m_admin');
+		if ($this->m_admin->checkAcces($this->session->userdata('ROLL_ID')) == false) {
+			redirect(base_url().'index.php/profile', 'refresh');
+		}
     }
 
 	public function index($data){

@@ -172,7 +172,7 @@
 	    }
 
 		<?php 
-		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history', 'profile'))){
+		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history', 'profile', 'admin'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('order'))){

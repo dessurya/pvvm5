@@ -8,7 +8,7 @@
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
-	<?php if (in_array($this->uri->segment(1), array('vendor','ipc','profile'))) {?>
+	<?php if (in_array($this->uri->segment(1), array('vendor','ipc','profile', 'admin'))) {?>
 		callForm(urlForm);
 	<?php }?>
 
@@ -70,21 +70,19 @@
 				<?php } else if($this->uri->segment(1) == 'vendor') {?>
 				{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
-				{name: "USERNAME", data: "USERNAME"},
 				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
 				{name: "PHONE", data: "PHONE"},
 				{name: "NPWP", data: "NPWP"},
 				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
-				<?php } else if($this->uri->segment(1) == 'ipc') {?>
-				{name: "NO", data: "ID", orderable: false, searchable:false},
+				<?php } else if($this->uri->segment(1) == 'admin') {?>
+				{name: "NO", data: "ADMIN_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
-				{name: "NIPP", data: "NIPP"},
-				{name: "NAME", data: "NAME"},
+				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
-				{name: "POSISI", data: "POSISI"},
-				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"},
-				{name: "LAST_LOGIN", data: "LAST_LOGIN"}
+				{name: "PHONE", data: "PHONE"},
+				{name: "NPWP", data: "NPWP"},
+				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 				<?php } else if($this->uri->segment(1) == 'history') {?>
 				{name: "NO", data: "BATCH_ID", orderable: false, searchable:false},
 				{name: "CREATED_DATE", data: "CREATED_DATE"},
@@ -134,6 +132,8 @@
 				var index = page * length + (iDisplayIndex + 1);
 				<?php if($this->uri->segment(1) == 'vendor') { ?>
 				$(row).attr('id', data.VENDOR_ID);
+				<?php } else if($this->uri->segment(1) == 'admin') { ?>
+				$(row).attr('id', data.ADMIN_ID);
 				<?php } else if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
 				$(row).attr('id', data.ID);
 				<?php } ?>

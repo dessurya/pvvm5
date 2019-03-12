@@ -11,6 +11,10 @@ class Report extends CI_Controller {
 		if(!$this->session->userdata('LOGGED')) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
+		$this->load->model('m_admin');
+		if ($this->m_admin->checkAcces($this->session->userdata('ROLL_ID')) == false) {
+			redirect(base_url().'index.php/profile', 'refresh');
+		}
     }
 
 	public function index($data = null){
