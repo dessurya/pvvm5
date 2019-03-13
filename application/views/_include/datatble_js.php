@@ -81,6 +81,7 @@
 				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
 				{name: "PHONE", data: "PHONE"},
+				{name: "NIPP", data: "NIPP"},
 				{name: "NPWP", data: "NPWP"},
 				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 				<?php } else if($this->uri->segment(1) == 'history') {?>

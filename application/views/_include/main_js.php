@@ -72,19 +72,24 @@
 	    function actionResponse(data) {
 	    	var dataPN = new Array();
 	    	$('#loading-page').hide();
-        	if (data.response == true && data.msg !== null && data.msg !== "" && data.msg !== undefined) {
+	        dataPN['text'] = data.msg;
+        	if (data.response == true) {
                 dataPN['model'] = 'info';
 		        dataPN['title'] = 'Success';
-		        dataPN['text'] = data.msg;
 		        dataPN['type'] = 'success';
-		        if(data.title !== null && data.title !== "" && data.title !== undefined){
-        			dataPN['title'] = data.title;	
-        		}
-        		if(data.type !== null && data.type !== "" && data.type !== undefined){
-        			dataPN['type'] = data.type;	
-        		}
-                showPNotify(dataPN);
+        	}else if (data.response == false){
+        		dataPN['model'] = 'info';
+		        dataPN['title'] = 'Error';
+		        dataPN['type'] = 'error';
         	}
+	        if(data.title !== null && data.title !== "" && data.title !== undefined){
+    			dataPN['title'] = data.title;	
+    		}
+    		if(data.type !== null && data.type !== "" && data.type !== undefined){
+    			dataPN['type'] = data.type;	
+    		}
+            showPNotify(dataPN);
+            
             if (data.type == "add") {
             	if (data.response == true) {
 	            	callForm(urlForm);

@@ -42,6 +42,17 @@
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
+							<label>NIPP</label>
+							<input 
+								readonly
+								name="NIPP" 
+								value="<?php echo $admin['NIPP'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
 							<label>Posisi</label>
 							<input 
 								readonly

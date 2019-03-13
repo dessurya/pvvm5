@@ -90,6 +90,9 @@ class Vendor extends CI_Controller {
 		$this->load->model('m_vendor');
 		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
 		$response['reload'] = true;
+		if ($response['response'] == false) {
+			$response['reload'] = false;
+		}
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}

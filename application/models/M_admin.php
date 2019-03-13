@@ -9,10 +9,30 @@ class M_admin extends CI_Model{
 
 	public function checkAcces($roll_id){
 		$url = $this->uri->segment(1);
-		if ($url == 'order') {
-			$url = "order/index/".$this->uri->segment(3);
+		if ($roll_id != 2) {
+			return $this->notDefaultRole($roll_id, $url);
+		}else{
+			if ($url == 'api') {
+				return true;
+			}else{
+				return false;
+			}
 		}
-		$query = "SELECT MENU_ID FROM PWMS_TR_SYSTEM_MENU WHERE URL_MENU = '".$url."'";
+	}
+
+	private function notDefaultRole($roll_id, $url){
+		if ($url == 'order') {
+			if (in_array($this->uri->segment(2), array('getdata', 'show', 'tools'))) {
+				return true;
+			}
+			$url = "order/index/".$this->uri->segment(3);
+		}else if($url == 'history'){
+			if (in_array($this->uri->segment(2), array('getdata'))) {
+				return true;
+			}
+			$url = 'history/index/'.$this->uri->segment(3);
+		}
+		$query = "SELECT MENU_ID FROM PWMS_TR_SYSTEM_MENU WHERE URL_MENU like '".$url."'";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		$MENU_ID = $arrdata[0]['MENU_ID'];
@@ -25,6 +45,7 @@ class M_admin extends CI_Model{
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		$check = $arrdata[0]['C'];
+
 		if($check == 0) return false;
 		else return true;
 	}
@@ -47,6 +68,7 @@ class M_admin extends CI_Model{
 			UPPER(EMAIL) AS EMAIL, 
 			PHONE,
 			NPWP,
+			NIPP,
 			CASE FLAG_ACTIVE WHEN 'N' THEN 'NONACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 		");
 	    $this->datatables->from('PWMS_TR_WASTE_USER ATWV');
@@ -62,6 +84,7 @@ class M_admin extends CI_Model{
         		else if ($list['key'] == 'NAMA') { $field = 'NAMA'; }
         		else if ($list['key'] == 'EMAIL') { $field = 'EMAIL'; }
         		else if ($list['key'] == 'PHONE') { $field = 'PHONE'; }
+        		else if ($list['key'] == 'NIPP') { $field = 'NIPP'; }
         		else if ($list['key'] == 'NPWP') { $field = 'NPWP'; }
         		else if ($list['key'] == 'FLAG_ACTIVE') { 
         			$field = 'FLAG_ACTIVE';
@@ -93,6 +116,7 @@ class M_admin extends CI_Model{
 				USER_ID,
 				ORGANISASI,
 				POSISI,
+				NIPP,
 				AUTH_TYPE_ID,
 				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
 				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'NONACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
@@ -148,23 +172,46 @@ class M_admin extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		if (isset($get['id'])) { $result['type'] = "update"; }
+		else{ $result['type'] = "add"; }
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct NPWP number";
+		}
+		if (strpos($post['email'], '@') === false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct email address";
+		}else{
+			$mail = explode('@', $post['email']);
+			$mail = $mail[1];
+			if (strpos($mail, '.') === false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct email address";
+			}
+		}
+		if ($this->uniqUsername($post['email'], $result['type']) == false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, ".$result['type']." user ".$post['name']." fail cause email is exist...!";
+		}
+		if (strlen($post['phone']) <= 5 or strlen($post['phone']) >= 21) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct phone number";
+		}
+
+		if ($result['response'] == false) {
+			return $result;
+		}
+
 		if (isset($get['id'])) {
 			$ADMIN_ID = $get['id'];
 			$AUTH_ID = $this->finddata($roll_id,$ADMIN_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
-			$result['type'] = "update";
 		}else{
 			$this->load->model('m_sequences');
 			$AUTH_ID = $this->m_sequences->getNextVal("AUTH_ID");
 			$ADMIN_ID = $this->m_sequences->getNextVal("USER_ID");
-			$result['type'] = "add";
 		}
 
-		if ($this->uniqUsername($post['email'], $result['type']) == false) {
-			$result['response'] = false;
-			$result['msg'] = "Sorry!, ".$result['type']." user ".$post['name']." fail cause email is exist...!";
-			return $result;
-		}
 
 		$result['msg'] = "Success, ".$result['type']." user ".$post['name'];
 

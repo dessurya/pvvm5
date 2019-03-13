@@ -19,7 +19,7 @@ class M_report extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function getTotalOrder(){
+	public function getTotalOrder($roll_id, $self_id){
 		$this->db->select("*");
 		$this->db->from("ORDER_WARTA_KAPAL");
 
@@ -35,13 +35,16 @@ class M_report extends CI_Model{
 		    	$this->db->where($finddate." <= ", $end, false);
 		    }
 	    }
+	    if ($roll_id == 3) {
+	    	$this->db->where("VENDOR_ID", $self_id);
+	    }
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
 		$num_rows = count($arrdata);
 		return $num_rows;
 	}
 
-	public function getOrderNew(){
+	public function getOrderNew($roll_id, $self_id){
 		$this->db->select("*");
 		$this->db->from("ORDER_WARTA_KAPAL");
 
@@ -56,6 +59,9 @@ class M_report extends CI_Model{
 		    	$this->db->where($finddate." >= ", $start, false);
 		    	$this->db->where($finddate." <= ", $end, false);
 		    }
+	    }
+	    if ($roll_id == 3) {
+	    	$this->db->where("VENDOR_ID", $self_id);
 	    }
 	    $this->db->where('STATUS_ID', 1);
 	    $query = $this->db->get();
@@ -64,7 +70,7 @@ class M_report extends CI_Model{
 		return $num_rows;
 	}
 
-	public function getOrderOnProgress(){
+	public function getOrderOnProgress($roll_id, $self_id){
 		$this->db->select("*");
 		$this->db->from("ORDER_WARTA_KAPAL");
 
@@ -81,13 +87,16 @@ class M_report extends CI_Model{
 		    }
 	    }
 	    $this->db->where('STATUS_ID', 2);
+	    if ($roll_id == 3) {
+	    	$this->db->where("VENDOR_ID", $self_id);
+	    }
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
 		$num_rows = count($arrdata);
 		return $num_rows;
 	}
 
-	public function getOrderDone(){
+	public function getOrderDone($roll_id, $self_id){
 		$this->db->select("*");
 		$this->db->from("ORDER_WARTA_KAPAL");
 
@@ -104,6 +113,9 @@ class M_report extends CI_Model{
 		    }
 	    }
 	    $this->db->where('STATUS_ID', 3);
+	    if ($roll_id == 3) {
+	    	$this->db->where("VENDOR_ID", $self_id);
+	    }
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
 		$num_rows = count($arrdata);
@@ -130,9 +142,9 @@ class M_report extends CI_Model{
 			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID";
 		$query .= " 
 			WHERE 
-				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WO.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') >= TO_DATE('".$start."', 'DD/MM/YYYY')
 				AND
-				TO_DATE(TO_CHAR(WK.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
+				TO_DATE(TO_CHAR(WO.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
 			";
 		if ($roll_id == 3) {
 			$query .= " AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
@@ -158,7 +170,7 @@ class M_report extends CI_Model{
 		}
 	}
 
-	public function getWasteReport(){
+	public function getWasteReport($roll_id, $self_id){
 		$start = $_POST['sdate'];
 		$end = $_POST['edate'];
 
@@ -176,7 +188,7 @@ class M_report extends CI_Model{
 				SUM(TONGKANG_QTY) AS TONGKANG_QTY,
 				SUM(TRUCKING_QTY) AS TRUCKING_QTY
 			FROM 
-				PWMS_TX_SHIP_WASTE_INs SW
+				PWMS_TX_SHIP_WASTE_IN SW
 			LEFT JOIN 
 				PWMS_TR_WASTE_LIST WL 
 				ON SW.WASTE_ID = WL.WASTE_ID

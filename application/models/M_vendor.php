@@ -159,25 +159,47 @@ class M_vendor extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		if (isset($get['id'])) { $result['type'] = "update"; }
+		else{ $result['type'] = "add"; }
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct NPWP number";
+		}
+		if (strpos($post['email'], '@') === false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct email address";
+		}else{
+			$mail = explode('@', $post['email']);
+			$mail = $mail[1];
+			if (strpos($mail, '.') === false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct email address";
+			}
+		}
+		if ($this->uniqUsername($post['email'], $result['type']) == false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
+		}
+		if (strlen($post['phone']) <= 5 or strlen($post['phone']) >= 21) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct phone number";
+		}
+		if ($result['response'] == false) {
+			return $result;
+		}
+
 		if (isset($get['id'])) {
 			$VENDOR_ID = $get['id'];
 			$AUTH_ID = $this->finddata($roll_id,$VENDOR_ID);
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
-			$result['type'] = "update";
 		}else{
 			$this->load->model('m_sequences');
 			$AUTH_ID = $this->m_sequences->getNextVal("AUTH_ID");
 			$VENDOR_ID = $this->m_sequences->getNextVal("VENDOR_ID");
-			$result['type'] = "add";
 		}
 
 		$result['msg'] = "Success, ".$result['type']." vendor ".$post['name'];
 
-		if ($this->uniqUsername($post['email'], $result['type']) == false) {
-			$result['response'] = false;
-			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
-			return $result;
-		}
 
 		$deftpass = explode("@", $post['email']);
 		$deftpass = md5($deftpass[0]);
@@ -185,9 +207,8 @@ class M_vendor extends CI_Model{
 		$this->db->set('USERNAME',  $post['email']);
 		$this->db->set('PASSWORD',  $deftpass);
 		$this->db->set('AUTH_TYPE_ID',  3);
-		$this->db->set('FLAG_ACTIVE',  'N');
 		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }
-		else{ $this->db->insert('PWMS_TX_SYSTEM_AUTH'); }
+		else{ $this->db->set('FLAG_ACTIVE',  'N'); $this->db->insert('PWMS_TX_SYSTEM_AUTH'); }
 		$this->db->set('VENDOR_ID',  $VENDOR_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAMA',  $post['name']);

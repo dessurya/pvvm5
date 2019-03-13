@@ -90,7 +90,7 @@
 				<div class="form-group">
 					<label>Tanggal Tongkang Pick Up</label>
 					<input 
-						<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
 						name="TONGKANG_PICKUP_DATE" 
 						value="<?php echo $head['TONGKANG_PICKUP_DATE'] ?>" 
 						type="text" 
@@ -101,7 +101,7 @@
 				<div class="form-group">
 					<label>Tanggal Trucking Pick Up</label>
 					<input 
-						<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
 						name="TRUCKING_PICKUP_DATE" 
 						value="<?php echo $head['TRUCKING_PICKUP_DATE'] ?>" 
 						type="text" 
@@ -109,7 +109,7 @@
 				</div>
 			</div>
 		</div>
-		<?php if($this->session->userdata('ROLL_ID') != 1 and $head['ORDER_ID'] == null) { ?>
+		<?php if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] == null) { ?>
 		<div class="ln_solid"></div>
 		<button 
 			id="pickupordersubmit"
@@ -178,14 +178,14 @@
 						</td>
 						<td>
 							<input 
-								<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 2) echo 'readonly="" tabindex="-1"'; ?>
+								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 2) echo 'readonly="" tabindex="-1"'; ?>
 								type="text" name="TONGKANG" class="form-control number" 
 								value="<?php echo $list['TONGKANG_QTY'] ?>"
 								>
 						</td>
 						<td>
 							<input 
-								<?php if($this->session->userdata('ROLL_ID') == 1 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 1) echo 'readonly="" tabindex="-1"'; ?>
+								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 1) echo 'readonly="" tabindex="-1"'; ?>
 								type="text" name="TRUCKING" class="form-control number" 
 								value="<?php echo $list['TRUCKING_QTY'] ?>"
 								>
@@ -195,7 +195,7 @@
 				</tbody>
 			</table>
 		</div>
-		<?php if($this->session->userdata('ROLL_ID') != 1 and $head['ORDER_ID'] != null and $head['STATUS_ID'] != 3) { ?>
+		<?php if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] != null and $head['STATUS_ID'] != 3) { ?>
 		<div class="ln_solid"></div>
 		<button 
 			data-action="<?php echo site_url().'/order/tools/store?type=save&warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
