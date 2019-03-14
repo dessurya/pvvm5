@@ -49,7 +49,8 @@ class M_vendor extends CI_Model{
 	        	}
 	        }
 		    return $this->datatables->generate();
-		}else if($data == 'autoComplate'){
+		}
+		else if($data == 'autoComplate'){
 			$query = "
 				SELECT 
 					LOWER(NAME) AS VENDOR_NAME, 

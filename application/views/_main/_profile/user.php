@@ -149,7 +149,7 @@
 												readonly
 												name="NPWP" 
 												value="<?php echo $detailProfile['NPWP'] ?>" 
-												type="email" 
+												type="text" 
 												class="form-control">
 											</div>
 										</div>

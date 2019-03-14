@@ -8,7 +8,7 @@
 	<?php } ?>
 	var urlForm = "<?php echo site_url().'/' ?>"+urisegment1+"/callForm";
 
-	<?php if (in_array($this->uri->segment(1), array('vendor','ipc','profile'))) {?>
+	<?php if (in_array($this->uri->segment(1), array('vendor','ipc','profile', 'role'))) {?>
 		callForm(urlForm);
 	<?php }?>
 
@@ -41,7 +41,7 @@
 		    },
 		    <?php  if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
 			    aaSorting: [ [1,'desc'] ],
-			<?php } else if($this->uri->segment(1) == 'vendor') {?>
+			<?php } else if(in_array($this->uri->segment(1), array('vendor'))) {?>
 			    aaSorting: [ [3,'asc'] ],
 			<?php } else if($this->uri->segment(1) == 'history') {?>
 			    aaSorting: [ [1,'asc'] ],
@@ -67,7 +67,7 @@
 					if(data.STATUS == null){ return 'AVAILABLE'; }
 					else{ return data.STATUS; }
 				}}
-				<?php } else if($this->uri->segment(1) == 'vendor') {?>
+				<?php } else if(in_array($this->uri->segment(1), array('vendor'))) {?>
 				{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
 				{name: "USERNAME", data: "USERNAME"},
@@ -76,6 +76,11 @@
 				{name: "PHONE", data: "PHONE"},
 				{name: "NPWP", data: "NPWP"},
 				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
+				<?php } else if(in_array($this->uri->segment(1), array('role'))) {?>
+				{name: "NO", data: "AUTH_TYPE_ID", orderable: false, searchable:false},
+				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+				{name: "AUTH TYPE NAME", data: "AUTH_TYPE_NAME"},
+				// {name: "TABLE NAME", data: "TABLE_NAME"},
 				<?php } else if($this->uri->segment(1) == 'ipc') {?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
@@ -136,6 +141,8 @@
 				$(row).attr('id', data.VENDOR_ID);
 				<?php } else if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
 				$(row).attr('id', data.ID);
+				<?php } else if(in_array($this->uri->segment(1), array('role'))) { ?>
+				$(row).attr('id', data.AUTH_TYPE_ID);
 				<?php } ?>
 				$('td:eq(0)', row).html(index);
 			}

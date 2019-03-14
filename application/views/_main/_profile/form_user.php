@@ -90,7 +90,7 @@
 							class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-6 col-xs-12">
+					<!-- <div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
@@ -98,6 +98,20 @@
 							value="<?php echo $data['NPWP'] ?>" 
 							type="text" 
 							class="form-control">
+						</div>
+					</div> -->
+					<div class="col-md-4 col-sm-6 col-xs-12">
+						<div class="form-group">
+							<label>NPWP</label>
+							<input 
+								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
+								title="format must be xx.xxx.xxx.x-xxx.xxx"
+								name="npwp" 
+								value="<?php echo $data['NPWP'] ?>" 
+								type="text" 
+								class="form-control" 
+								placeholder="Enter NPWP"
+								required="">
 						</div>
 					</div>
 				</div>

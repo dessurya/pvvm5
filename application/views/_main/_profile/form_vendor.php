@@ -72,10 +72,14 @@
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
-							name="npwp" 
-							value="<?php echo $data['NPWP'] ?>" 
-							type="text" 
-							class="form-control">
+								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
+								title="format must be xx.xxx.xxx.x-xxx.xxx"
+								name="npwp" 
+								value="<?php echo $data['NPWP'] ?>" 
+								type="text" 
+								class="form-control" 
+								placeholder="Enter NPWP"
+								required="">
 						</div>
 					</div>
 				</div>
