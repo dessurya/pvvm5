@@ -41,10 +41,10 @@
 						<div class="form-group">
 							<label>NIPP</label>
 							<input 
-								name="nipp" 
-								value="<?php if(isset($data)) { echo $data['NIPP']; } ?>" 
+								name="nipp"
+								value="<?php if(isset($data)) { echo $data['NIPP']; } ?>"
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter NIPP">
 						</div>
 					</div>
@@ -52,12 +52,10 @@
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
-								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
-								title="format must be xx.xxx.xxx.x-xxx.xxx"
 								name="npwp" 
-								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>" 
+								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>"
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter NPWP"
 								required="">
 						</div>

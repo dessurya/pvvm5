@@ -221,9 +221,8 @@ class M_admin extends CI_Model{
 		$this->db->set('USERNAME',  $post['email']);
 		$this->db->set('PASSWORD',  $deftpass);
 		$this->db->set('AUTH_TYPE_ID',  $post['role']);
-		$this->db->set('FLAG_ACTIVE',  'N');
 		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }
-		else{ $this->db->insert('PWMS_TX_SYSTEM_AUTH'); }
+		else{ $this->db->set('FLAG_ACTIVE',  'N'); $this->db->insert('PWMS_TX_SYSTEM_AUTH'); }
 		$this->db->set('USER_ID',  $ADMIN_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAMA',  $post['name']);
