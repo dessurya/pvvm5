@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Vendor extends CI_Controller {
+class Admin extends CI_Controller {
 
 	public $content;
 	public function __construct() {
@@ -18,10 +18,10 @@ class Vendor extends CI_Controller {
 
 	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
-		$urlview = '_main/_vendor/index.php';
+		$urlview = '_main/_admin/index.php';
 
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Vendor";
+		$viewComp['_tittle_'] = "IPWMS | User";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
@@ -32,18 +32,17 @@ class Vendor extends CI_Controller {
 	public function show($data = null){
 		$response = array();
 		$roll_id = $this->session->userdata('ROLL_ID');
-		$urlview = '_main/_vendor/show.php';
+		$urlview = '_main/_admin/show.php';
 
 		if ($data == null) {
 			$response['response'] = false;
 		}else{
-			$this->load->model('m_vendor');
-			$find = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $data);
+			$this->load->model('m_admin');
+			$find = $this->m_admin->finddata($this->session->userdata('ROLL_ID'), $data);
 			$find = $find[0];
 			$send = array();
-			$send['vendor'] = $find;
-			$send['orderinfo'] = $this->m_vendor->orderinfo($this->session->userdata('ROLL_ID'), $data);
-			$send['history'] = $this->m_vendor->findhistory($this->session->userdata('ROLL_ID'), $data);
+			$send['admin'] = $find;
+			$send['history'] = $this->m_admin->findhistory($this->session->userdata('ROLL_ID'), $data);
 			$response['response'] = true;
 			$response['name'] = 'Vendor : '.$find['NAMA'];
 			$response['result'] = $this->load->view($urlview, $send, true);
@@ -54,28 +53,31 @@ class Vendor extends CI_Controller {
 	}
 
 	public function getdata($data = null){
-		$this->load->model('m_vendor');
+		$this->load->model('m_admin');
 		header('Content-Type: application/json');
-		echo $this->m_vendor->getdata($this->session->userdata('ROLL_ID'), $data);
+		echo $this->m_admin->getdata($this->session->userdata('ROLL_ID'), $data);
 	}
 
 	public function callForm($data = null){
 		$data = null;
 		$html = '';
+		$this->load->model('m_admin');
+		$role = $this->session->userdata('ROLL_ID');
 		if (isset($_GET['id'])) {
-			$this->load->model('m_vendor');
 			$id = explode('^', $_GET['id']);
-			$data = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $id);
+			$data = $this->m_admin->finddata($role, $id);
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
-				$arrdata['route'] = site_url().'/vendor/tools?action=store&id='.$list['VENDOR_ID'];
-				$html .= $this->load->view('_main/_vendor/form.php', $arrdata, true);
+				$arrdata['role'] = $this->m_admin->getRole($role);
+				$arrdata['route'] = site_url().'/admin/tools?action=store&id='.$list['USER_ID'];
+				$html .= $this->load->view('_main/_admin/form.php', $arrdata, true);
 			}
 		}else{
 			$arrdata = array();
-			$arrdata['route'] = site_url().'/vendor/tools?action=store';
-			$html .= $this->load->view('_main/_vendor/form.php', $arrdata, true);
+			$arrdata['role'] = $this->m_admin->getRole($role);
+			$arrdata['route'] = site_url().'/admin/tools?action=store';
+			$html .= $this->load->view('_main/_admin/form.php', $arrdata, true);
 		}
 		header('Content-Type: application/json');
 		echo json_encode(
@@ -87,12 +89,9 @@ class Vendor extends CI_Controller {
 	}
 
 	public function tools($data = null){
-		$this->load->model('m_vendor');
-		$response = $this->m_vendor->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
+		$this->load->model('m_admin');
+		$response = $this->m_admin->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
 		$response['reload'] = true;
-		if ($response['response'] == false) {
-			$response['reload'] = false;
-		}
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}

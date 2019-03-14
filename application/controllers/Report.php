@@ -11,6 +11,10 @@ class Report extends CI_Controller {
 		if(!$this->session->userdata('LOGGED')) {
 			redirect(base_url().'index.php/login', 'refresh');
 		}
+		$this->load->model('m_admin');
+		if ($this->m_admin->checkAcces($this->session->userdata('ROLL_ID')) == false) {
+			redirect(base_url().'index.php/profile', 'refresh');
+		}
     }
 
 	public function index($data = null){
@@ -40,11 +44,13 @@ class Report extends CI_Controller {
 		}
 		$result['response'] = true;
 		$result['msg'] = "Success get Report...";
-		$result['total_order'] = $this->m_report->getTotalOrder();
-		$result['new_order'] = $this->m_report->getOrderNew();
-		$result['order_on_progress'] = $this->m_report->getOrderOnProgress();
-		$result['done_order'] = $this->m_report->getOrderDone();
-		$wr = $this->m_report->getWasteReport();
+		$roll_id = $this->session->userdata('ROLL_ID');
+		$self_id = $this->session->userdata('DETAIL_ID');
+		$result['total_order'] = $this->m_report->getTotalOrder($roll_id, $self_id);
+		$result['new_order'] = $this->m_report->getOrderNew($roll_id, $self_id);
+		$result['order_on_progress'] = $this->m_report->getOrderOnProgress($roll_id, $self_id);
+		$result['done_order'] = $this->m_report->getOrderDone($roll_id, $self_id);
+		$wr = $this->m_report->getWasteReport($roll_id, $self_id);
 		// var_dump($wr);
 		// exit();
 		$view = '<table class="table table-bordered">

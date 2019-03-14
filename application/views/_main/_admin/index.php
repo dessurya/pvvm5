@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>VENDOR</h2>
+				<h2>USER</h2>
 				<div id="action" class="nav navbar-right panel_toolbox">
                     <div class="btn-group">
                     	<button type="button" class="btn btn-sm btn-success">
@@ -59,14 +59,14 @@
 							<a href="#tab_form" role="tab" data-toggle="tab" aria-expanded="true">Form</a>
 						</li>
 						<li role="presentation" class="">
-							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">Vendor : No Data</a>
+							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true">User : No Data</a>
 						</li>
 					</ul>
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">
 							<div class="x_panel">
 								<div class="x_title">
-									<h2>Data <small>Vendor</small></h2>
+									<h2>Data <small>User</small></h2>
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
@@ -81,6 +81,7 @@
 															<th>Name</th>
 															<th>Email</th>
 															<th>Phone</th>
+															<th>NIPP</th>
 															<th>NPWP</th>
 															<th>Status</th>
 														</tr>
@@ -92,6 +93,7 @@
 															<th class="search">Name</th>
 															<th class="search">Email</th>
 															<th class="search">Phone</th>
+															<th class="search">NIPP</th>
 															<th class="search">NPWP</th>
 															<th class="search autoComplete">Status</th>
 														</tr>

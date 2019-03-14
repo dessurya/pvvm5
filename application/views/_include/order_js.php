@@ -1,8 +1,10 @@
 <script type="text/javascript">
 	function calldattime(elm) {	
+		var date = new Date();
+		date.setDate(date.getDate() - 1);
 		if (!$(elm).is('[readonly]')) {
 			$(elm).datetimepicker({
-				minDate: new Date(),
+				minDate: date,
 				format:'DD/MM/YYYY',
 		        ignoreReadonly: true,
 		        allowInputToggle: true

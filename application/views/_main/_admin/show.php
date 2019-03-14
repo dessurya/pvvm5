@@ -1,6 +1,6 @@
 <div class="x_panel">
 	<div class="x_title">
-		<h2><?php echo strtoupper($vendor['NAMA']) ?><small>Vendor</small></h2>
+		<h2><?php echo strtoupper($admin['NAMA']) ?><small>Admin</small></h2>
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content">
@@ -13,7 +13,7 @@
 							<input 
 								readonly
 								name="NAME" 
-								value="<?php echo $vendor['NAMA'] ?>" 
+								value="<?php echo $admin['NAMA'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -24,7 +24,7 @@
 							<input 
 								readonly
 								name="NPWP" 
-								value="<?php echo $vendor['NPWP'] ?>" 
+								value="<?php echo $admin['NPWP'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -35,7 +35,40 @@
 							<input 
 								readonly
 								name="EMAIL" 
-								value="<?php echo $vendor['EMAIL'] ?>" 
+								value="<?php echo $admin['EMAIL'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>NIPP</label>
+							<input 
+								readonly
+								name="NIPP" 
+								value="<?php echo $admin['NIPP'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Posisi</label>
+							<input 
+								readonly
+								name="POSISI" 
+								value="<?php echo $admin['POSISI'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organisasi</label>
+							<input 
+								readonly
+								name="ORGANISASI" 
+								value="<?php echo $admin['ORGANISASI'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -46,7 +79,7 @@
 							<input 
 								readonly
 								name="PHONE" 
-								value="<?php echo $vendor['PHONE'] ?>" 
+								value="<?php echo $admin['PHONE'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -57,7 +90,7 @@
 							<input 
 								readonly
 								name="FLAG_ACTIVE" 
-								value="<?php echo $vendor['FLAG_ACTIVE'] ?>" 
+								value="<?php echo $admin['FLAG_ACTIVE'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -68,40 +101,7 @@
 							<input 
 								readonly
 								name="LAST_LOGIN" 
-								value="<?php echo $vendor['LAST_LOGIN'] ?>" 
-								type="text" 
-								class="form-control">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label>Order In Progress</label>
-							<input 
-								readonly
-								name="ORDERWORK" 
-								value="<?php echo $orderinfo['ndone'] ?>" 
-								type="text" 
-								class="form-control">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label>Order Done</label>
-							<input 
-								readonly
-								name="ORDERDONE" 
-								value="<?php echo $orderinfo['ydone'] ?>" 
-								type="text" 
-								class="form-control">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label>All Of Order</label>
-							<input 
-								readonly
-								name="ORDERALL" 
-								value="<?php echo $orderinfo['ndone']+$orderinfo['ydone'] ?>" 
+								value="<?php echo $admin['LAST_LOGIN'] ?>" 
 								type="text" 
 								class="form-control">
 						</div>
@@ -111,21 +111,14 @@
 				<div id="actionshow" class="row">
 					<div class="col-md-4">
 						<div class="form-group">
-							<a href="<?php echo site_url().'/order/index/list/for/'.$vendor['VENDOR_ID'].'/'.$vendor['NAMA'] ?>/vendor" data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block">
-								<i class="fa fa-file-text-o"></i> Show Order
-							</a>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
+							<button data-id="<?php echo $admin['USER_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
 								<i class="fa fa-pencil"></i> Update
 							</button>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<button data-id="<?php echo $vendor['VENDOR_ID'] ?>" type="button" class="btn btn-success btn-block refreshshow">
+							<button data-id="<?php echo $admin['USER_ID'] ?>" type="button" class="btn btn-success btn-block refreshshow">
 								<i class="fa fa-refresh"></i> Refresh Data
 							</button>
 						</div>

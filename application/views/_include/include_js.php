@@ -11,7 +11,7 @@
 <script src="<?php echo base_url().'_asset/gentelella/vendors/pnotify/dist/pnotify.callbacks.js' ?>"></script>
 <script src="<?php echo base_url().'_asset/gentelella/vendors/Chart.js/dist/Chart.min.js' ?>"></script>
 
-<?php if ( in_array($this->uri->segment(1), array('vendor', 'order', 'history', 'report', 'role')) ) { ?>
+<?php if ( in_array($this->uri->segment(1), array('vendor', 'order', 'history', 'report', 'admin', 'role'))) { ?>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
@@ -19,7 +19,6 @@
 
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/iCheck/icheck.js"></script>
 	<script src="<?php echo base_url(); ?>_asset/jQuery-autoComplete-master/jquery.auto-complete.js"></script>
-<?php } if ( in_array($this->uri->segment(1), array('order', 'history', 'report')) ) { ?>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/moment/moment.js"></script>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="<?php echo base_url(); ?>_asset/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>

@@ -47,12 +47,10 @@ class Profile extends CI_Controller {
 		$arrdata = array();
 		$arrdata['detailProfile'] = $detailProfile[0];
 		$arrdata['route'] = site_url().'/profile/changepass?username='.$detailProfile[0]['USERNAME'].'&auth_id='.$detailProfile[0]['AUTH_ID'];
-		if ($roll_id == 1) { // ipc cabang
-			return $this->load->view('_main/_profile/user.php', $arrdata, true);
-		}else if($roll_id == 2) { // shipping agent
-			return $this->load->view('_main/_profile/shipping_agent.php', $arrdata, true);
-		}else if($roll_id == 3) { // vendor
+		if ($roll_id == 3) { // ipc cabang
 			return $this->load->view('_main/_profile/vendor.php', $arrdata, true);
+		}else if($roll_id == 1 or $roll_id >= 4) { // vendor
+			return $this->load->view('_main/_profile/user.php', $arrdata, true);
 		}
 	}
 
@@ -132,7 +130,7 @@ class Profile extends CI_Controller {
 	public function do_upload(){
 		$this->load->model('m_profile');
         $config['upload_path']="./upload/profile";
-        $config['allowed_types']='gif|jpg|png';
+        $config['allowed_types']='jpg|png|jpeg';
         $config['encrypt_name'] = TRUE;
         
         $this->load->library('upload',$config);
@@ -144,9 +142,9 @@ class Profile extends CI_Controller {
             $config['source_image']='./upload/profile/'.$data['file_name'];
             $config['create_thumb']= FALSE;
             $config['maintain_ratio']= FALSE;
-            $config['quality']= '60%';
-            $config['width']= 256;
-            $config['height']= 256;
+            // $config['quality']= '60%';
+            // $config['width']= 256;
+            // $config['height']= 256;
             $config['new_image']= './upload/profile/'.$data['file_name'];
             $this->load->library('image_lib', $config);
             $this->image_lib->resize();
