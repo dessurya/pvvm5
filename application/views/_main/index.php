@@ -29,9 +29,9 @@
 					<div class="left_col scroll-view">
 						<div class="navbar nav_title" style="border: 0;">
 							<a href="#" class="site_title">
-								<span>IPWMS</span>
+								<span>PWMS</span>
 							</a>
-							<small class="site_title">Indonesia Port Waste Management System</small>
+							<small class="site_title">Port Waste Management System</small>
 							<div class="clearfix"></div>
 							<?php // menu profile quick info ?>
 							<div class="profile clearfix">

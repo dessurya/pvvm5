@@ -14,7 +14,7 @@ class Profile extends CI_Controller {
 
 	public function index($data = null){
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Profile";
+		$viewComp['_tittle_'] = "PWMS | Profile";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->getContent();

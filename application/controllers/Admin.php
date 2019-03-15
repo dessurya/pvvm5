@@ -21,7 +21,7 @@ class Admin extends CI_Controller {
 		$urlview = '_main/_admin/index.php';
 
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | User";
+		$viewComp['_tittle_'] = "PWMS | User";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);

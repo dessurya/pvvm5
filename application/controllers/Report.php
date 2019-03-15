@@ -22,7 +22,7 @@ class Report extends CI_Controller {
 		$urlview = '_main/_report/index.php';
 
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Report";
+		$viewComp['_tittle_'] = "PWMS | Report";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);

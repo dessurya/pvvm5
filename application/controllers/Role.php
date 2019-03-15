@@ -15,7 +15,7 @@ class Role extends CI_Controller {
 	public function index($data = null){
 		$urlview = '_main/_role/index.php';
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Role";
+		$viewComp['_tittle_'] = "PWMS | Role";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 		$viewComp['_contents_'] = $this->load->view($urlview, '', true);

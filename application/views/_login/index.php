@@ -49,7 +49,7 @@
 						</div>
 					</div>
 					<form action="<?php echo site_url().'/login/signin' ?>" method="POST" autocomplete="off">
-						<h1>IPWMS</h1>
+						<h1>PWMS</h1>
 						<div>
 							<span class="error username"></span>
 							<input type="text" name="username" class="form-control" placeholder="Username" required>

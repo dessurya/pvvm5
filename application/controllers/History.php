@@ -19,7 +19,7 @@ class History extends CI_Controller {
 	public function index($data){
 		$urlview = '_main/_history/index.php';
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | HISTORY ".strtoupper($data);
+		$viewComp['_tittle_'] = "PWMS | HISTORY ".strtoupper($data);
 		
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";

@@ -25,7 +25,7 @@ class Order extends CI_Controller {
 		}
 		$send['tittle'] = $tittle;
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | ".$tittle;
+		$viewComp['_tittle_'] = "PWMS | ".$tittle;
 		if ($show == 'for') {
 			$this->load->model('m_vendor');
 			$result = $this->m_vendor->finddata($this->session->userdata('ROLL_ID'), $this->uri->segment(5));

@@ -13,7 +13,7 @@ class Login extends CI_Controller {
 			redirect(base_url().'index.php/profile', 'refresh');
 		}
 		$viewComp = array();
-		$viewComp['_tittle_'] = "IPWMS | Sign In Area";
+		$viewComp['_tittle_'] = "PWMS | Sign In Area";
 		$this->parser->parse('_login/index', $viewComp);
 	}
 
