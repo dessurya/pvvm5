@@ -36,7 +36,7 @@
 														<button class="btn btn-warning btn-block" id="btn_upload" type="submit">Upload</button>
 													</div>
 													<small class="muted">
-														File Size: max 10.000.000 bytes (10 Mb)<br>
+														<!-- File Size: max 10.000.000 bytes (10 Mb)<br> -->
 														File Extensiion : .JPG .JPEG .PNG
 													</small>
 												</form>	

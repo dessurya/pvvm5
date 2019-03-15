@@ -136,6 +136,8 @@ class Profile extends CI_Controller {
         $this->load->library('upload',$config);
 	    if($this->upload->do_upload("file")){
 	        $data = $this->upload->data();
+	        var_dump($data);
+	        
 
 	        //Resize and Compress Image
             $config['image_library']='gd2';

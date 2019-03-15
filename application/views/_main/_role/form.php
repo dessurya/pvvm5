@@ -2,7 +2,7 @@
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Form <small><?php if(isset($role)) { echo 'Update '. $role[0]['AUTH_TYPE_NAME']; } else { echo 'Add'; } ?></small></h2>
+				<h2>Form <small><?php if(isset($role)){ echo 'Update '. $role[0]['AUTH_TYPE_NAME']; } else { echo 'Add'; } ?></small></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">

@@ -35,9 +35,12 @@ class Role extends CI_Controller {
 			$response['response'] = false;
 		}else{
 			$this->load->model('m_role');
+			$find = $this->m_role->finddata($auth_type_id, $data);
+			$find = $find[0];
 			$send = array();
 			$send['role'] = $this->m_role->finddata($auth_type_id, $data);
 			$send['detail'] = $this->m_role->finddatadetail($data);
+			$response['name'] = 'Role : '.$find['AUTH_TYPE_NAME'];
 			$response['response'] = true;
 			$response['result'] = $this->load->view($urlview, $send, true);
 		}

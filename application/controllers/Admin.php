@@ -44,7 +44,7 @@ class Admin extends CI_Controller {
 			$send['admin'] = $find;
 			$send['history'] = $this->m_admin->findhistory($this->session->userdata('ROLL_ID'), $data);
 			$response['response'] = true;
-			$response['name'] = 'Vendor : '.$find['NAMA'];
+			$response['name'] = 'User : '.$find['NAMA'];
 			$response['result'] = $this->load->view($urlview, $send, true);
 		}
 

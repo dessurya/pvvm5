@@ -21,8 +21,8 @@
 	                $('#loading-page').hide();
 	            },
 	            success: function(data) {
-					// actionResponse(data);
-					location.reload();
+					actionResponse(data);
+					// location.reload();
 	            }
         	});
 		});
