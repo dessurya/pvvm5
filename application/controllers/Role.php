@@ -13,9 +13,7 @@ class Role extends CI_Controller {
     }
 
 	public function index($data = null){
-		$roll_id = $this->session->userdata('ROLL_ID');
 		$urlview = '_main/_role/index.php';
-
 		$viewComp = array();
 		$viewComp['_tittle_'] = "IPWMS | Role";
 		$viewComp['_link_css_'] = "";
@@ -28,7 +26,6 @@ class Role extends CI_Controller {
 	public function show($data = null){
 		$response = array();
 		$auth_type_id = $this->uri->segment(3);
-		// $roll_id = $this->session->userdata('ROLL_ID');
 		$urlview = '_main/_role/show.php';
 
 		if ($data == null) {
@@ -61,26 +58,16 @@ class Role extends CI_Controller {
 		$this->load->model('m_role');
 		if (isset($_GET['id'])) {
 			$id = explode('^', $_GET['id']);
-			$auth_type_id = $_GET['id'];
-			// $data = $this->m_role->finddata($auth_type_id, $id);
-			// foreach ($data as $list) {
+			foreach ($id as $list) {
 				$arrdata = array();
-				$arrdata['role'] = $this->m_role->finddata($auth_type_id, $data);
-				// $arrdata['detail'] = $data;
-				$arrdata['detail'] = $this->m_role->finddatadetail($auth_type_id, $id);
-				// echo "auth_type_id = ".$auth_type_id;
-				// echo "<pre>";
-				// var_dump($arrdata['detail']);
-				// echo "</pre>";
-				// exit();
-
-				$arrdata['route'] = site_url().'/role/tools?action=store&id='.$auth_type_id;
+				$arrdata['role'] = $this->m_role->finddata($list, $id);
+				$arrdata['detail'] = $this->m_role->finddatadetail($list, $id);
+				$arrdata['route'] = site_url().'/role/tools?action=store&id='.$list;
 				$html .= $this->load->view('_main/_role/form.php', $arrdata, true);
-			// }
+			}
 		}else{
 			$data = null;
 			$auth_type_id = null;
-			// $list_menu = $this->m_role->finddatadetail($auth_type_id, $data);
 			$arrdata = array();
 			$arrdata['list_menu'] =$this->m_role->findlistmenu();
 			$arrdata['route'] = site_url().'/role/tools?action=store';
