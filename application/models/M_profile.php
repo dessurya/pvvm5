@@ -145,9 +145,42 @@ class M_profile extends CI_Model{
 
 	private function store($roll_id, $get, $post){
 		$result = array();
-		$ID = $get['id'];
-		$AUTH_ID = $this->finddata($roll_id,$ID);
-		$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		$result['response'] = true;
+		
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct NPWP number";
+			$result['type'] = "error";
+		}
+		if (strpos($post['email'], '@') === false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct email address";
+			$result['type'] = "error";
+		} else {
+			$mail = explode('@', $post['email']);
+			$mail = $mail[1];
+			if (strpos($mail, '.') === false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct email address";
+				$result['type'] = "error";
+			}
+		}
+		if (strlen($post['phone']) <= 5 or strlen($post['phone']) >= 21) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct phone number";
+			$result['type'] = "error";
+		}
+		if ($result['response'] == false) {
+			return $result;
+		}
+
+		if (isset($get['id'])) { 
+			$ID = $get['id'];
+			$AUTH_ID = $this->finddata($roll_id,$ID);
+			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		}
+		$result['msg'] = "Success, update profile ".$post['name'];
+		$result['type'] = "success";
 
 		if ($roll_id == 1) {
 			$this->db->set('USER_ID',  $ID);
@@ -181,16 +214,6 @@ class M_profile extends CI_Model{
 		$setsesion['NAME'] = $post['name'];
 		$setsesion['EMAIL'] = $post['email'];
 		$this->session->set_userdata($setsesion);
-
-		$result['response'] = true;
-		if (isset($get['id'])) { 
-			$result['msg'] = "Success, update profile ".$post['name'];
-			$result['type'] = "update";
-		}
-		else{ 
-			$result['msg'] = "Success, add new  ".$post['name'];
-			$result['type'] = "add";
-		}
 
 		return $result;
 	}
