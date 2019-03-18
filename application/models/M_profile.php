@@ -196,27 +196,35 @@ class M_profile extends CI_Model{
 	}
 
 	public function changepass($username, $get, $post){
-		// $result['response'] = false;
+		$result['response'] = false;
 		$auth_id = $get['auth_id'];
+		$pass_len = strlen($post['npassword']);
 		$oldpass = md5($post['password']);
 		$newpass = md5($post['npassword']);
 		$is_exist =  $this->checkpass($this->db->escape($username), $this->db->escape($oldpass));
 
-		if (!is_null($is_exist)) {
-			$this->db->set('PASSWORD',  $newpass);
-			// $this->db->where('AUTH_ID',  $auth_id);
-			$this->db->where('USERNAME',  $username);
-			$this->db->update('PWMS_TX_SYSTEM_AUTH');
-			$rtitle = "Success";
-			$result_msg = "Success, update password ".$username;
-			$rtype = "success";
+		if ($pass_len >= 8 and $pass_len <= 20 ) {
+			if (!is_null($is_exist)) {
+				$this->db->set('PASSWORD',  $newpass);
+				$this->db->where('USERNAME',  $username);
+				$this->db->update('PWMS_TX_SYSTEM_AUTH');
+				$result['response'] = true;
+				$rtitle = "Success";
+				$result_msg = "Success, update password ".$username;
+				$rtype = "success";
+			} else {
+				$result['response'] = false;
+				$rtitle = "Error";
+				$result_msg = "Failed, the password you entered is incorrect. ";
+				$rtype = "error";
+			}
 		} else {
+			$result['response'] = false;
 			$rtitle = "Error";
-			$result_msg = "Failed, the password you entered is incorrect. ";
+			$result_msg = "Failed, minimum 8 characters and maximum 20 characters. ";
 			$rtype = "error";
-		}
+		} 
 
-		$result['response'] = true;
 		$result['title'] = $rtitle;
 		$result['msg'] = $result_msg;
 		$result['type'] = $rtype;
