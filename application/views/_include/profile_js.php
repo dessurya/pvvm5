@@ -1,4 +1,8 @@
 <script type="text/javascript">
+	$('button.reload').click(function() {
+		location.reload();
+	});
+
 	$(document).ready(function () {
 		$("#npassword, #cnpassword").keyup(checkPasswordMatch);
 		$('.btn_submit').prop('disabled', true);

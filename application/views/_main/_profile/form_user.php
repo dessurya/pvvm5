@@ -35,7 +35,7 @@
 							<label>NAMA</label>
 							<input 
 							name="name" 
-							value="<?php echo $data['NAME'] ?>" 
+							value="<?php echo $data['NAMA'] ?>" 
 							type="text" 
 							class="form-control"
 							required="">

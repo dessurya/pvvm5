@@ -178,20 +178,27 @@
 									</div>
 									<div class="ln_solid"></div>
 									<div id="actionshow" class="row">
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<div class="form-group">
 												<button data-id="<?php echo $detailProfile['ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
 													<i class="fa fa-pencil"></i> Update
 												</button>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<div class="form-group">
 												<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target=".bs-example-modal-sm">
 													<i class="fa fa-lock"></i> Change Password
 												</button>
 											</div>
-										</div> 
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<button data-id="<?php echo $detailProfile['ID'] ?>" type="button" class="btn btn-success btn-block reload">
+													<i class="fa fa-refresh"></i> Refresh Data
+												</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

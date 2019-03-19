@@ -54,6 +54,36 @@ class Profile extends CI_Controller {
 		}
 	}
 
+	public function show($data=null){
+		$response = array();
+		$roll_id = $this->session->userdata('ROLL_ID');
+		// $urlview = '_main/_admin/show.php';
+		if ($roll_id == 3) { // ipc cabang
+			$urlview = '_main/_profile/vendor.php';
+
+		}else if($roll_id == 1 or $roll_id >= 4) { // vendor
+			$urlview = '_main/_profile/user.php';
+
+		}
+
+		if ($data == null) {
+			$response['response'] = false;
+		}else{
+			$this->load->model('m_profile');
+			$find = $this->m_profile->finddata($this->session->userdata('ROLL_ID'), $data);
+			// var_dump($find);
+			// exit();
+			$find = $find[0];
+			$send = array();
+			$send['detailProfile'] = $find;
+			$response['response'] = true;
+			$response['name'] = 'Profile : '.$find['NAMA'];
+			$response['result'] = $this->load->view($urlview, $send, true);
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $response );
+	}
 
 	public function getdata($data = null){
 		$this->load->model('m_order');	
