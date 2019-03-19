@@ -2,7 +2,18 @@
 	<div class="x_title">
 		<h2>Order Waste</h2>
 		<div id="action" class="nav navbar-right panel_toolbox">
-			<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
+			<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow"><i class="fa fa-refresh"></i> Refresh Data</button>
+			<?php if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] == null) { ?>
+				<!-- <div class="pull-right"> -->
+					<button 
+					id="pickupordersubmit"
+					data-action="<?php echo site_url().'/order/tools/pickupordersubmit?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
+					type="button" 
+					class="btn btn-info"
+					><i class="fa fa-download"></i> Get This Order</button>
+					<!-- <button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button> -->
+				<!-- </div> -->
+			<?php } ?>
 		</div>
 		<div class="clearfix"></div>
 	</div>
@@ -10,7 +21,7 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group">
-					<label>No.PKK</label>
+					<label>No. PKK</label>
 					<input 
 						readonly=""
 						name="PKK_NO" 
@@ -21,7 +32,7 @@
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-					<label>No.Layanan</label>
+					<label>No. Layanan</label>
 					<input 
 						readonly=""
 						name="LAYANAN_NO" 
@@ -109,16 +120,7 @@
 				</div>
 			</div>
 		</div>
-		<?php if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] == null) { ?>
-		<div class="ln_solid"></div>
-		<button 
-			id="pickupordersubmit"
-			data-action="<?php echo site_url().'/order/tools/pickupordersubmit?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
-			type="button" 
-			class="btn btn-success"
-		>Get This Order</button>
-		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
-		<?php } ?>
+		<!-- <div class="ln_solid"></div> -->
 	</div>
 </div>
 
@@ -126,7 +128,21 @@
 	<div class="x_title">
 		<h2>Order Waste Detail</h2>
 		<div id="action" class="nav navbar-right panel_toolbox">
-			<?php echo $head['STATUS_NAMA'] ?>
+			<b> STATUS :  &nbsp;</b>
+			<?php 
+				if ($head['STATUS_ID'] == 3) {
+					$btn_color = ' btn-success';
+				} else if ($head['STATUS_ID'] == 2) {
+					$btn_color = ' btn-warning';
+				} else if ($head['STATUS_ID'] == 1) {
+					$btn_color = ' btn-primary';
+				} else if ($head['STATUS_ID'] == 0) {
+					$btn_color = ' btn-info';
+				}
+			?>
+			<button type="button" class="btn btn-round <?php echo $btn_color ?>">
+				<i><?php echo $head['STATUS_NAMA'] ?></i>
+			</button>
 		</div>
 		<div class="clearfix"></div>
 	</div>
@@ -197,15 +213,17 @@
 		</div>
 		<?php if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] != null and $head['STATUS_ID'] != 3) { ?>
 		<div class="ln_solid"></div>
-		<button 
+		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow"><i class="fa fa-refresh"></i> Refresh Data</button>
+		<div class="pull-right">
+			<button 
 			data-action="<?php echo site_url().'/order/tools/store?type=save&warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
 			type="submit" 
-			class="btn btn-success storedata saveact">Save</button>
-		<button 
+			class="btn btn-warning storedata saveact"><i class="fa fa-floppy-o"></i> Save</button>
+			<button 
 			data-action="<?php echo site_url().'/order/tools/store?type=submit&warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>" 
 			type="submit" 
-			class="btn btn-success storedata submact">Submit</button>
-		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow">Refresh Data</button>
+			class="btn btn-success storedata submact"><i class="fa fa-send-o"></i> Submit</button>
+		</div>
 		<?php } ?>
 	</div>
 </div>
@@ -240,7 +258,7 @@
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-					<label>Nomer Dokument</label>
+					<label>Nomor Dokumen</label>
 					<input 
 						readonly=""
 						name="DOKUMEN_NO" 
