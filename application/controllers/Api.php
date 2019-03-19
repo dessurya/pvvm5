@@ -19,15 +19,15 @@ class Api extends CI_Controller {
 		
 		
 		$dataInsert =  array(
-						'PKK_ID' => $dataPost->nomor_pkk,
-						'NO_LAYANAN' => $dataPost->nomor_layanan,
-						'KODE_PELABUHAN' => $dataPost->kode_pelabuhan,
-						'NAMA_PERUSAHAAN' => $dataPost->nama_perusahaan,
-						'PELABUHAN_BONGKAR_TERAKHIR' => $dataPost->pelabuhan_bongkar_terakhir,
-						'TANGGAL_BONGKAR_TERAKHIR' => date('d-M-y',strtotime($dataPost->tanggal_bongkar_terakhir)),
-						'NOMOR_DOKUMEN' => $dataPost->nomor_dokumen,
-						'SUMBER_LIMBAH' => $dataPost->sumber_limbah
-					);
+			'PKK_ID' => $dataPost->nomor_pkk,
+			'NO_LAYANAN' => $dataPost->nomor_layanan,
+			'KODE_PELABUHAN' => $dataPost->kode_pelabuhan,
+			'NAMA_PERUSAHAAN' => $dataPost->nama_perusahaan,
+			'PELABUHAN_BONGKAR_TERAKHIR' => $dataPost->pelabuhan_bongkar_terakhir,
+			'TANGGAL_BONGKAR_TERAKHIR' => date('d-M-y',strtotime($dataPost->tanggal_bongkar_terakhir)),
+			'NOMOR_DOKUMEN' => $dataPost->nomor_dokumen,
+			'SUMBER_LIMBAH' => $dataPost->sumber_limbah
+		);
 		$orderListDetail = array();
 		$counter = 0;
 
@@ -58,8 +58,10 @@ class Api extends CI_Controller {
 		$send = $this->session->flashdata('send');
 		$curl = curl_init();
 		$data = array();
-		$data[CURLOPT_URL] = "http://10.88.48.102/pwms/index.php/api";
+		$data[CURLOPT_URL] = "https://api-inaportnet.dephub.go.id/public/api/sps/cemar/realisasi";
+		// $data[CURLOPT_URL] = "http://10.88.48.102/pwms/index.php/api";
 		$data[CURLOPT_RETURNTRANSFER] = true;
+		$data[CURLOPT_SSL_VERIFYPEER] = false;
 		$data[CURLOPT_ENCODING] = "";
 		$data[CURLOPT_MAXREDIRS] = 10;
 		$data[CURLOPT_TIMEOUT] = 30;
