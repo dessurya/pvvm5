@@ -145,9 +145,42 @@ class M_profile extends CI_Model{
 
 	private function store($roll_id, $get, $post){
 		$result = array();
-		$ID = $get['id'];
-		$AUTH_ID = $this->finddata($roll_id,$ID);
-		$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		$result['response'] = true;
+		
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct NPWP number";
+			$result['type'] = "error";
+		}
+		if (strpos($post['email'], '@') === false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct email address";
+			$result['type'] = "error";
+		} else {
+			$mail = explode('@', $post['email']);
+			$mail = $mail[1];
+			if (strpos($mail, '.') === false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct email address";
+				$result['type'] = "error";
+			}
+		}
+		if (strlen($post['phone']) <= 5 or strlen($post['phone']) >= 21) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, Please correct phone number";
+			$result['type'] = "error";
+		}
+		if ($result['response'] == false) {
+			return $result;
+		}
+
+		if (isset($get['id'])) { 
+			$ID = $get['id'];
+			$AUTH_ID = $this->finddata($roll_id,$ID);
+			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		}
+		$result['msg'] = "Success, update profile ".$post['name'];
+		$result['type'] = "success";
 
 		if ($roll_id == 1) {
 			$this->db->set('USER_ID',  $ID);
@@ -182,41 +215,39 @@ class M_profile extends CI_Model{
 		$setsesion['EMAIL'] = $post['email'];
 		$this->session->set_userdata($setsesion);
 
-		$result['response'] = true;
-		if (isset($get['id'])) { 
-			$result['msg'] = "Success, update profile ".$post['name'];
-			$result['type'] = "update";
-		}
-		else{ 
-			$result['msg'] = "Success, add new  ".$post['name'];
-			$result['type'] = "add";
-		}
-
 		return $result;
 	}
 
 	public function changepass($username, $get, $post){
-		// $result['response'] = false;
+		$result['response'] = false;
 		$auth_id = $get['auth_id'];
+		$pass_len = strlen($post['npassword']);
 		$oldpass = md5($post['password']);
 		$newpass = md5($post['npassword']);
 		$is_exist =  $this->checkpass($this->db->escape($username), $this->db->escape($oldpass));
 
-		if (!is_null($is_exist)) {
-			$this->db->set('PASSWORD',  $newpass);
-			// $this->db->where('AUTH_ID',  $auth_id);
-			$this->db->where('USERNAME',  $username);
-			$this->db->update('PWMS_TX_SYSTEM_AUTH');
-			$rtitle = "Success";
-			$result_msg = "Success, update password ".$username;
-			$rtype = "success";
+		if ($pass_len >= 8 and $pass_len <= 20 ) {
+			if (!is_null($is_exist)) {
+				$this->db->set('PASSWORD',  $newpass);
+				$this->db->where('USERNAME',  $username);
+				$this->db->update('PWMS_TX_SYSTEM_AUTH');
+				$result['response'] = true;
+				$rtitle = "Success";
+				$result_msg = "Success, update password ".$username;
+				$rtype = "success";
+			} else {
+				$result['response'] = false;
+				$rtitle = "Error";
+				$result_msg = "Failed, the password you entered is incorrect. ";
+				$rtype = "error";
+			}
 		} else {
+			$result['response'] = false;
 			$rtitle = "Error";
-			$result_msg = "Failed, the password you entered is incorrect. ";
+			$result_msg = "Failed, minimum 8 characters and maximum 20 characters. ";
 			$rtype = "error";
-		}
+		} 
 
-		$result['response'] = true;
 		$result['title'] = $rtitle;
 		$result['msg'] = $result_msg;
 		$result['type'] = $rtype;

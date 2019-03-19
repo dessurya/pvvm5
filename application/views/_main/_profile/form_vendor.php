@@ -28,8 +28,9 @@
 								readonly
 								name="roll" 
 								value="<?php echo $data['ROLL'] ?>" 
-								type="email" 
-								class="form-control">
+								type="text" 
+								class="form-control"
+								>
 							</div>
 						</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
@@ -51,7 +52,7 @@
 								name="phone" 
 								value="<?php echo $data['PHONE'] ?>" 
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter Phone"
 								required="">
 						</div>
@@ -62,7 +63,7 @@
 							<input 
 								name="email" 
 								value="<?php echo $data['EMAIL'] ?>" 
-								type="text" 
+								type="email" 
 								class="form-control" 
 								placeholder="Enter Email"
 								required="">
@@ -72,12 +73,10 @@
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
-								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
-								title="format must be xx.xxx.xxx.x-xxx.xxx"
 								name="npwp" 
 								value="<?php echo $data['NPWP'] ?>" 
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter NPWP"
 								required="">
 						</div>

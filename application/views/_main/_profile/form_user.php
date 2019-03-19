@@ -37,7 +37,8 @@
 							name="name" 
 							value="<?php echo $data['NAME'] ?>" 
 							type="text" 
-							class="form-control">
+							class="form-control"
+							required="">
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
@@ -47,7 +48,8 @@
 							name="nipp" 
 							value="<?php echo $data['NIPP'] ?>" 
 							type="text" 
-							class="form-control">
+							class="form-control number"
+							required="">
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
@@ -57,7 +59,8 @@
 							name="phone" 
 							value="<?php echo $data['PHONE'] ?>" 
 							type="text" 
-							class="form-control">
+							class="form-control number"
+							required="">
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
@@ -67,7 +70,8 @@
 							name="email" 
 							value="<?php echo $data['EMAIL'] ?>" 
 							type="email" 
-							class="form-control">
+							class="form-control"
+							required="">
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
@@ -104,12 +108,10 @@
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
-								pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
-								title="format must be xx.xxx.xxx.x-xxx.xxx"
 								name="npwp" 
 								value="<?php echo $data['NPWP'] ?>" 
 								type="text" 
-								class="form-control" 
+								class="form-control number" 
 								placeholder="Enter NPWP"
 								required="">
 						</div>
