@@ -110,25 +110,9 @@
             showPNotify(dataPN);
             
             if (data.type == "add") {
-            	if (data.response == true) {
-	            	callForm(urlForm);
-            	}else if (data.response == false) {
-            		dataPN['model'] = 'info';
-			        dataPN['title'] = 'Error';
-			        dataPN['text'] = data.msg;
-			        dataPN['type'] = 'error';
-	                showPNotify(dataPN);
-            	}
+            	callForm(urlForm);
             }else if (data.type == "update") {
-            	if (data.response == true) {
-	            	// callForm(urlForm);
-            	}else if (data.response == false) {
-            		dataPN['model'] = 'info';
-			        dataPN['title'] = 'Error';
-			        dataPN['text'] = data.msg;
-			        dataPN['type'] = 'error';
-	                showPNotify(dataPN);
-            	}
+            	$('#form_id_'+data.form_id).remove();
             }else if(data.type == "orderrecalldetail"){
             	openDetailData(data.url);
             }else if(data.type == "info"){

@@ -318,7 +318,7 @@ class M_profile extends CI_Model{
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 
-		if ((count($arrdata) >= 1 and $type == "add") or (count($arrdata) >= 1 and $type == "update")) {
+		if ((count($arrdata) >= 1 and $type == "add") or (count($arrdata) >= 2 and $type == "update")) {
 			return false;
 		}else{
 			return true;

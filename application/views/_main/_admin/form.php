@@ -1,4 +1,4 @@
-<div id="form_id_<?php if(isset($data)) { echo $data['USER_ID']; } else { echo '0'; } ?>" class="col-md-12">
+<div id="form_id_<?php if(isset($data)) { echo $data['AUTH_ID']; } else { echo '0'; } ?>" class="col-md-12">
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">

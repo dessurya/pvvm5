@@ -218,7 +218,7 @@ class M_admin extends CI_Model{
 		$deftpass = explode("@", $post['email']);
 		$deftpass = md5($deftpass[0]);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
-		$this->db->set('USERNAME',  $post['email']);
+		$this->db->set('USERNAME',  strtolower($post['email']));
 		$this->db->set('PASSWORD',  $deftpass);
 		$this->db->set('AUTH_TYPE_ID',  $post['role']);
 		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }
@@ -227,7 +227,7 @@ class M_admin extends CI_Model{
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAMA',  $post['name']);
 		$this->db->set('NIPP',  $post['nipp']);
-		$this->db->set('EMAIL',  $post['email']);
+		$this->db->set('EMAIL',  strtolower($post['email']));
 		$this->db->set('PHONE',  $post['phone']);
 		$this->db->set('ORGANISASI',  $post['organisasi']);
 		$this->db->set('POSISI',  $post['posisi']);
@@ -239,13 +239,15 @@ class M_admin extends CI_Model{
 			$json = json_encode($this->finddata($roll_id, $ADMIN_ID));
 			$this->recordhistory('PWMS_TR_WASTE_USER', $result['type'], $result['msg'], $ADMIN_ID, $json);
 		// record history
+			
+		$result['form_id'] = $AUTH_ID;
 		return $result;
 	}
 
 	public function uniqUsername($usrnm, $type){
 		$query = "
 			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
-			WHERE USERNAME = '".$usrnm."'";
+			WHERE USERNAME = '".strtolower($usrnm)."'";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		if (

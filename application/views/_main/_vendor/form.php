@@ -1,4 +1,4 @@
-<div id="form_id_<?php if(isset($data)) { echo $data['VENDOR_ID']; } else { echo '0'; } ?>" class="col-md-6 col-sm-6 col-xs-6">
+<div id="form_id_<?php if(isset($data)) { echo $data['AUTH_ID']; } else { echo '0'; } ?>" class="col-md-6 col-sm-6 col-xs-6">
 	<form action="<?php echo $route ?>" class="form-horizontal form-label-left store" method="post">
 		<div class="x_panel">
 			<div class="x_title">

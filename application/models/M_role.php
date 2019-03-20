@@ -122,6 +122,7 @@ class M_role extends CI_Model{
 			// $json = json_encode($this->finddata($roll_id, $VENDOR_ID));
 			// $this->recordhistory('PWMS_TR_WASTE_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
 		// record history
+		$result['form_id'] = $auth_type_id;
 		return $result;
 	}
 	

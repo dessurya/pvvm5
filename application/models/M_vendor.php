@@ -223,18 +223,20 @@ class M_vendor extends CI_Model{
 			$json = json_encode($this->finddata($roll_id, $VENDOR_ID));
 			$this->recordhistory('PWMS_TR_WASTE_VENDOR', $result['type'], $result['msg'], $VENDOR_ID, $json);
 		// record history
+
+		$result['form_id'] = $AUTH_ID;
 		return $result;
 	}
 
 	public function uniqUsername($usrnm, $type){
 		$query = "
 			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
-			WHERE USERNAME = '".$usrnm."'";
+			WHERE USERNAME = '".strtolower($usrnm)."'";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		if (
 			(count($arrdata) >= 1 and $type == "add") or 
-			(count($arrdata) >= 1 and $type == "update")
+			(count($arrdata) >= 2 and $type == "update")
 		) {
 			return false;
 		}else{

@@ -153,6 +153,7 @@
 					<tr>
 						<th>Type</th>
 						<th>Waste</th>
+						<th width="80px">UM</th>
 						<th width="80px">Max</th>
 						<th width="80px">Request</th>
 						<th width="80px">Actual Tongkang</th>
@@ -176,6 +177,14 @@
 								type="text" name="WASTE" class="form-control" 
 								value="<?php echo $list['WASTE_NAME'] ?>" 
 								data-id="<?php echo $list['WASTE_ID'] ?>"
+								>
+						</td>
+						<td>
+							<input 
+								readonly="" tabindex="-1"
+								type="text" name="WASTE" class="form-control" 
+								value="<?php echo $list['UM_NAME'] ?>" 
+								data-id="<?php echo $list['UM_ID'] ?>"
 								>
 						</td>
 						<td>
