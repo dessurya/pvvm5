@@ -47,7 +47,7 @@ class M_login extends CI_Model{
 		$result['response'] = false;
 		$result['data'] = null;
 		$result['active'] = null;
-		$query = "SELECT * FROM PWMS_TX_SYSTEM_AUTH WHERE USERNAME=".$username." AND PASSWORD=".$password;
+		$query = "SELECT * FROM PWMS_TX_SYSTEM_AUTH WHERE USERNAME=".strtolower($username)." AND PASSWORD=".$password;
 		$runQuery = $this->db->query($query);
 		if ($runQuery->num_rows() > 0) {
 			$arrdata = $runQuery->result_array();
