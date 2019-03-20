@@ -147,6 +147,10 @@ class M_profile extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		if (isset($get['id'])) { $result['type'] = "update"; 
+		} else { 
+			$result['type'] = "add"; 
+		}
 		
 		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
 			$result['response'] = false;
@@ -171,6 +175,11 @@ class M_profile extends CI_Model{
 			$result['msg'] = "Sorry!, Please correct phone number";
 			$result['type'] = "error";
 		}
+		if ($this->uniqUsername($post['email'], $result['type']) == false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
+		}
+
 		if ($result['response'] == false) {
 			return $result;
 		}
@@ -190,7 +199,7 @@ class M_profile extends CI_Model{
 			$this->db->set('POSISI',  $post['posisi']);
 			$this->db->set('ORGANISASI',  $post['organisasi']);
 			$this->db->set('PHONE',  $post['phone']);
-			$this->db->set('EMAIL',  $post['email']);
+			$this->db->set('EMAIL',  strtolower($post['email']));
 			$this->db->set('NPWP',  $post['npwp']);
 			if (isset($get['id'])) { 
 				$this->db->where('USER_ID',  $ID); 
@@ -199,10 +208,11 @@ class M_profile extends CI_Model{
 				$this->db->insert('PWMS_TR_WASTE_USER'); 
 			}
 		} else if ($roll_id == 3) {
+			
 			$this->db->set('VENDOR_ID',  $ID);
 			$this->db->set('NAMA',  $post['name']);
 			$this->db->set('PHONE',  $post['phone']);
-			$this->db->set('EMAIL',  $post['email']);
+			$this->db->set('EMAIL',  strtolower($post['email']));
 			$this->db->set('NPWP',  $post['npwp']);
 			if (isset($get['id'])) { 
 				$this->db->where('VENDOR_ID',  $ID); 
@@ -210,6 +220,8 @@ class M_profile extends CI_Model{
 			} else { 
 				$this->db->insert('PWMS_TR_WASTE_VENDOR'); 
 			}
+			$this->db->set('USERNAME', $post['email']);
+			if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }			
 		}
 
 		$setsesion['NAME'] = $post['name'];
@@ -278,7 +290,7 @@ class M_profile extends CI_Model{
 		$this->db->where('AUTH_ID',  $auth_id);
 		$this->db->set('PHOTO',  $image);
 	    $upload = $this->db->update($table_name);
-	    // var_dump($upload);
+
 	    if ($upload) {
 			$rtitle = "Success";
 			$result_msg = "Success, upload new photo";
@@ -297,6 +309,20 @@ class M_profile extends CI_Model{
 		$result['msg'] = $result_msg;
 		$result['type'] = $rtype;
 		return $result;
+	}
+
+	public function uniqUsername($usrnm, $type){
+		$query = "
+			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
+			WHERE USERNAME = '".$usrnm."'";
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+
+		if ((count($arrdata) >= 1 and $type == "add") or (count($arrdata) >= 1 and $type == "update")) {
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 }

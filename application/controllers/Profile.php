@@ -145,6 +145,9 @@ class Profile extends CI_Controller {
 		$this->load->model('m_profile');
 		$response = $this->m_profile->tools($this->session->userdata('ROLL_ID'), $_GET, $_POST);
 		$response['reload'] = true;
+		if ($response['response'] == false) {
+			$response['reload'] = false;
+		}
 		header('Content-Type: application/json');
 		echo json_encode( $response );
 	}
@@ -166,7 +169,7 @@ class Profile extends CI_Controller {
         $this->load->library('upload',$config);
 	    if($this->upload->do_upload("file")){
 	        $data = $this->upload->data();
-	        var_dump($data);
+	        // var_dump($data);
 	        
 
 	        //Resize and Compress Image
@@ -186,7 +189,7 @@ class Profile extends CI_Controller {
 	        
 	        $response= $this->m_profile->save_upload($image);
 		
-	        // $response['reload'] = true;
+	        $response['reload'] = true;
 	        header('Content-Type: application/json');
 	        echo json_encode( $response );
         }
