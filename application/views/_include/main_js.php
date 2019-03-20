@@ -26,9 +26,28 @@
 			return false;
 		});
 
-		$(document).on('keypress keyup blur', 'input.number', function (event) {    
-			$(this).val($(this).val().replace(/[^\d].+/, ""));
-			if ((event.which < 48 || event.which > 57)) { event.preventDefault(); }
+		// 00.000.000.0-000.000
+
+		$(document).on('keypress', 'input.maskNPWP', function (event) {
+			$(this).val($(this).val().replace(/\D/g,''));
+			console.log($(this).val().length);
+			if ($(this).val().length > 15) { $(this).val().substr(15); }
+			if ($(this).val().length > 10){
+				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,"$1.$2.$3.$4-$5.$6"));
+			} else if ($(this).val().length > 9){
+				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d)/,"$1.$2.$3.$4-$5"));
+			}else if ($(this).val().length > 8){
+				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d)/,"$1.$2.$3.$4"));
+			} else if ($(this).val().length > 5) {
+				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d)/,"$1.$2.$3"));
+			}else if ($(this).val().length > 2){
+				$(this).val($(this).val().replace(/(\d{2})(\d)/,"$1.$2"));
+			}
+			console.log($(this).val());
+		});
+
+		$(document).on('keypress', 'input.number', function (event) {    
+			if ((event.which < 48 || event.which > 57)) { return false; }
 		});
 
 		function logout(url){
@@ -93,6 +112,16 @@
             if (data.type == "add") {
             	if (data.response == true) {
 	            	callForm(urlForm);
+            	}else if (data.response == false) {
+            		dataPN['model'] = 'info';
+			        dataPN['title'] = 'Error';
+			        dataPN['text'] = data.msg;
+			        dataPN['type'] = 'error';
+	                showPNotify(dataPN);
+            	}
+            }else if (data.type == "update") {
+            	if (data.response == true) {
+	            	// callForm(urlForm);
             	}else if (data.response == false) {
             		dataPN['model'] = 'info';
 			        dataPN['title'] = 'Error';

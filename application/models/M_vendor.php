@@ -185,6 +185,7 @@ class M_vendor extends CI_Model{
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct phone number";
 		}
+
 		if ($result['response'] == false) {
 			return $result;
 		}
@@ -201,11 +202,10 @@ class M_vendor extends CI_Model{
 
 		$result['msg'] = "Success, ".$result['type']." vendor ".$post['name'];
 
-
 		$deftpass = explode("@", $post['email']);
 		$deftpass = md5($deftpass[0]);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
-		$this->db->set('USERNAME',  $post['email']);
+		$this->db->set('USERNAME',  strtolower($post['email']));
 		$this->db->set('PASSWORD',  $deftpass);
 		$this->db->set('AUTH_TYPE_ID',  3);
 		if (isset($get['id'])) { $this->db->where('AUTH_ID',  $AUTH_ID); $this->db->update('PWMS_TX_SYSTEM_AUTH'); }
@@ -213,7 +213,7 @@ class M_vendor extends CI_Model{
 		$this->db->set('VENDOR_ID',  $VENDOR_ID);
 		$this->db->set('AUTH_ID',  $AUTH_ID);
 		$this->db->set('NAMA',  $post['name']);
-		$this->db->set('EMAIL',  $post['email']);
+		$this->db->set('EMAIL',  strtolower($post['email']));
 		$this->db->set('PHONE',  $post['phone']);
 		$this->db->set('NPWP',  $post['npwp']);
 		if (isset($get['id'])) { $this->db->where('VENDOR_ID',  $VENDOR_ID); $this->db->update('PWMS_TR_WASTE_VENDOR'); }
@@ -234,7 +234,7 @@ class M_vendor extends CI_Model{
 		$arrdata = $runQuery->result_array();
 		if (
 			(count($arrdata) >= 1 and $type == "add") or 
-			(count($arrdata) >= 2 and $type == "update")
+			(count($arrdata) >= 1 and $type == "update")
 		) {
 			return false;
 		}else{
