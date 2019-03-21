@@ -7,7 +7,18 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Roll</label>
+							<input 
+								readonly
+								name="ROLL" 
+								value="<?php echo $admin['AUTH_TYPE_NAME'] ?>" 
+								type="text" 
+								class="form-control">
+						</div>
+					</div>
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Name</label>
 							<input 
@@ -18,7 +29,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>NPWP</label>
 							<input 
@@ -26,10 +37,10 @@
 								name="NPWP" 
 								value="<?php echo $admin['NPWP'] ?>" 
 								type="text" 
-								class="form-control">
+								class="form-control maskNPWP">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Email</label>
 							<input 
@@ -40,7 +51,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>NIPP</label>
 							<input 
@@ -51,7 +62,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Posisi</label>
 							<input 
@@ -62,7 +73,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Organisasi</label>
 							<input 
@@ -73,7 +84,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Phone</label>
 							<input 
@@ -84,7 +95,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Status</label>
 							<input 
@@ -95,7 +106,7 @@
 								class="form-control">
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Last Login</label>
 							<input 
@@ -109,14 +120,14 @@
 				</div>
 				<div class="ln_solid"></div>
 				<div id="actionshow" class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<button data-id="<?php echo $admin['USER_ID'] ?>" type="button" class="btn btn-success btn-block updateshow">
 								<i class="fa fa-pencil"></i> Update
 							</button>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<button data-id="<?php echo $admin['USER_ID'] ?>" type="button" class="btn btn-success btn-block refreshshow">
 								<i class="fa fa-refresh"></i> Refresh Data

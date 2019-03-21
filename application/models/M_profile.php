@@ -152,8 +152,9 @@ class M_profile extends CI_Model{
 		} else { 
 			$result['type'] = "add"; 
 		}
-		
-		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+		$post['npwp'] = str_replace('.','',$post['npwp']);
+		$post['npwp'] = str_replace('-','',$post['npwp']);
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct NPWP number";
 			$result['type'] = "error";

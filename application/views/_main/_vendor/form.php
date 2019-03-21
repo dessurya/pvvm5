@@ -22,7 +22,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>NPWP</label>
-							<input 
+							<input
 								name="npwp" 
 								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>" 
 								type="text" 

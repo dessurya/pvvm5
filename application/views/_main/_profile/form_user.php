@@ -83,16 +83,6 @@
 							class="form-control">
 						</div>
 					</div>
-					<!-- <div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="form-group">
-							<label>NPWP</label>
-							<input 
-							name="npwp" 
-							value="<?php echo $data['NPWP'] ?>" 
-							type="text" 
-							class="form-control">
-						</div>
-					</div> -->
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>NPWP</label>
@@ -100,7 +90,7 @@
 								name="npwp" 
 								value="<?php echo $data['NPWP'] ?>" 
 								type="text" 
-								class="form-control number" 
+								class="form-control number maskNPWP" 
 								placeholder="Enter NPWP"
 								required="">
 						</div>

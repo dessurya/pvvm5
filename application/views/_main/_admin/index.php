@@ -78,6 +78,7 @@
 														<tr>
 															<th>No</th>
 															<th><input class="iCheckTrig flat" type="checkbox"></th>
+															<th>ROLL</th>
 															<th>Name</th>
 															<th>Email</th>
 															<th>Phone</th>
@@ -90,6 +91,7 @@
 														<tr>
 															<th></th>
 															<th></th>
+															<th class="search autoComplete">ROLL</th>
 															<th class="search">Name</th>
 															<th class="search">Email</th>
 															<th class="search">Phone</th>

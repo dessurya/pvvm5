@@ -26,26 +26,6 @@
 			return false;
 		});
 
-		// 00.000.000.0-000.000
-
-		$(document).on('keypress', 'input.maskNPWP', function (event) {
-			$(this).val($(this).val().replace(/\D/g,''));
-			console.log($(this).val().length);
-			if ($(this).val().length > 15) { $(this).val().substr(15); }
-			if ($(this).val().length > 10){
-				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,"$1.$2.$3.$4-$5.$6"));
-			} else if ($(this).val().length > 9){
-				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d)/,"$1.$2.$3.$4-$5"));
-			}else if ($(this).val().length > 8){
-				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d{3})(\d)/,"$1.$2.$3.$4"));
-			} else if ($(this).val().length > 5) {
-				$(this).val($(this).val().replace(/(\d{2})(\d{3})(\d)/,"$1.$2.$3"));
-			}else if ($(this).val().length > 2){
-				$(this).val($(this).val().replace(/(\d{2})(\d)/,"$1.$2"));
-			}
-			console.log($(this).val());
-		});
-
 		$(document).on('keypress', 'input.number', function (event) {    
 			if ((event.which < 48 || event.which > 57)) { return false; }
 		});
@@ -109,9 +89,9 @@
     		}
             showPNotify(dataPN);
             
-            if (data.type == "add") {
+            if (data.type == "add" && data.response == true) {
             	callForm(urlForm);
-            }else if (data.type == "update") {
+            }else if (data.type == "update" && data.response == true) {
             	$('#form_id_'+data.form_id).remove();
             }else if(data.type == "orderrecalldetail"){
             	openDetailData(data.url);
@@ -189,7 +169,35 @@
 	        }
 	    }
 
-		<?php 
+	    <?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
+	    $(document).on('change', 'input.maskNPWP', function () {
+			var value = $(this).val();
+			$(this).val(maskNPWP(value));
+		});
+		$(document).on('focus', 'input.maskNPWP', function () {
+			var value = $(this).val();
+			$(this).val(maskNPWP(value));
+		});
+		function maskNPWP(string = '') {
+			if (string.length == 0){
+				return '';
+			}
+			string = string.replace(/\D/g,'');
+			if (string.length >= 16 || string.length <= 14){
+				var dataPN = new Array();
+				dataPN['model'] = 'info';
+		        dataPN['title'] = 'Error';
+		        dataPN['type'] = 'error';
+		        dataPN['text'] = 'Invalid NPWP Number!';
+		        showPNotify(dataPN);
+			}
+			if (string.length == 15){
+				string = string.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,"$1.$2.$3.$4-$5.$6");
+			}
+			return string;
+		}
+		<?php } 
+
 		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history', 'profile', 'admin', 'role'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}

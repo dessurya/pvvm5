@@ -73,7 +73,9 @@
 				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
 				{name: "PHONE", data: "PHONE"},
-				{name: "NPWP", data: "NPWP"},
+				{name: "NPWP", data: function(data) {
+					return data.NPWP.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,"$1.$2.$3.$4-$5.$6");
+				}},
 				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 				<?php } else if(in_array($this->uri->segment(1), array('role'))) {?>
 				{name: "NO", data: "AUTH_TYPE_ID", orderable: false, searchable:false},
@@ -82,11 +84,14 @@
 				<?php } else if($this->uri->segment(1) == 'admin') {?>
 				{name: "NO", data: "ADMIN_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+				{name: "AUTH_TYPE_NAME", data: "AUTH_TYPE_NAME"},
 				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
 				{name: "PHONE", data: "PHONE"},
 				{name: "NIPP", data: "NIPP"},
-				{name: "NPWP", data: "NPWP"},
+				{name: "NPWP", data: function(data) {
+					return data.NPWP.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,"$1.$2.$3.$4-$5.$6");
+				}},
 				{name: "FLAG_ACTIVE", data: "FLAG_ACTIVE"}
 				<?php } else if($this->uri->segment(1) == 'history') {?>
 				{name: "NO", data: "BATCH_ID", orderable: false, searchable:false},
@@ -270,6 +275,12 @@
 				calldattime('input[name=TONGKANG_PICKUP_DATE]');
 				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>
+				<?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
+	            $('input.maskNPWP').each(function(){
+	            	var value = $(this).val();
+					$(this).val(maskNPWP(value));
+	            });
+		        <?php } ?>
 	            $('#loading-page').hide();
 	            dtableReload();
 	        }
@@ -296,6 +307,12 @@
 	        success: function(data) {
 	            $('.x_content .tab-content #tab_form').html(data.result);
 	            $('#loading-page').hide();
+	            <?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
+	            $('input.maskNPWP').each(function(){
+	            	var value = $(this).val();
+					$(this).val(maskNPWP(value));
+	            });
+		        <?php } ?>
 	        }
 	    });
 	}

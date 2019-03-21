@@ -26,7 +26,7 @@
 								name="NPWP" 
 								value="<?php echo $vendor['NPWP'] ?>" 
 								type="text" 
-								class="form-control">
+								class="form-control maskNPWP">
 						</div>
 					</div>
 					<div class="col-md-4">

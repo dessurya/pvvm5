@@ -69,10 +69,13 @@ class M_admin extends CI_Model{
 			PHONE,
 			NPWP,
 			NIPP,
+			ATAT.AUTH_TYPE_ID AS AUTH_TYPE_ID,
+			UPPER(AUTH_TYPE_NAME) AS AUTH_TYPE_NAME,
 			CASE FLAG_ACTIVE WHEN 'N' THEN 'NONACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 		");
 	    $this->datatables->from('PWMS_TR_WASTE_USER ATWV');
 	    $this->datatables->join('PWMS_TX_SYSTEM_AUTH ATSA', 'ATSA.AUTH_ID = ATWV.AUTH_ID', 'left');
+	    $this->datatables->join('PWMS_TR_AUTH_TYPE ATAT', 'ATAT.AUTH_TYPE_ID = ATSA.AUTH_TYPE_ID', 'left');
 	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ADMIN_ID');
 	    $this->datatables->where("ATSA.AUTH_TYPE_ID <>", 1);
 	    $this->datatables->where("ATSA.AUTH_TYPE_ID <>", 2);
@@ -85,7 +88,12 @@ class M_admin extends CI_Model{
         		else if ($list['key'] == 'EMAIL') { $field = 'EMAIL'; }
         		else if ($list['key'] == 'PHONE') { $field = 'PHONE'; }
         		else if ($list['key'] == 'NIPP') { $field = 'NIPP'; }
-        		else if ($list['key'] == 'NPWP') { $field = 'NPWP'; }
+        		else if ($list['key'] == 'NPWP') { 
+        			$field = 'NPWP'; 
+        			$search = str_replace('.','',$search);
+					$search = str_replace('-','',$search);
+        		}
+        		else if ($list['key'] == 'AUTH_TYPE_NAME') { $field = 'AUTH_TYPE_NAME'; }
         		else if ($list['key'] == 'FLAG_ACTIVE') { 
         			$field = 'FLAG_ACTIVE';
         			if ($search == 'ACTIVED' ) { $search = 'Y'; }
@@ -117,7 +125,8 @@ class M_admin extends CI_Model{
 				ORGANISASI,
 				POSISI,
 				NIPP,
-				AUTH_TYPE_ID,
+				AT.AUTH_TYPE_ID AS AUTH_TYPE_ID,
+				UPPER(AUTH_TYPE_NAME) AS AUTH_TYPE_NAME,
 				TO_CHAR(TA.LAST_LOGIN, 'YYYY/MM/DD HH24:MI') AS LAST_LOGIN,
 				CASE TA.FLAG_ACTIVE WHEN 'N' THEN 'NONACTIVE' WHEN 'Y' THEN 'ACTIVED' END AS FLAG_ACTIVE
 			FROM 
@@ -125,6 +134,9 @@ class M_admin extends CI_Model{
 			LEFT JOIN
 				PWMS_TX_SYSTEM_AUTH TA
 				ON TA.AUTH_ID = TV.AUTH_ID
+			LEFT JOIN
+				PWMS_TR_AUTH_TYPE AT
+				ON AT.AUTH_TYPE_ID = TA.AUTH_TYPE_ID
 			WHERE ".$where;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
@@ -172,9 +184,11 @@ class M_admin extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		$post['npwp'] = str_replace('.','',$post['npwp']);
+		$post['npwp'] = str_replace('-','',$post['npwp']);
 		if (isset($get['id'])) { $result['type'] = "update"; }
 		else{ $result['type'] = "add"; }
-		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct NPWP number";
 		}
@@ -239,7 +253,7 @@ class M_admin extends CI_Model{
 			$json = json_encode($this->finddata($roll_id, $ADMIN_ID));
 			$this->recordhistory('PWMS_TR_WASTE_USER', $result['type'], $result['msg'], $ADMIN_ID, $json);
 		// record history
-			
+
 		$result['form_id'] = $AUTH_ID;
 		return $result;
 	}
