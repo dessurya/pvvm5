@@ -8,18 +8,18 @@
 			</div>
 			<div class="x_content">
 				<div class="row">
-					<div class="col-md-4 col-sm-6 col-xs-12">
+					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="form-group">
-							<label>USERNAME</label>
+							<label>EMAIL</label>
 							<input 
-							readonly
-							name="username" 
-							value="<?php echo $data['USERNAME'] ?>" 
-							type="text" 
-							class="form-control">
+							name="email" 
+							value="<?php echo $data['EMAIL'] ?>" 
+							type="email" 
+							class="form-control"
+							required="">
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-6 col-xs-12">
+					<!-- <div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>ROLE</label>
 							<input 
@@ -29,7 +29,7 @@
 							type="email" 
 							class="form-control">
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>NAMA</label>
@@ -60,17 +60,6 @@
 							value="<?php echo $data['PHONE'] ?>" 
 							type="text" 
 							class="form-control number"
-							required="">
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="form-group">
-							<label>EMAIL</label>
-							<input 
-							name="email" 
-							value="<?php echo $data['EMAIL'] ?>" 
-							type="email" 
-							class="form-control"
 							required="">
 						</div>
 					</div>

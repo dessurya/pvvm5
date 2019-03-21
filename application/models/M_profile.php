@@ -147,7 +147,8 @@ class M_profile extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
-		if (isset($get['id'])) { $result['type'] = "update"; 
+		if (isset($get['id'])) { 
+			$result['type'] = "update"; 
 		} else { 
 			$result['type'] = "add"; 
 		}
@@ -313,13 +314,16 @@ class M_profile extends CI_Model{
 
 	public function uniqUsername($usrnm, $type){
 		$query = "
-			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
+			SELECT USERNAME, AUTH_ID  FROM PWMS_TX_SYSTEM_AUTH
 			WHERE USERNAME = '".$usrnm."'";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
-
-		if ((count($arrdata) >= 1 and $type == "add") or (count($arrdata) >= 2 and $type == "update")) {
-			return false;
+		if ((count($arrdata) >= 1 and $type == "update")) {
+			if ($this->session->userdata('AUTH_ID') == $arrdata[0]['AUTH_ID']) {
+				return true;
+			} else {
+				return false;
+			}
 		}else{
 			return true;
 		}

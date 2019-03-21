@@ -8,7 +8,7 @@
 			</div>
 			<div class="x_content">
 				<div class="row">
-					<div class="col-md-4 col-sm-6 col-xs-12">
+					<!-- <div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>USERNAME</label>
 							<input 
@@ -17,22 +17,33 @@
 								type="text" 
 								class="form-control" 
 								placeholder="Enter USERNAME"
-								required=""
 								readonly="">
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-4 col-sm-6 col-xs-12">
-							<div class="form-group">
-								<label>ROLE</label>
-								<input 
-								readonly
-								name="roll" 
-								value="<?php echo $data['ROLL'] ?>" 
-								type="text" 
-								class="form-control"
-								>
-							</div>
+						<div class="form-group">
+							<label>EMAIL</label>
+							<input
+							name="email" 
+							value="<?php echo $data['EMAIL'] ?>" 
+							type="email" 
+							class="form-control" 
+							placeholder="Enter Email"
+							required="">
 						</div>
+					</div>
+					<!-- <div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="form-group">
+							<label>ROLE</label>
+							<input 
+							readonly
+							name="roll" 
+							value="<?php echo $data['ROLL'] ?>" 
+							type="text" 
+							class="form-control"
+							>
+						</div>
+					</div> -->
 					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>NAMA</label>
@@ -54,18 +65,6 @@
 								type="text" 
 								class="form-control number" 
 								placeholder="Enter Phone"
-								required="">
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						<div class="form-group">
-							<label>Email</label>
-							<input 
-								name="email" 
-								value="<?php echo $data['EMAIL'] ?>" 
-								type="email" 
-								class="form-control" 
-								placeholder="Enter Email"
 								required="">
 						</div>
 					</div>
