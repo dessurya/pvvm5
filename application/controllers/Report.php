@@ -227,10 +227,11 @@ class Report extends CI_Controller {
 	    }
 
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'.$fileName.'.xlsx"');
+        header('Content-Disposition: attachment; filename="'.$fileName.'.xls"');
         header('Cache-Control: max-age=0');
 
-        $newWriter = PHPExcel_IOFactory::createWriter($new, 'Excel2007');
+        $newWriter = PHPExcel_IOFactory::createWriter($new, 'Excel5');
+        // ob_clean();
         $newWriter->save('php://output');
         exit;
 	}
