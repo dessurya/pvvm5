@@ -275,7 +275,7 @@
 				calldattime('input[name=TONGKANG_PICKUP_DATE]');
 				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>
-				<?php if( in_array($this->uri->segment(1), array('vendor', 'admin'))){ ?>
+				<?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
 	            $('input.maskNPWP').each(function(){
 	            	var value = $(this).val();
 					$(this).val(maskNPWP(value));
@@ -307,7 +307,7 @@
 	        success: function(data) {
 	            $('.x_content .tab-content #tab_form').html(data.result);
 	            $('#loading-page').hide();
-	            <?php if( in_array($this->uri->segment(1), array('vendor', 'admin'))){ ?>
+	            <?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
 	            $('input.maskNPWP').each(function(){
 	            	var value = $(this).val();
 					$(this).val(maskNPWP(value));

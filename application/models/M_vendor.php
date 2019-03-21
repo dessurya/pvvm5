@@ -240,6 +240,8 @@ class M_vendor extends CI_Model{
 			WHERE USERNAME = '".strtolower($usrnm)."'";
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
+		var_dump($arrdata);
+		die;
 		if (
 			(count($arrdata) >= 1 and $type == "add") or 
 			(count($arrdata) >= 2 and $type == "update")

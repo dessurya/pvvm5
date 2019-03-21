@@ -169,7 +169,7 @@
 	        }
 	    }
 
-	    <?php if( in_array($this->uri->segment(1), array('vendor', 'admin'))){ ?>
+	    <?php if( in_array($this->uri->segment(1), array('vendor', 'admin', 'profile'))){ ?>
 	    $(document).on('change', 'input.maskNPWP', function () {
 			var value = $(this).val();
 			$(this).val(maskNPWP(value));

@@ -144,13 +144,11 @@
 											<div class="form-group">
 												<label>NPWP</label>
 												<input 
-												pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}.[0-9]{1}-[0-9]{3}.[0-9]{3}"
-												title="format must be xx.xxx.xxx.x-xxx.xxx"
 												readonly
 												name="NPWP" 
 												value="<?php echo $detailProfile['NPWP'] ?>" 
 												type="text" 
-												class="form-control">
+												class="form-control maskNPWP">
 											</div>
 										</div>
 										<div class="col-md-6 col-sm-12">
