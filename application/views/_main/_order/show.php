@@ -19,7 +19,7 @@
 	</div>
 	<div class="x_content">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>No. PKK</label>
 					<input 
@@ -30,7 +30,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>No. Layanan</label>
 					<input 
@@ -41,7 +41,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Agent</label>
 					<input 
@@ -52,7 +52,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Pelabuhan</label>
 					<input 
@@ -63,7 +63,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Tanggal Warta Kapal</label>
 					<input 
@@ -74,7 +74,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Tanggal Pick Up Order</label>
 					<input 
@@ -85,7 +85,29 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label>Tanggal Tongkang Pick Up</label>
+					<input 
+						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						name="TONGKANG_PICKUP_DATE" 
+						value="<?php echo $head['TONGKANG_PICKUP_DATE'] ?>" 
+						type="text" 
+						class="form-control">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label>Tanggal Trucking Pick Up</label>
+					<input 
+						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
+						name="TRUCKING_PICKUP_DATE" 
+						value="<?php echo $head['TRUCKING_PICKUP_DATE'] ?>" 
+						type="text" 
+						class="form-control">
+				</div>
+			</div>
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Status</label>
 					<input type="hidden" name="STATUS_ID" value="<?php echo $head['STATUS_ID'] ?>">
@@ -97,24 +119,25 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
-					<label>Tanggal Tongkang Pick Up</label>
+					<label>Kapal</label>
 					<input 
-						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
-						name="TONGKANG_PICKUP_DATE" 
-						value="<?php echo $head['TONGKANG_PICKUP_DATE'] ?>" 
+						readonly=""
+						name="KAPAL_NAMA" 
+						value="<?php echo $head['KAPAL_NAMA'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
-					<label>Tanggal Trucking Pick Up</label>
+					<label>Vendor</label>
+					<input type="hidden" name="VENDOR_ID" value="<?php echo $head['VENDOR_ID'] ?>">
 					<input 
-						<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] != null) echo 'readonly=""'; ?>
-						name="TRUCKING_PICKUP_DATE" 
-						value="<?php echo $head['TRUCKING_PICKUP_DATE'] ?>" 
+						readonly=""
+						name="VENDOR_NAMA" 
+						value="<?php echo $head['VENDOR_NAMA'] ?>" 
 						type="text" 
 						class="form-control">
 				</div>
@@ -262,7 +285,7 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="x_content">
-		<div class="col-md-4">
+		<div class="col-md-3">
 				<div class="form-group">
 					<label>Tanggal</label>
 					<input 
@@ -273,7 +296,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Pelabuhan</label>
 					<input 
@@ -284,7 +307,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Nomor Dokumen</label>
 					<input 
@@ -295,7 +318,7 @@
 						class="form-control">
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label>Sumber</label>
 					<input 

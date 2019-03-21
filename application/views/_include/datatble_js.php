@@ -53,6 +53,7 @@
 				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
 				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
+				{name: "NAMA_KAPAL", data: "NAMA_KAPAL"},
 				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"}
 				<?php } else if(in_array($this->uri->segment(1), array('order', 'report')) and $this->uri->segment(3) == 'list') { ?>
 				{name: "NO", data: "ID", orderable: false, searchable:false},

@@ -26,6 +26,7 @@ class M_api extends CI_Model{
 			   	:NO_LAYANAN_VAR, 
 			   	:KODE_PELABUHAN_VAR, 
 			   	:NAMA_PERUSAHAAN_VAR, 
+			   	:NAMA_KAPAL_VAR,
 			   	:PELABUHAN_BONGKAR_TERAKHIR_VAR, 
 			   	:TANGGAL_BONGKAR_TERAKHIR_VAR, 
 			   	:NO_DOKUMEN_VAR, 
@@ -38,6 +39,7 @@ class M_api extends CI_Model{
 			oci_bind_by_name($stid, ':NO_LAYANAN_VAR',  $dataInsert["NO_LAYANAN"],-1);
 			oci_bind_by_name($stid, ':KODE_PELABUHAN_VAR',  $dataInsert["KODE_PELABUHAN"],-1);
 			oci_bind_by_name($stid, ':NAMA_PERUSAHAAN_VAR',  $dataInsert["NAMA_PERUSAHAAN"],-1);
+			oci_bind_by_name($stid, ':NAMA_KAPAL_VAR',  $dataInsert["NAMA_KAPAL"],-1);
 			oci_bind_by_name($stid, ':PELABUHAN_BONGKAR_TERAKHIR_VAR',  $dataInsert["PELABUHAN_BONGKAR_TERAKHIR"],-1);
 			oci_bind_by_name($stid, ':TANGGAL_BONGKAR_TERAKHIR_VAR',  $dataInsert["TANGGAL_BONGKAR_TERAKHIR"],-1);
 			oci_bind_by_name($stid, ':NO_DOKUMEN_VAR',  $dataInsert["NOMOR_DOKUMEN"],-1);
@@ -122,6 +124,7 @@ class M_api extends CI_Model{
 			   	:NO_LAYANAN_VAR, 
 			   	:KODE_PELABUHAN_VAR, 
 			   	:NAMA_PERUSAHAAN_VAR, 
+			   	:NAMA_KAPAL_VAR,
 			   	:PELABUHAN_BONGKAR_TERAKHIR_VAR, 
 			   	:TANGGAL_BONGKAR_TERAKHIR_VAR, 
 			   	:NO_DOKUMEN_VAR, 
@@ -134,6 +137,7 @@ class M_api extends CI_Model{
 			oci_bind_by_name($stid, ':NO_LAYANAN_VAR',  $dataInsert["NO_LAYANAN"],-1);
 			oci_bind_by_name($stid, ':KODE_PELABUHAN_VAR',  $dataInsert["KODE_PELABUHAN"],-1);
 			oci_bind_by_name($stid, ':NAMA_PERUSAHAAN_VAR',  $dataInsert["NAMA_PERUSAHAAN"],-1);
+			oci_bind_by_name($stid, ':NAMA_KAPAL_VAR',  $dataInsert["NAMA_KAPAL"],-1);
 			oci_bind_by_name($stid, ':PELABUHAN_BONGKAR_TERAKHIR_VAR',  $dataInsert["PELABUHAN_BONGKAR_TERAKHIR"],-1);
 			oci_bind_by_name($stid, ':TANGGAL_BONGKAR_TERAKHIR_VAR',  $dataInsert["TANGGAL_BONGKAR_TERAKHIR"],-1);
 			oci_bind_by_name($stid, ':NO_DOKUMEN_VAR',  $dataInsert["NOMOR_DOKUMEN"],-1);

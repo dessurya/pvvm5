@@ -43,6 +43,7 @@
 															<th>PKK</th>
 															<th>No Layanan</th>
 															<th>Agent</th>
+															<th>Kapal</th>
 															<th>Pelabuhan</th>
 															<?php if ($tittle == 'Order List') { ?>
 															<th>Vendor</th>
@@ -60,6 +61,7 @@
 															<th class="search">PKK</th>
 															<th class="search">No Layanan</th>
 															<th class="search">Agent</th>
+															<th class="search">Kapal</th>
 															<th class="search autoComplete">Pelabuhan</th>
 															<?php if ($tittle == 'Order List') { ?>
 															<th class="search">Vendor</th>
