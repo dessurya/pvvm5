@@ -314,7 +314,7 @@ class M_profile extends CI_Model{
 			AND AUTH_ID <> ".$authid;
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
-
+		
 		if ( count($arrdata) >= 1 ) {
 			return false;
 		}else{

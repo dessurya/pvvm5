@@ -62,6 +62,7 @@ class Order extends CI_Controller {
 			$send['head'] = $find;
 			$send['detail'] = $this->m_order->finddatadetail($roll_id, $data);
 			$send['history'] = $this->m_order->history($roll_id, $data);
+			$send['all_status'] = $this->m_order->getallstatus();
 			$response['response'] = true;
 			$response['name'] = 'Order Waste : '.$find['PKK_NO'];
 			$response['result'] = $this->load->view($urlview, $send, true);

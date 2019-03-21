@@ -37,12 +37,6 @@ class Profile extends CI_Controller {
 	private function getContent(){
 		$this->load->model('m_profile');
 		$roll_id = $this->session->userdata('ROLL_ID');
-		// var_dump($this->session->userdata('AUTH_ID'));
-		// exit();
-		//old query
-		// $query = "SELECT * FROM ".$this->session->userdata('TABLE_NAME')." WHERE AUTH_ID=".$this->session->userdata('AUTH_ID');
-		// $runQuery = $this->db->query($query);
-		// $detailProfile = $runQuery->result_array();
 		$detailProfile = $this->m_profile->getdetail($this->session->userdata('ROLL_ID'), $this->session->userdata('AUTH_ID'));
 		$arrdata = array();
 		$arrdata['detailProfile'] = $detailProfile[0];
@@ -71,8 +65,6 @@ class Profile extends CI_Controller {
 		}else{
 			$this->load->model('m_profile');
 			$find = $this->m_profile->finddata($this->session->userdata('ROLL_ID'), $data);
-			// var_dump($find);
-			// exit();
 			$find = $find[0];
 			$send = array();
 			$send['detailProfile'] = $find;
@@ -120,7 +112,6 @@ class Profile extends CI_Controller {
 			$this->load->model('m_profile');
 			$id = explode('^', $_GET['id']);
 			$data = $this->m_profile->finddata($this->session->userdata('ROLL_ID'), $id);
-			// var_dump($data);
 			foreach ($data as $list) {
 				$arrdata = array();
 				$arrdata['data'] = $list;
@@ -169,8 +160,6 @@ class Profile extends CI_Controller {
         $this->load->library('upload',$config);
 	    if($this->upload->do_upload("file")){
 	        $data = $this->upload->data();
-	        // var_dump($data);
-	        
 
 	        //Resize and Compress Image
             $config['image_library']='gd2';

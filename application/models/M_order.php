@@ -245,6 +245,13 @@ class M_order extends CI_Model{
 		return $response;
 	}
 
+	public function getallstatus(){
+		$this->db->select("*");
+		$this->db->from("PWMS_TR_ORDER_STATUS");
+		$query = $this->db->get();
+	    return $arrdata = $query->result_array();
+	}
+
 	private function recordhistory($tabname, $acttyp, $descrp, $tablid, $json){
 		$this->load->model('m_history');
 		$this->m_history->record($tabname, $acttyp, $descrp, $tablid, $json);

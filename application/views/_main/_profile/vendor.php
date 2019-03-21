@@ -52,17 +52,17 @@
 								</div>
 								<div class="col-md-9 col-sm-8 col-xs-12">
 									<div class="row">
-										<!-- <div class="col-md-6 col-sm-12">
+										<div class="col-md-6 col-sm-12">
 											<div class="form-group">
-												<label>USERNAME</label>
+												<label>EMAIL</label>
 												<input 
 												readonly
-												name="USERNAME" 
-												value="<?php echo $detailProfile['USERNAME'] ?>" 
-												type="text" 
+												name="EMAIL" 
+												value="<?php echo $detailProfile['EMAIL'] ?>" 
+												type="email" 
 												class="form-control">
 											</div>
-										</div> -->
+										</div>
 										<div class="col-md-6 col-sm-12">
 											<div class="form-group">
 												<label>ROLE</label>
@@ -93,17 +93,6 @@
 												name="phone" 
 												value="<?php echo $detailProfile['PHONE'] ?>" 
 												type="text" 
-												class="form-control">
-											</div>
-										</div>
-										<div class="col-md-6 col-sm-12">
-											<div class="form-group">
-												<label>EMAIL</label>
-												<input 
-												readonly
-												name="EMAIL" 
-												value="<?php echo $detailProfile['EMAIL'] ?>" 
-												type="email" 
 												class="form-control">
 											</div>
 										</div>

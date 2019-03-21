@@ -126,23 +126,42 @@
 
 <div class="x_panel">
 	<div class="x_title">
-		<h2>Order Waste Detail</h2>
+		<h2 style="width: 30%;">Order Waste Detail</h2>
 		<div id="action" class="nav navbar-right panel_toolbox">
-			<b> STATUS :  &nbsp;</b>
-			<?php 
-				if ($head['STATUS_ID'] == 3) {
-					$btn_color = ' btn-success';
-				} else if ($head['STATUS_ID'] == 2) {
-					$btn_color = ' btn-warning';
-				} else if ($head['STATUS_ID'] == 1) {
-					$btn_color = ' btn-primary';
-				} else if ($head['STATUS_ID'] == 0) {
-					$btn_color = ' btn-info';
-				}
-			?>
-			<button type="button" class="btn btn-round <?php echo $btn_color ?>">
-				<i><?php echo $head['STATUS_NAMA'] ?></i>
-			</button>
+			<div class="bz-wizard-step">
+				<b> STATUS :  &nbsp;</b>
+				<?php 
+					if ($head['STATUS_ID'] == 3) {
+						$btn_color = ' btn-success';
+					} else if ($head['STATUS_ID'] == 2) {
+						$btn_color = ' btn-warning';
+					} else if ($head['STATUS_ID'] == 1) {
+						$btn_color = ' btn-primary';
+					} else if ($head['STATUS_ID'] == 0) {
+						$btn_color = ' btn-info';
+					}
+					if ($head['STATUS_ID'] >= 1) {
+						foreach ($all_status as $key => $value) {
+				?>
+				<button 
+					type="button" 
+					class="btn btn-round <?php if ($head['STATUS_ID'] == $value['STATUS_ID']) {
+						echo $btn_color;
+					} ?>"
+				>
+					<i><?php echo $value['STATUS']; ?> </i>
+				</button>
+				<?php 
+						}
+					} else { 
+				?>
+				<button type="button" class="btn btn-round <?php echo $btn_color ?>">
+					<i><?php echo $head['STATUS_NAMA'] ?></i>
+				</button>
+				<?php 
+					} 
+				?>
+			</div>
 		</div>
 		<div class="clearfix"></div>
 	</div>
