@@ -88,7 +88,11 @@ class M_admin extends CI_Model{
         		else if ($list['key'] == 'EMAIL') { $field = 'EMAIL'; }
         		else if ($list['key'] == 'PHONE') { $field = 'PHONE'; }
         		else if ($list['key'] == 'NIPP') { $field = 'NIPP'; }
-        		else if ($list['key'] == 'NPWP') { $field = 'NPWP'; }
+        		else if ($list['key'] == 'NPWP') { 
+        			$field = 'NPWP'; 
+        			$search = str_replace('.','',$search);
+					$search = str_replace('-','',$search);
+        		}
         		else if ($list['key'] == 'AUTH_TYPE_NAME') { $field = 'AUTH_TYPE_NAME'; }
         		else if ($list['key'] == 'FLAG_ACTIVE') { 
         			$field = 'FLAG_ACTIVE';
@@ -180,9 +184,11 @@ class M_admin extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		$post['npwp'] = str_replace('.','',$post['npwp']);
+		$post['npwp'] = str_replace('-','',$post['npwp']);
 		if (isset($get['id'])) { $result['type'] = "update"; }
 		else{ $result['type'] = "add"; }
-		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16) {
+		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct NPWP number";
 		}

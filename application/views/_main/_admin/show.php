@@ -37,7 +37,7 @@
 								name="NPWP" 
 								value="<?php echo $admin['NPWP'] ?>" 
 								type="text" 
-								class="form-control">
+								class="form-control maskNPWP">
 						</div>
 					</div>
 					<div class="col-md-3">
