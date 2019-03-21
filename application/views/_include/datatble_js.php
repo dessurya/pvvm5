@@ -82,6 +82,7 @@
 				<?php } else if($this->uri->segment(1) == 'admin') {?>
 				{name: "NO", data: "ADMIN_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
+				{name: "AUTH_TYPE_NAME", data: "AUTH_TYPE_NAME"},
 				{name: "NAMA", data: "NAMA"},
 				{name: "EMAIL", data: "EMAIL"},
 				{name: "PHONE", data: "PHONE"},
