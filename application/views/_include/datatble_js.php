@@ -62,6 +62,7 @@
 				{name: "PKK_NO", data: "PKK_NO"},
 				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
 				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
+				{name: "NAMA_KAPAL", data: "NAMA_KAPAL"},
 				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
 				{name: "VENDOR_NAMA", data: "VENDOR_NAMA"},
 				{name: "STATUS", data: function(data) { //name
