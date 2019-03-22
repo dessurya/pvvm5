@@ -23,6 +23,7 @@ class Api extends CI_Controller {
 			'NO_LAYANAN' => $dataPost->nomor_layanan,
 			'KODE_PELABUHAN' => $dataPost->kode_pelabuhan,
 			'NAMA_PERUSAHAAN' => $dataPost->nama_perusahaan,
+			'NAMA_KAPAL' => $dataPost->nama_kapal,
 			'PELABUHAN_BONGKAR_TERAKHIR' => $dataPost->pelabuhan_bongkar_terakhir,
 			'TANGGAL_BONGKAR_TERAKHIR' => date('d-M-y',strtotime($dataPost->tanggal_bongkar_terakhir)),
 			'NOMOR_DOKUMEN' => $dataPost->nomor_dokumen,

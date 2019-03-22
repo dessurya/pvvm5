@@ -147,11 +147,10 @@ class M_profile extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
-		if (isset($get['id'])) { 
-			$result['type'] = "update"; 
-		} else { 
-			$result['type'] = "add"; 
-		}
+		$result['type'] = "update";
+		$ID = $get['id'];
+		$AUTH_ID = $this->finddata($roll_id,$ID);
+		$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		$post['npwp'] = str_replace('.','',$post['npwp']);
 		$post['npwp'] = str_replace('-','',$post['npwp']);
 		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
@@ -177,20 +176,15 @@ class M_profile extends CI_Model{
 			$result['msg'] = "Sorry!, Please correct phone number";
 			$result['type'] = "error";
 		}
-		if ($this->uniqUsername($post['email'], $result['type']) == false) {
+		if ($this->uniqUsername($post['email'], $result['type'], $AUTH_ID) == false) {
 			$result['response'] = false;
-			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
+			$result['msg'] = "Sorry!, ".$result['type']." your profile fail cause email is exist...!";
 		}
 
 		if ($result['response'] == false) {
 			return $result;
 		}
 
-		if (isset($get['id'])) { 
-			$ID = $get['id'];
-			$AUTH_ID = $this->finddata($roll_id,$ID);
-			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
-		}
 		$result['msg'] = "Success, update profile ".$post['name'];
 		$result['type'] = "success";
 
@@ -313,18 +307,16 @@ class M_profile extends CI_Model{
 		return $result;
 	}
 
-	public function uniqUsername($usrnm, $type){
+	public function uniqUsername($usrnm, $type, $authid){
 		$query = "
-			SELECT USERNAME, AUTH_ID  FROM PWMS_TX_SYSTEM_AUTH
-			WHERE USERNAME = '".$usrnm."'";
+			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
+			WHERE USERNAME = '".$usrnm."' 
+			AND AUTH_ID <> ".$authid;
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
-		if ((count($arrdata) >= 1 and $type == "update")) {
-			if ($this->session->userdata('AUTH_ID') == $arrdata[0]['AUTH_ID']) {
-				return true;
-			} else {
-				return false;
-			}
+		
+		if ( count($arrdata) >= 1 ) {
+			return false;
 		}else{
 			return true;
 		}

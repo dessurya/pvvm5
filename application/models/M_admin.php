@@ -184,9 +184,15 @@ class M_admin extends CI_Model{
 	private function store($roll_id, $get, $post){
 		$result = array();
 		$result['response'] = true;
+		$AUTH_ID = null;
 		$post['npwp'] = str_replace('.','',$post['npwp']);
 		$post['npwp'] = str_replace('-','',$post['npwp']);
-		if (isset($get['id'])) { $result['type'] = "update"; }
+		if (isset($get['id'])) { 
+			$result['type'] = "update"; 
+			$ADMIN_ID = $get['id'];
+			$AUTH_ID = $this->finddata($roll_id,$ADMIN_ID);
+			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
+		}
 		else{ $result['type'] = "add"; }
 		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
 			$result['response'] = false;
@@ -203,7 +209,7 @@ class M_admin extends CI_Model{
 				$result['msg'] = "Sorry!, Please correct email address";
 			}
 		}
-		if ($this->uniqUsername($post['email'], $result['type']) == false) {
+		if ($this->uniqUsername($post['email'], $result['type'], $AUTH_ID) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, ".$result['type']." user ".$post['name']." fail cause email is exist...!";
 		}
@@ -216,11 +222,7 @@ class M_admin extends CI_Model{
 			return $result;
 		}
 
-		if (isset($get['id'])) {
-			$ADMIN_ID = $get['id'];
-			$AUTH_ID = $this->finddata($roll_id,$ADMIN_ID);
-			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
-		}else{
+		if ($result['type'] == "add") {
 			$this->load->model('m_sequences');
 			$AUTH_ID = $this->m_sequences->getNextVal("AUTH_ID");
 			$ADMIN_ID = $this->m_sequences->getNextVal("USER_ID");
@@ -258,16 +260,16 @@ class M_admin extends CI_Model{
 		return $result;
 	}
 
-	public function uniqUsername($usrnm, $type){
+	public function uniqUsername($usrnm, $type, $authid){
 		$query = "
 			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
 			WHERE USERNAME = '".strtolower($usrnm)."'";
+		if ($type == "update") {
+			$query .= " AND AUTH_ID <> ".$authid;
+		}
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
-		if (
-			(count($arrdata) >= 1 and $type == "add") or 
-			(count($arrdata) >= 2 and $type == "update")
-		) {
+		if ( count($arrdata) >= 1 ) {
 			return false;
 		}else{
 			return true;
