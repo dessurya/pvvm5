@@ -70,7 +70,7 @@ class M_order extends CI_Model{
         return $this->datatables->generate();
 	}
 
-	public function finddata($roll_id, $id, $type = null){
+	public function finddata($roll_id, $id){
 		if (is_array($id)) {
 			$id = implode(',', $id);
 			$where = 'WK.WARTA_KAPAL_IN_ID IN ('.$id.')';
@@ -78,8 +78,8 @@ class M_order extends CI_Model{
 			$where = "WK.WARTA_KAPAL_IN_ID = ".$id;
 		}
 
-		if ($type == null) {
-			$select = "
+		$query = "
+			SELECT 
 				WK.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
 				TO_CHAR(WK.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS WARTA_KAPAL_DATE, 
 				WK.PKK_NO AS PKK_NO,
@@ -98,20 +98,7 @@ class M_order extends CI_Model{
 				WO.VENDOR_ID AS VENDOR_ID,
 				WV.NAMA AS VENDOR_NAMA,
 				CASE WHEN WO.STATUS_ID IS NULL THEN 0 ELSE WO.STATUS_ID END AS STATUS_ID,
-				CASE WHEN OS.STATUS IS NULL THEN 'AVAILABLE' ELSE OS.STATUS END AS STATUS_NAMA";
-		}else if ($type == 'detailapisubmitforsend') {
-			$select="
-				WK.PKK_NO AS PKK_NO,
-				WK.NO_LAYANAN AS LAYANAN_NO,
-				WK.NAMA_PERUSAHAAN AS PERUSAHAAN_NAMA,
-				WK.NAMA_KAPAL AS KAPAL_NAMA,
-				WK.KODE_PELABUHAN AS PELABUHAN_KODE,
-				TO_CHAR(WO.CREATED_DATE, 'YYYY-MM-DD') AS ORDER_DATE
-			";
-		}
-
-		$query = "
-			SELECT ".$select."
+				CASE WHEN OS.STATUS IS NULL THEN 'AVAILABLE' ELSE OS.STATUS END AS STATUS_NAMA
 			FROM PWMS_TR_WARTA_KAPAL_IN WK
 			LEFT JOIN PWMS_TR_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
 			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID
@@ -121,7 +108,7 @@ class M_order extends CI_Model{
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function finddatadetail($roll_id, $id, $type = null){
+	public function finddatadetail($roll_id, $id){
 		if (is_array($id)) {
 			$id = implode(',', $id);
 			$where = 'SWI.WARTA_KAPAL_IN_ID IN ('.$id.')';
@@ -129,8 +116,8 @@ class M_order extends CI_Model{
 			$where = "SWI.WARTA_KAPAL_IN_ID = '".$id."'";
 		}
 
-		if ($type == null) {
-			$select = "
+		$query = "
+			SELECT 
 				SWI.WARTA_KAPAL_IN_ID AS WARTA_KAPAL_IN_ID,
 				SWI.DET_WARTA_KAPAL_IN_ID AS DET_WARTA_KAPAL_IN_ID,
 				SWI.MAX_LOAD_QTY AS MAX_LOAD_QTY,
@@ -144,20 +131,7 @@ class M_order extends CI_Model{
 				WL.TYPE_ID AS TYPE_ID,
 				WT.TYPE_NAME AS TYPE_NAME,
 				WL.UM_ID AS UM_ID,
-				WU.UM_NAME AS UM_NAME";
-		}else if ($type == 'detailapisubmitforsend') {
-			$select="
-				WL.WASTE_NAME AS name,
-				WT.TYPE_NAME AS type,
-				WU.UM_NAME AS unit,
-				SWI.MAX_LOAD_QTY AS kapasitas_tangki_penyimpanan,
-				SWI.TONGKANG_QTY AS jumlah_limbah_dibongkar,
-				SWI.KEEP_QTY AS jumlah_limbah_disimpan
-			";
-		}
-
-		$query = "
-			SELECT ".$select."
+				WU.UM_NAME AS UM_NAME
 			FROM PWMS_TX_SHIP_WASTE_IN SWI
 			LEFT JOIN PWMS_TR_WASTE_LIST WL ON SWI.WASTE_ID = WL.WASTE_ID
 			LEFT JOIN PWMS_TR_WASTE_TYPE WT ON WL.TYPE_ID = WT.TYPE_ID
