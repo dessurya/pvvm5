@@ -95,9 +95,34 @@ class Order extends CI_Controller {
 			echo json_encode( $response );
 		}else if ($fbck == 'sendapi') {
 			$response['id'] = $_GET['warta_kapal_in_id'];
-			$this->session->set_flashdata('send',$response);
-			redirect(base_url().'index.php/api/sendapi');
+			$this->sendapi($response);
 		}
+	}
+
+	private function sendapi($dataPost){
+		$curl = curl_init();
+		$data = array();
+		// $data[CURLOPT_URL] = "http://localhost/pwms_api/devlop/index.php/inaport/sendapi";
+		$data[CURLOPT_URL] = "http://10.10.33.56/_pwms_api/devlop/index.php/inaport/sendapi";
+		$data[CURLOPT_RETURNTRANSFER] = true;
+		$data[CURLOPT_SSL_VERIFYPEER] = false;
+		$data[CURLOPT_ENCODING] = "";
+		$data[CURLOPT_MAXREDIRS] = 10;
+		$data[CURLOPT_TIMEOUT] = 30;
+		$data[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+		$data[CURLOPT_CUSTOMREQUEST] = "POST";
+		$data[CURLOPT_POSTFIELDS] = $dataPost['id'];
+		curl_setopt_array($curl,$data);
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		if ($err) {
+			$dataPost['apires'] = "cURL Error #:" . $err;
+		} else {
+			$dataPost['apires'] = $response;
+		}
+		header('Content-Type: application/json');
+		echo json_encode($dataPost);
 	}
 
 }
