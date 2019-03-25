@@ -226,7 +226,8 @@
 	    showPNotify(dataPN, data);
 	    return false;
 	});
-	
+
+	<?php if(in_array($this->uri->segment(1), array('order', 'report', 'admin', 'role', 'vendor'))) { ?>
 	$(document).on('dblclick', '#datatable tbody tr td', function(){
 		if(!$(this).hasClass('not')){
 			var idshow = $(this).closest('tr').attr('id');
@@ -235,6 +236,7 @@
 		}
 		return false;
 	});
+	<?php } ?>
 
 	$(document).on('click', 'button.refreshshow', function(){
 		var url = '<?php echo site_url().'/'.$this->uri->segment(1).'/show/' ?>'+$(this).data('id');

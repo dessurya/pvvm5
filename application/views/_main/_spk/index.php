@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2><?php echo $tittle; echo isset($showNama) ? ' '.$showNama : ''; ?></h2>
+				<h2><?php echo "SURAT PERINTAH KERJA";?></h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -11,9 +11,9 @@
 						<li role="presentation" class="active">
 							<a href="#tab_list" role="tab" data-toggle="tab" aria-expanded="true">List</a>
 						</li>
-						<li role="presentation" class="">
+						<!-- <li role="presentation" class="">
 							<a href="#tab_open" role="tab" data-toggle="tab" aria-expanded="true"><?php echo $tittle; ?> : No Data</a>
-						</li>
+						</li> -->
 					</ul>
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade active in" id="tab_list">

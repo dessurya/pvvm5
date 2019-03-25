@@ -32,11 +32,11 @@ class M_spk extends CI_Model{
 			STATUS_ID,
 			STATUS,
 			TO_CHAR(WARTA_KAPAL_IN_DATE, 'YYYY/MM/DD HH24:MI:SS') AS WARTA_KAPAL_IN_DATE, 
-			TO_CHAR(ORDER_DATE, 'YYYY/MM/DD HH24:MI:SS') AS ORDER_DATE
+			TO_CHAR(ORDER_DATE, 'YYYY/MM/DD HH24:MI:SS') AS ORDER_DATE,
 		");
         $this->datatables->from('ORDER_WARTA_KAPAL');
 	    $this->datatables->add_column('CHECKBOX', '<input type="checkbox" class="flat dtable" value="$1">', 'ID');
-		$this->datatables->add_column('SPK', '<a class="btn btn-warning btn-sm" target="_blank" href="'.$url_spk.'$1&type=1">SPK Pengambilan</a><a class="btn btn-warning btn-sm" target="_blank" href="'.$url_spk.'$1&type=2">SPK Pengeluaran</a>', 'ID');
+		$this->datatables->add_column('SPK', '<a class="btn btn-warning btn-sm" target="_blank" href="'.$url_spk.'$1&type=1">SPK Pengeluaran</a><a class="btn btn-warning btn-sm" target="_blank" href="'.$url_spk.'$1&type=2">SPK Pengambilan</a>', 'ID');
 
 
 	    if ($roll_id == 3 or $roll_id == 1) {
@@ -91,8 +91,9 @@ class M_spk extends CI_Model{
 				WK.SUMBER_LIMBAH AS SUMBER_LIMBAH,
 				WO.ORDER_ID AS ORDER_ID,
 				TO_CHAR(WO.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS') AS ORDER_DATE, 
-				TO_CHAR(WO.TONGKANG_PICKUP_DATE, 'YYYY/MM/DD') AS TONGKANG_PICKUP_DATE, 
-				TO_CHAR(WO.TRUCKING_PICKUP_DATE, 'YYYY/MM/DD') AS TRUCKING_PICKUP_DATE, 
+				TO_CHAR(WO.TONGKANG_PICKUP_DATE, 'DD-MM-YYYY HH24:MI:SS') AS TONGKANG_PICKUP_DATE, 
+				TO_CHAR(WO.TRUCKING_PICKUP_DATE, 'DD-MM-YYYY HH24:MI:SS') AS TRUCKING_PICKUP_DATE, 
+				TO_CHAR(WO.CREATED_DATE, 'DD-MM-YYYY') AS TGL_SPK, 
 				WO.VENDOR_ID AS VENDOR_ID,
 				WV.NAMA AS VENDOR_NAMA,
 				CASE WHEN WO.STATUS_ID IS NULL THEN 0 ELSE WO.STATUS_ID END AS STATUS_ID,

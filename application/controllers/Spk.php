@@ -110,79 +110,356 @@ class Spk extends CI_Controller {
 		$this->load->model('m_spk');
 		$find = $this->m_spk->finddata($roll_id, $wki_id);
 		$find = $find[0];
-		$send['head'] = $find;
-		// $send['detail'] = $this->m_spk->finddatadetail($roll_id, $wki_id);
-		// $send['history'] = $this->m_spk->history($roll_id, $wki_id);
-		// $send['all_status'] = $this->m_spk->getallstatus();
-		// $response['response'] = true;
-		// $response['name'] = 'Order Waste : '.$find['PKK_NO'];
+		$detail = $this->m_spk->finddatadetail($roll_id, $wki_id);
 		// echo "<pre>";
-		// var_dump($send['head']);
+		// var_dump($detail);
 		// echo "</pre>";
 		// exit();
 
 
     	$this->load->library('pdf');
-    	$this->load->library('html_pdf');
 
         $pdf = new FPDF('P','mm','A4');
         $pdf->AddPage();
         $pdf->SetFont('Arial','B',16);
         $this->kop($pdf);
         $this->header($pdf,$status);
-        $this->isi($pdf);
+        $this->isi($pdf,$status,$find,$detail);
+        $this->footer($pdf);
+        $this->div($pdf);
+        $this->kop2($pdf);
+        $this->header2($pdf,$status);
+        $this->isi2($pdf,$status,$find);
+        $this->footer2($pdf,$status);
 
-        $pdf->ln(100);
         $pdf->Output();
     }
 
     // KOP SURAT
     private function kop($pdf) {
-        $pdf->SetFont('Arial','B',10);
+        $pdf->SetFont('Arial','B',11);
         $pdf->Cell(40,8,'PT. PELABUHAN INDONESIA II (PERSERO)');
-        $pdf->SetFont('Arial','',10);
+        $pdf->SetFont('Arial','',11);
         $pdf->Cell(250,8,'FM.01/04/04/06',0,10,'C');
         $pdf->ln(-5);
+        $pdf->SetFont('Arial','B',11);
         $pdf->Cell(30,10,'Cabang Pelabuhan Tanjung Priok');
         $pdf->ln(15);
     }
+    private function kop2($pdf) {
+        $pdf->SetFont('Arial','B',11);
+        $pdf->Cell(55,8,'PT. PELABUHAN INDONESIA II (PERSERO)',0,0,'C');
+        $pdf->SetFont('Arial','',10);
+        $pdf->Cell(150,8,'Tanggal : '.date("d-m-Y"),0,10,'C');
+        $pdf->ln(-5);
+        $pdf->SetFont('Arial','B',11);
+        $pdf->Cell(37,10,'Cabang Pelabuhan Tanjung Priok',0,1,'C');
+        $pdf->ln(5);
+    }
+
 
     // Isi
-    private function isi($pdf) {
-        $pdf->SetFont('Arial','',10);
-        $pdf->Cell(60,5,'No. Surat Permohonan      : ',0,5);
-        $pdf->Cell(60,5,'No. SPK                   : ',0,5);
-        $pdf->Cell(60,5,'Nama Petugas Tugboat      : ',0,5);
-        $pdf->Cell(60,5,'Alat yang digunakan       : ',0,5);
+    private function isi($pdf,$status,$find,$detail) {
+    	foreach ($detail as $key => $value) {
+    		if ($value['WASTE_NAME'] == 'OILY SLUDGE' and $value['UM_NAME'] == 'M3') {
+    			// convert m3 to ton
+    			$volume = $value['REQUEST_QTY'] * 0.3531466672;
+    		} else if ($value['WASTE_NAME'] == 'OILY SLUDGE' and $value['UM_NAME'] == 'KG') {
+    			// connvert kg to ton
+    			$volume = $value['REQUEST_QTY'] / 1000;
+    		}
+    	}
+    	if ($status == 1) {
+    		$tab = '                                                       ';
+        	$pdf->setX(25);
+    		$pdf->SetMargins(25, 5);
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Surat Permohonan',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.' ',0,1, 'L');
 
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'SPK',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': '.' ',0,1, 'L');
 
-        // $pdf->Cell(100,10,'No. Surat Permohonan');
-        // $pdf->Cell(190,7,'SURAT PERINTAH KERJA (SPK)',0,1,'C');
-        // $pdf->Cell(190,7,'PENGAMBILAN LIMBAH B3',0,1,'C');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Nama petugas',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.' ',0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'Perusahaan',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': '.$find['PERUSAHAAN_NAMA'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Kapal',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.$find['KAPAL_NAMA'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'Kade',0,0);
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': '.'',0,1,'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Rencana Kerja',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.$find['TONGKANG_PICKUP_DATE'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'Estimasi Volume Pengeluaran Minyak',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': '.$volume,0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Truk yang Digunakan',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.'- ',0,1, 'L');
+
+        } else if ($status == 2) {
+        	$tab = '                                ';
+        	$pdf->SetMargins(25, 5);
+
+        	$pdf->setFont('Arial','',10);
+    		$pdf->Cell(52,10,'No Surat Permohonan',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(-18,10,''.$tab.': '.' ',0,0, 'C');
+    		$pdf->setFont('Arial','',10);
+        	$pdf->Cell(105,10,'Tgl Surat Permohonan : ',0,0,'R');
+        	$pdf->setFont('Arial','',10);
+        	$pdf->Cell(6,10,$find['TGL_SPK'],0,1,'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'No SPK',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': '.' ',0,0, 'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(83,0.5,'Tgl SPK',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,'                      :   '.$find['TGL_SPK'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'Nama petugas Tugboat',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': '.' ',0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,0.5,'Alat yang digunakan',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,0.5,''.$tab.': ',0,1, 'L');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(10,10,'',0,0,'L');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(6,10,''.$tab.': ',0,1, 'L');
+        }
+        $pdf->ln(5);
+
+    }
+
+    private function isi2($pdf,$status,$find){
+    	$tab = '                                                       ';
+    	if ($status == 1) {
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(37,5,'ID Truk :',0,1,'R');
+    		$pdf->setFont('Arial','B',10);
+    		$pdf->Cell(42,3,'B9232FYW',0,1,'R');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(46,5,'Pelaksanaan :',0,1,'R');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(38,5,'1. Mulai :',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(38,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(41,5,'2. Selesai :',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(35,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(46,5,'Pelaksanaan :',0,1,'R');
+
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(45,5,'1. Sludge Oil :',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(25,5,'..............TON',0,0,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(60,5,'(......................................................)',0,0,'R');
+    		$pdf->ln(15);
+
+        } else if ($status == 2) {
+        	$tab = '                                          ';
+
+        	$pdf->setX(25);
+        	$pdf->SetMargins(25, 5);
+			
+			$pdf->setFont('Arial','',9);
+    		$pdf->Cell(10,5,'Kapal Keagenan',0,0,'L');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(6,5,''.$tab.': '.$find['PERUSAHAAN_NAMA'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(10,5,'Kapal',0,0,'L');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(6,5,''.$tab.': '.$find['KAPAL_NAMA'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(10,5,'Kade',0,0,'L');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(6,5,''.$tab.': '.' ',0,1, 'L');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(10,5,'Rencana Kerja',0,0,'L');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(6,5,''.$tab.': '.$find['TONGKANG_PICKUP_DATE'],0,1, 'L');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(10,5,'Estimasi Volume Pengambilan',0,0,'L');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(6,5,''.$tab.': '.$find['KAPAL_NAMA'],0,1, 'L');
+        	$pdf->setFont('Arial','',9);
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(22,5,'Pelaksanaan :',0,1,'R');
+
+    		$tab = '     ';
+
+        	$pdf->setX(25);
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(20,5,'1. Berangkat',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(31,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(13,5,'2. Mulai',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(38,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+
+    		$pdf->Cell(16,5,'3. Selesai',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(35,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+
+    		$pdf->Cell(17,5,'4. Kembali',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(34,5,'Hari.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(40,5,'Tgl.....................',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(45,5,'JAM.....................WIB',0,1,'R');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(22,5,'Pelaksanaan :',0,1,'R');
+
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(21,5,'1. Sludge Oil :',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(25,5,'..............TON',0,0,'R');
+    		$pdf->setFont('Arial','',9);
+    		$pdf->Cell(60,5,'(......................................................)',0,0,'R');
+    		$pdf->ln(10);
+
+        }
     }
 
     // Judul
     private function header($pdf,$status) {
-    	// echo $status;
-    	// exit();
-
         if ($status == 1) {
-            $judul_bawah = "PENGAMBILAN LIMBAH B3";
-        } else if ($status == 2) {
             $judul_bawah = "PENGELUARAN LIMBAH SLUDGE OIL";
+            $pdf->SetTitle('SPK PENGELUARAN LIMBAH');
+        } else if ($status == 2) {
+            $judul_bawah = "PENGAMBILAN LIMBAH B3";
+            $pdf->SetTitle('SPK PENGAMBILAN LIMBAH');
         }
         $pdf->SetFont('Arial','B',12);
         $pdf->Cell(190,7,'SURAT PERINTAH KERJA (SPK)',0,1,'C');
-        $pdf->Cell(190,7,$judul_bawah,0,1,'C');
+        $pdf->Cell(190,3,$judul_bawah,0,1,'C');
         $pdf->ln(5);
+    }
 
+    private function header2($pdf,$status) {
+        if ($status == 1) {
+            $judul_bawah = "(PENGELUARAN)";
+        } else if ($status == 2) {
+            $judul_bawah = "(PENGAMBILAN)";
+        }
+        $pdf->SetMargins(5, 5);        
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(160,7,'INPUT BUKTI PEMAKAIAN JASA ALAT',0,1,'C');
+        $pdf->Cell(200,3,$judul_bawah,0,1,'C');
+        $pdf->ln(5);
+    }
 
+    // ttd
+    private function footer($pdf){
+    	$image1 = base_url()."/upload/spk/ttd_wahyusunandar.png";
+    	$pdf->setFont('Arial','',11);
+    	$pdf->Cell(155,10,'Tanjung Priok, '.date("d-m-Y"),0,1,'R');
+    	$pdf->setFont('Arial','B',11);
+    	$pdf->Cell(160,0.5,'SUPERVISOR ANEKA USAHA',0,1,'R');
+        $pdf->Cell(160, 0.5, $pdf->Image($image1, $pdf->GetX()+123, $pdf->GetY()+3, 15), 0, 1, 'R');
+        $pdf->ln(25);
+    	$pdf->setFont('Arial','BU',11);
+    	$pdf->Cell(150,0.5,'WAHYU SUNANDAR',0,1,'R');
+    	$pdf->setFont('Arial','',10);
+    	$pdf->Cell(145,10,'NIPP 269035722',0,1,'R');
+    }
+
+    // ttd
+    private function footer2($pdf,$status){
+    	$image1 = base_url()."/upload/spk/ttd_wahyusunandar.png";
+    	if ($status == 1) {
+    		$pdf->setFont('Arial','',11);
+    		$pdf->Cell(175,10,'Tanjung Priok, '.date("d-m-Y"),0,1,'R');
+    		$pdf->setFont('Arial','B',11);
+    		$pdf->Cell(180,0.5,'SUPERVISOR ANEKA USAHA',0,1,'R');
+    		$pdf->Cell(160, 0.5, $pdf->Image($image1, $pdf->GetX()+143, $pdf->GetY()+3, 15), 0, 1, 'R');
+    		$pdf->ln(25);
+    		$pdf->setFont('Arial','BU',11);
+    		$pdf->Cell(170,0.5,'WAHYU SUNANDAR',0,1,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(165,10,'NIPP 269035722',0,1,'R');
+    	} else if ($status == 2) {
+    		$pdf->setFont('Arial','',11);
+    		$pdf->Cell(155,10,'Tanjung Priok, '.date("d-m-Y"),0,1,'R');
+    		$pdf->setFont('Arial','B',11);
+    		$pdf->Cell(160,0.5,'SUPERVISOR ANEKA USAHA',0,1,'R');
+    		$pdf->Cell(160, 0.5, $pdf->Image($image1, $pdf->GetX()+123, $pdf->GetY()+3, 15), 0, 1, 'R');
+    		$pdf->ln(25);
+    		$pdf->setFont('Arial','BU',11);
+    		$pdf->Cell(150,0.5,'WAHYU SUNANDAR',0,1,'R');
+    		$pdf->setFont('Arial','',10);
+    		$pdf->Cell(145,10,'NIPP 269035722',0,1,'R');
+    	}
     }
 
     private function div($pdf) {
+
         $dash = '--------------------------------------------------------------------------------------------------------------------------------------------------------------';
         $pdf->SetFont('Arial','B',10);
-        $pdf->Cell(40,10,$dash);
+        $pdf->Cell(160,5,$dash,0,1,'C');
         
     }
 
