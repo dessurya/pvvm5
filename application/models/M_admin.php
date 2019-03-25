@@ -21,11 +21,14 @@ class M_admin extends CI_Model{
 	}
 
 	private function notDefaultRole($roll_id, $url){
+
 		if ($url == 'order') {
 			if (in_array($this->uri->segment(2), array('getdata', 'show', 'tools'))) {
 				return true;
 			}
 			$url = "order/index/".$this->uri->segment(3);
+		}else if($url == 'spk'){
+			return true;
 		}else if($url == 'history'){
 			if (in_array($this->uri->segment(2), array('getdata'))) {
 				return true;

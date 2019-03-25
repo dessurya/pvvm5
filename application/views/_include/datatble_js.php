@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	var urlDataTable = "<?php echo site_url().'/' ?>"+urisegment1+"/getdata";
-	<?php if(in_array($this->uri->segment(1), array('order', 'report'))) {?>
+	<?php if(in_array($this->uri->segment(1), array('order', 'report', 'spk'))) {?>
 		urlDataTable += "<?php echo '/'.$this->uri->segment(3) ?>";
 	<?php if($this->uri->segment(3) == 'list' and $this->uri->segment(4) == 'for') {?>
 		urlDataTable += "<?php echo '/'.$this->uri->segment(4).'/'.$this->uri->segment(5) ?>";
@@ -69,6 +69,19 @@
 					if(data.STATUS == null){ return 'AVAILABLE'; }
 					else{ return data.STATUS; }
 				}}
+				<?php }else if(in_array($this->uri->segment(1), array('spk')) and $this->uri->segment(3) == 'list') { ?>
+				{name: "NO", data: "ID", width: "10%", orderable: false, searchable:false},
+				{name: "ORDER_DATE", data: "ORDER_DATE", width: "10%"},
+				{name: "PKK_NO", data: "PKK_NO", width: "20%"},
+				{name: "VENDOR_NAMA", data: "VENDOR_NAMA", width: "20%"},
+				{name: "STATUS", data: function(data) { //name
+					if(data.STATUS == null){ return 'AVAILABLE'; }
+					else{ return data.STATUS; }
+				}, width: "10%"},
+				// {name: "SPK", data: function(data) {
+				// 	return '<a class="btn btn-warning btn-sm" href=' + url + '' + data.ID + '>' + 'SPK Pengeluaran' + '</a><a class="btn btn-warning btn-sm" href=' + url +''+ data.ID + '>' + 'SPK Pengambilan' + '</a>';
+				// }, width: "30%"}
+				{name: "SPK", data: "SPK"}
 				<?php } else if(in_array($this->uri->segment(1), array('vendor'))) {?>
 				{name: "NO", data: "VENDOR_ID", orderable: false, searchable:false},
 				{name: "CHECKBOX", data: "CHECKBOX", orderable: false, class: "not", searchable:false},
@@ -146,7 +159,7 @@
 				$(row).attr('id', data.VENDOR_ID);
 				<?php } else if($this->uri->segment(1) == 'admin') { ?>
 				$(row).attr('id', data.ADMIN_ID);
-				<?php } else if(in_array($this->uri->segment(1), array('order', 'report'))) { ?>
+				<?php } else if(in_array($this->uri->segment(1), array('order', 'report', 'spk'))) { ?>
 				$(row).attr('id', data.ID);
 				<?php } else if(in_array($this->uri->segment(1), array('role'))) { ?>
 				$(row).attr('id', data.AUTH_TYPE_ID);
@@ -273,7 +286,7 @@
 	            $('.x_content .tab-content #tab_open').html(data.result);
 				$('ul.nav-tabs li.tab_open').show();
 	        	$('ul.nav-tabs.bar_tabs a[href=#tab_open]').tab('show').html(data.name);
-	        	<?php if( in_array($this->uri->segment(1), array('order', 'report')) ){ ?>
+	        	<?php if( in_array($this->uri->segment(1), array('order', 'report', 'spk')) ){ ?>
 				calldattime('input[name=TONGKANG_PICKUP_DATE]');
 				calldattime('input[name=TRUCKING_PICKUP_DATE]');
 				<?php } ?>

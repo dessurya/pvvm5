@@ -198,16 +198,16 @@
 		}
 		<?php } 
 
-		if( in_array($this->uri->segment(1), array('vendor', 'order', 'ipc', 'history', 'profile', 'admin', 'role'))){
+		if( in_array($this->uri->segment(1), array('vendor', 'order', 'history', 'profile', 'admin', 'role', 'spk'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}
-		if( in_array($this->uri->segment(1), array('order'))){
+		if( in_array($this->uri->segment(1), array('order', 'spk'))){
 			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('report', 'dashboard'))){
 			echo substr($this->load->view('_include/report_js.php', '', true), 31 );
 		}
-		if( in_array($this->uri->segment(1), array('order', 'history'))){
+		if( in_array($this->uri->segment(1), array('order', 'history', 'spk'))){
 			echo substr($this->load->view('_include/datatble_daterange_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('profile'))){
