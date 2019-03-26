@@ -103,7 +103,7 @@ class Order extends CI_Controller {
 		$curl = curl_init();
 		$data = array();
 		// $data[CURLOPT_URL] = "http://localhost/pwms_api/devlop/index.php/inaport/sendapi";
-		$data[CURLOPT_URL] = "http://10.10.33.56/_pwms_api/devlop/index.php/inaport/sendapi";
+		$data[CURLOPT_URL] = "http://10.10.33.56/cfs_dev/_pwms_api/devlop/index.php/inaport/sendapi";
 		$data[CURLOPT_RETURNTRANSFER] = true;
 		$data[CURLOPT_SSL_VERIFYPEER] = false;
 		$data[CURLOPT_ENCODING] = "";
