@@ -1,6 +1,65 @@
 <script type="text/javascript">
+	var sdat = null;
+	var edat = null;
+	var kpal = null;
+	var agnt = null;
 
-	function init_daterangepicker() {
+	init_daterangepicker();
+	$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+		$('#reportrange, #reportrange span').css('background', '#26b99a').css('color', 'white');
+		$('#datatable').DataTable().destroy();
+		var data = new Array();
+		sdat = picker.startDate.format('D/M/Y');
+		edat = picker.endDate.format('D/M/Y');
+		data['sdate'] = sdat;
+		data['edate'] = edat;
+		get_report(data);
+	});
+
+	$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
+		$('#reportrange, #reportrange span').css('background', '#fff').css('color', '#73879c');
+		$('#reportrange span').html('Filter Date');
+		$('#total_order, #new_order, #order_on_progress, #done_order').html('-');
+		$('#btn-export').html('');
+		$('tbody').html('<tr><td colspan="4" class="text-center">NO DATA</td></tr>');
+	});
+
+    $(document).ready(function () {
+    	$("#agent").select2({
+    		placeholder: "Pilih Agent"
+    	});
+
+    	$("#kapal").select2({
+    		placeholder: "Pilih Kapal"
+    	});
+    });
+
+    $(function(){
+       $('.test').select2({
+           minimumInputLength: 2,
+           placeholder: 'masukkan nama kapal',
+           ajax: {
+              dataType: 'JSON',
+              url: "<?PHP echo site_url().'/report/test' ?>",
+              delay: 500,
+              data: function(params) {
+                return {
+                  search: params.term
+                }
+              },
+              processResults: function (data, page) {
+              return {
+                results: data
+              };
+            },
+          }
+      }).on('select2:select', function (evt) {
+         var data = $(".test option:selected").text();
+         alert("Data yang dipilih adalah "+data);
+      });
+	});
+
+    function init_daterangepicker() {
 
 		if( typeof ($.fn.daterangepicker) === 'undefined'){ return; }
 	
@@ -44,7 +103,6 @@
 		};
 		
 		$('#reportrange span').html('Filter Date');
-		// $('#reportrange span').html(moment().subtract(29, 'days').format('D/M/YYYY') + ' - ' + moment().format('D/M/YYYY'));
 		$('#reportrange').daterangepicker(optionSet1, cb);
 		$('#options1').click(function() {
 		  $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
@@ -57,33 +115,20 @@
 		});
 	}
 
-	function get_report(sdate, edate){
+	function get_report(data){
 		var input = {};
-		input['sdate'] = sdate;
-		input['edate'] = edate;
-		// console.log(input);
+		if (data.sdate !== null && data.sdate !== "" && data.sdate !== undefined ) {
+			input['sdate'] = data.sdate;
+		}
+		if (data.edate !== null && data.edate !== "" && data.edate !== undefined ) {
+			input['edate'] = data.edate;
+		}
 		var data = new Array();
 		data['url'] = "<?PHP echo site_url().'/report/getReport' ?>";
 	    data['input'] = input;
 	    data['type'] = 'getreport';
 		get_detail_report(data);
 	}
-
-
-	init_daterangepicker();
-	$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-		// console.log(picker.startDate.format('D/M/Y') + " -- " + picker.endDate.format('D/M/Y'));
-		$('#reportrange, #reportrange span').css('background', '#26b99a').css('color', 'white');
-		$('#datatable').DataTable().destroy();
-		get_report(picker.startDate.format('D/M/Y'), picker.endDate.format('D/M/Y'));
-	});
-	$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
-		$('#reportrange, #reportrange span').css('background', '#fff').css('color', '#73879c');
-		$('#reportrange span').html('Filter Date');
-		$('#total_order, #new_order, #order_on_progress, #done_order').html('-');
-		$('#btn-export').html('');
-		$('tbody').html('<tr><td colspan="4" class="text-center">NO DATA</td></tr>');
-	});
 
 	function get_detail_report(dataAction) {
 		var dataPN = new Array();
@@ -99,7 +144,6 @@
             },
             error: function(data) {
                 $('#loading-page').hide();
-                // location.reload();
             },
             success: function(data) {
             	$('#total_order').html(data.total_order);
@@ -126,74 +170,4 @@
             }
         });
     }
-
-    $(document).ready(function () {
-    	$("#agent").select2({
-    		placeholder: "Pilih Agent"
-    	});
-
-    	$("#kapal").select2({
-    		placeholder: "Pilih Kapal"
-    	});
-    	
-    });
-
-    $("#agent").on("change",function(){
-    	$("#kapal").select2({
-    		placeholder: "Pilih Kapal",
-    		minimumInputLength: 2,
-    		tags: [],
-    		ajax: {
-    			url: "<?PHP echo site_url().'/report/index2' ?>",
-    			dataType: 'json',
-    			type: "POST",
-    			quietMillis: 50,
-    			data: function (term) {
-    				return {
-    					term: term
-    				};
-    			},
-    			results: function (data) {
-    				return {
-    					results: $.map(data, function (item) {
-    						return {
-    							text: item.completeName,
-    							slug: item.slug,
-    							id: item.id
-    						}
-    					})
-    				};
-    			}
-    		}
-    	});
-    	asd = $("#agent").val();
-
-    });
-
-    $(function(){
-       $('.test').select2({
-           minimumInputLength: 2,
-           placeholder: 'masukkan nama kapal',
-           ajax: {
-              dataType: 'JSON',
-              url: "<?PHP echo site_url().'/report/test' ?>",
-              delay: 500,
-              data: function(params) {
-                return {
-                  search: params.term
-                }
-              },
-              processResults: function (data, page) {
-              return {
-                results: data
-              };
-            },
-          }
-      }).on('select2:select', function (evt) {
-         var data = $(".test option:selected").text();
-         alert("Data yang dipilih adalah "+data);
-      });
- });
-
-
 
