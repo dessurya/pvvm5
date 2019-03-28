@@ -71,7 +71,7 @@
 			if (input['command'] == null || input['command'] == "") {
 				dataPN['model'] = 'info';
 			    dataPN['title'] = 'Error';
-			    dataPN['text'] = 'Required command!';
+			    dataPN['text'] = 'Required notes!';
 			    dataPN['type'] = 'error';
 			    showPNotify(dataPN);
 	    		return false;

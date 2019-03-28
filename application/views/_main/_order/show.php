@@ -308,7 +308,7 @@
 		<?php if($head['STATUS_ID'] == 3 and (isset($approve) and $approve == true) ) { ?>
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Command</h2>
+				<h2>Notes</h2>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -420,7 +420,7 @@
 					<tr>
 						<th>Date</th>
 						<th>Activity</th>
-						<th>Command</th>
+						<th>Notes</th>
 						<th>By</th>
 					</tr>
 				</thead>
