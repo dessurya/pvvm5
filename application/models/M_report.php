@@ -239,15 +239,15 @@ class M_report extends CI_Model{
 
 	public function get_test($search) {
 		$query = "
-			SELECT DISTINCT (NAMA_KAPAL) 
+			SELECT DISTINCT UPPER(NAMA_KAPAL) 
 			FROM ORDER_WARTA_KAPAL
-			WHERE NAMA_KAPAL LIKE '%".$search."%' 
+			WHERE UPPER(NAMA_KAPAL) LIKE '%".strtoupper($search)."%' 
 			";
 
 		if ($this->session->userdata('ROLL_ID') == 3) {
 			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_KAPAL ASC";
 		} else {
-			$query .= "ORDER BY NAMA_KAPAL ASC";
+			$query .= "ORDER BY UPPER(NAMA_KAPAL) ASC";
 		}
 
 		$runQuery = $this->db->query($query);
