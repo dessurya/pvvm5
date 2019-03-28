@@ -245,7 +245,7 @@ class M_order extends CI_Model{
 			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
 			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
 			$json = json_encode($object);
-			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'revised', 'Success revised on order PKK : '.$object['head'][0]['PKK_NO'].'<br> Command : '.$data['post']['command'], $data['get']['warta_kapal_in_id'], $json);
+			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'revised', 'Success revised on order PKK : '.$object['head'][0]['PKK_NO'].'<br> Notes : '.$data['post']['command'], $data['get']['warta_kapal_in_id'], $json);
 		// record history
 		return null;
 	}
@@ -261,7 +261,7 @@ class M_order extends CI_Model{
 			$json = json_encode($object);
 			$command = "";
 			if ($data['post']['command'] != "") {
-				$command .= '<br> Command : '.$data['post']['command'];
+				$command .= '<br> Notes : '.$data['post']['command'];
 			}
 			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'approved', 'Success approved on order PKK : '.$object['head'][0]['PKK_NO'].$command, $data['get']['warta_kapal_in_id'], $json);
 		// record history
