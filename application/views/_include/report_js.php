@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 	var sdat = null;
 	var edat = null;
 	var kpal = null;
@@ -11,9 +12,7 @@
 		var data = new Array();
 		sdat = picker.startDate.format('D/M/Y');
 		edat = picker.endDate.format('D/M/Y');
-		data['sdate'] = sdat;
-		data['edate'] = edat;
-		get_report(data);
+		get_report(sdat, edat, kpal, agnt);
 	});
 
 	$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
@@ -35,28 +34,61 @@
     });
 
     $(function(){
-       $('.test').select2({
-           minimumInputLength: 2,
-           placeholder: 'masukkan nama kapal',
-           ajax: {
-              dataType: 'JSON',
-              url: "<?PHP echo site_url().'/report/test' ?>",
-              delay: 500,
-              data: function(params) {
-                return {
-                  search: params.term
-                }
-              },
-              processResults: function (data, page) {
-              return {
-                results: data
-              };
-            },
-          }
-      }).on('select2:select', function (evt) {
-         var data = $(".test option:selected").text();
-         alert("Data yang dipilih adalah "+data);
-      });
+
+	   	$('#agent').select2({
+	       minimumInputLength: 3,
+	       placeholder: 'Masukkan Nama Agent',
+	       ajax: {
+	        	dataType: 'JSON',
+	        	url: "<?PHP echo site_url().'/report/search?type=agent' ?>",
+	         	delay: 200,
+	          	data: function(params) {
+	            	return {
+	              		search: params.term
+	            	}
+	          	},
+	          	processResults: function (data, page) {
+	          		return {
+	            		results: data
+	          		};
+	        	},
+	      	}
+	  	});
+
+	  	$(document).on('change', '#kapal', function () {
+	   		kpal = $("#kapal option:selected").text();
+			get_report(sdat, edat, kpal, agnt);
+	   		// alert("Data yang dipilih adalah "+kpal);
+	   	});
+	   	$(document).on('change', '#agent', function () {
+	   		agnt = $("#agent option:selected").text();
+	   		$("#kapal").val(null).trigger('change');
+	   		kpal = null;
+			get_report(sdat, edat, kpal, agnt);
+	   		// alert("Data yang dipilih adalah "+agnt);
+	   	});
+
+	   	$('#kapal').select2({
+	       minimumInputLength: 3,
+	       placeholder: 'Masukkan Nama Kapal',
+	       ajax: {
+	        	dataType: 'json',
+	        	url: function (params) {
+	        		return '<?PHP echo site_url().'/report/search?type=kapal&agent=' ?>' + agnt;
+	        	},
+	         	delay: 200,
+	          	data: function(params) {
+	            	return {
+	              		search: params.term
+	            	}
+	          	},
+	          	processResults: function (data, page) {
+	          		return {
+	            		results: data
+	          		};
+	        	},
+	      	}
+	  	});
 	});
 
     function init_daterangepicker() {
@@ -115,14 +147,15 @@
 		});
 	}
 
-	function get_report(data){
+	function get_report(sdat, edat, kpal, agnt){
+		if (sdat == null && edat == null) {
+			return false;
+		}
 		var input = {};
-		if (data.sdate !== null && data.sdate !== "" && data.sdate !== undefined ) {
-			input['sdate'] = data.sdate;
-		}
-		if (data.edate !== null && data.edate !== "" && data.edate !== undefined ) {
-			input['edate'] = data.edate;
-		}
+		input['sdate'] = sdat;
+		input['edate'] = edat;
+		input['kpal'] = kpal;
+		input['agnt'] = agnt;
 		var data = new Array();
 		data['url'] = "<?PHP echo site_url().'/report/getReport' ?>";
 	    data['input'] = input;
@@ -170,4 +203,3 @@
             }
         });
     }
-

@@ -17,27 +17,27 @@
 			</div>
 			<div class="custom-search col-lg-8 col-lg-offset-2">
 				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
-					<label>Agent</label>
+					<!-- <label>Agent</label>
 					<select id="agent" name="agent" class="form-control">
 						<option value=""></option>
 						<?php foreach ($list_agent as $key ) { ?>
 							<option value="<?php echo $key['NAMA_PERUSAHAAN'] ?>"><?php echo $key['NAMA_PERUSAHAAN'] ?></option>
 						<?php } ?>
+					</select> -->
+					<label>Nama Agent</label>
+					<select name="kapal" class="form-control agent" id="agent">
 					</select>
 				</div>
 				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
-					<label>Kapal</label>
+					<!-- <label>Kapal</label>
 					<select id="kapal" name="kapal" class="form-control">
 						<option value=""></option>
 						<?php foreach ($list_kapal as $key ) { ?>
 							<option value="<?php echo $key['NAMA_KAPAL'] ?>"><?php echo $key['NAMA_KAPAL'] ?></option>
 						<?php } ?>
-					</select>
-				</div>
-				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
-					<label>Test</label>
-					<select name="kapal" class="form-control test">
-						<option value="">- test -</option>
+					</select> -->
+					<label>Nama Kapal</label>
+					<select name="kapal" class="form-control kapal" id="kapal">
 					</select>
 				</div>
 			</div>

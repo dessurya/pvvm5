@@ -38,6 +38,17 @@ class M_report extends CI_Model{
 	    if ($roll_id == 3) {
 	    	$this->db->where("VENDOR_ID", $self_id);
 	    }
+	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+	    	$where = array(
+	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
+	    		'NAMA_KAPAL' => $_POST['kpal']
+	    	);
+	    	$this->db->where($where);
+		} else if ($_POST['kpal'] != null) {
+			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+		} else if ($_POST['agnt'] != null) {
+			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+		}
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
 		$num_rows = count($arrdata);
@@ -63,6 +74,17 @@ class M_report extends CI_Model{
 	    if ($roll_id == 3) {
 	    	$this->db->where("VENDOR_ID", $self_id);
 	    }
+	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+	    	$where = array(
+	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
+	    		'NAMA_KAPAL' => $_POST['kpal']
+	    	);
+	    	$this->db->where($where);
+		} else if ($_POST['kpal'] != null) {
+			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+		} else if ($_POST['agnt'] != null) {
+			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+		}
 	    $this->db->where('STATUS_ID', 1);
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
@@ -86,6 +108,17 @@ class M_report extends CI_Model{
 		    	$this->db->where($finddate." <= ", $end, false);
 		    }
 	    }
+	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+	    	$where = array(
+	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
+	    		'NAMA_KAPAL' => $_POST['kpal']
+	    	);
+	    	$this->db->where($where);
+		} else if ($_POST['kpal'] != null) {
+			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+		} else if ($_POST['agnt'] != null) {
+			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+		}
 	    $this->db->where('STATUS_ID', 2);
 	    if ($roll_id == 3) {
 	    	$this->db->where("VENDOR_ID", $self_id);
@@ -112,6 +145,17 @@ class M_report extends CI_Model{
 		    	$this->db->where($finddate." <= ", $end, false);
 		    }
 	    }
+	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+	    	$where = array(
+	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
+	    		'NAMA_KAPAL' => $_POST['kpal']
+	    	);
+	    	$this->db->where($where);
+		} else if ($_POST['kpal'] != null) {
+			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+		} else if ($_POST['agnt'] != null) {
+			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+		}
 	    $this->db->where('STATUS_ID', 3);
 	    if ($roll_id == 3) {
 	    	$this->db->where("VENDOR_ID", $self_id);
@@ -146,6 +190,13 @@ class M_report extends CI_Model{
 				AND
 				TO_DATE(TO_CHAR(WO.CREATED_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY') <= TO_DATE('".$end."', 'DD/MM/YYYY')
 			";
+		if (isset($_GET['kpal']) and is_null($_GET['kpal']) and$_GET['kpal'] != null and $_GET['agnt'] != null) {
+			$query .= " AND WK.NAMA_KAPAL = '".$_GET['kpal']."' AND WK.NAMA_PERUSAHAAN = '".$_GET['agnt']."'";
+		} else if (isset($_GET['kpal']) and $_GET['kpal'] != null) {
+			$query .= " AND WK.NAMA_KAPAL = '".$_GET['kpal']."'";
+		} else if (isset($_GET['agnt']) and $_GET['agnt'] != null) {
+			$query .= " AND WK.NAMA_PERUSAHAAN = '".$_GET['agnt']."'";
+		}
 		if ($roll_id == 3) {
 			$query .= " AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
 		}
@@ -173,6 +224,8 @@ class M_report extends CI_Model{
 	public function getWasteReport($roll_id, $self_id){
 		$start = $_POST['sdate'];
 		$end = $_POST['edate'];
+		$kpal = $_POST['kpal'];
+		$agnt = $_POST['agnt'];
 
 		$query = "
 		SELECT 
@@ -186,7 +239,9 @@ class M_report extends CI_Model{
 				WU.UM_NAME AS UM_NAME,
 				SUM(REQUEST_QTY) AS REQUEST_QTY,
 				SUM(TONGKANG_QTY) AS TONGKANG_QTY,
-				SUM(TRUCKING_QTY) AS TRUCKING_QTY
+				SUM(TRUCKING_QTY) AS TRUCKING_QTY,
+				WK.NAMA_PERUSAHAAN AS NAMA_PERUSAHAAN,
+				WK.NAMA_KAPAL AS NAMA_KAPAL
 			FROM 
 				PWMS_TX_SHIP_WASTE_IN SW
 			LEFT JOIN 
@@ -212,40 +267,60 @@ class M_report extends CI_Model{
 			if ($this->session->userdata('ROLL_ID') == 3) {
 				$query .= "AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
 			}
-			$query .= "GROUP BY SW.WASTE_ID, WT.TYPE_NAME, WL.WASTE_NAME, WT.TYPE_ID, WU.UM_NAME ) ORDER BY TYPE_ID, WASTE_ID ASC";
+			if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+				$query .= " AND WK.NAMA_KAPAL = '".$_POST['kpal']."' AND WK.NAMA_PERUSAHAAN = '".$_POST['agnt']."'";
+			} else if ($_POST['kpal'] != null) {
+				$query .= " AND WK.NAMA_KAPAL = '".$_POST['kpal']."'";
+			} else if ($_POST['agnt'] != null) {
+				$query .= " AND WK.NAMA_PERUSAHAAN = '".$_POST['agnt']."'";
+			}
+			$query .= " GROUP BY SW.WASTE_ID, WT.TYPE_NAME, WL.WASTE_NAME, WT.TYPE_ID, WU.UM_NAME, WK.NAMA_PERUSAHAAN, WK.NAMA_KAPAL ) ORDER BY TYPE_ID, WASTE_ID ASC";
 			
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}
 
-	public function get_agent() {
-		$query = "SELECT DISTINCT (NAMA_PERUSAHAAN) FROM ORDER_WARTA_KAPAL ";
-		if ($this->session->userdata('ROLL_ID') == 3) {
-			$query .= "WHERE VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_PERUSAHAAN ASC";
-		}
-		$runQuery = $this->db->query($query);
-		return $arrdata = $runQuery->result_array();
-	}
-
-	public function get_kapal($vendor_id) {
-		$query = "SELECT DISTINCT (NAMA_KAPAL) FROM ORDER_WARTA_KAPAL ";
-
-		if ($this->session->userdata('ROLL_ID') == 3) {
-			$query .= "WHERE VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_KAPAL ASC";
-		}
-		$runQuery = $this->db->query($query);
-		return $arrdata = $runQuery->result_array();
-	}
-
-	public function get_test($search) {
+	public function search_agent($search) {
 		$query = "
-			SELECT DISTINCT UPPER(NAMA_KAPAL) 
+			SELECT DISTINCT UPPER(NAMA_PERUSAHAAN) as NAMA_PERUSAHAAN
 			FROM ORDER_WARTA_KAPAL
-			WHERE UPPER(NAMA_KAPAL) LIKE '%".strtoupper($search)."%' 
+			WHERE UPPER(NAMA_PERUSAHAAN) LIKE '%".strtoupper($search)."%' 
 			";
 
 		if ($this->session->userdata('ROLL_ID') == 3) {
-			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_KAPAL ASC";
+			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY UPPER(NAMA_PERUSAHAAN) ASC";
+		} else {
+			$query .= "ORDER BY UPPER(NAMA_PERUSAHAAN) ASC";
+		}
+
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		// var_dump($arrdata);
+		$lists = array();
+		$key = 0;
+		$temp_id = 1;
+		foreach ($arrdata as $row) {
+			$lists[$key]['id'] = $temp_id;
+			$lists[$key]['text'] = $row['NAMA_PERUSAHAAN'];
+			$key++;$temp_id++;
+		}
+		return $lists;
+		// var_dump($lists);
+		// var_dump($arrdata);
+		// exit();
+	}
+
+	public function search_kapal($search) {
+		$query = "
+			SELECT DISTINCT UPPER(NAMA_KAPAL) as NAMA_KAPAL
+			FROM ORDER_WARTA_KAPAL
+			WHERE UPPER(NAMA_KAPAL) LIKE '%".strtoupper($search)."%' 
+			";
+		if ($_GET['agent'] != null) {
+			$query .= "AND NAMA_PERUSAHAAN = '".$_GET['agent']."' ";
+		}
+		if ($this->session->userdata('ROLL_ID') == 3) {
+			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY UPPER(NAMA_KAPAL) ASC";
 		} else {
 			$query .= "ORDER BY UPPER(NAMA_KAPAL) ASC";
 		}

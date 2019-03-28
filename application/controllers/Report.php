@@ -27,34 +27,28 @@ class Report extends CI_Controller {
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
 
-		$list_agent = $this->m_report->get_agent();
-		$list_kapal = $this->m_report->get_kapal($vendor_id);
-        $arrdata = array();
-        $arrdata['list_agent'] = $list_agent;
-        $arrdata['list_kapal'] = $list_kapal;
-		$viewComp['_contents_'] = $this->load->view($urlview, $arrdata, true);
+		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
 		$this->parser->parse('_main/index', $viewComp);
 	}
 
-	public function test(){
+	public function search(){
+		$type = $_GET['type'];
 		$search = $_GET['search'];
+		
+		if ($type == 'agent') {
+			$lists = $this->m_report->search_agent($search);
 
-		$list_test = $this->m_report->get_test($search);
+		} else if ($type == 'kapal') {
+			$lists = $this->m_report->search_kapal($search);
+		}
 
-		// $result['response'] = true;
-		// $result['msg'] = "Success get Report...";
-  //       $result['list_test'] = $list_test;
 
 		header('Content-Type: application/json');
-		echo json_encode($list_test);
+		echo json_encode($lists);
 	}
 
 	public function getReport(){
 		$result = array();
-		if ($_POST) {
-			$sdate = $_POST['sdate'];
-			$edate = $_POST['edate'];
-		}
 
 		if(!$this->session->userdata('LOGGED')) {
 			$result['response'] = false;
@@ -124,7 +118,15 @@ class Report extends CI_Controller {
 				</table>';
 
 		$result['waste_report'] = $view;
-		$result['btn_export'] = '<a class="btn btn-info" href="'.site_url().'/report/exportRawDataReport/'.str_replace('/','_',$_POST['sdate']).'/'.str_replace('/','_',$_POST['edate']).'"><i class="fa fa-file-excel-o"></i> Export Row Data</a>';
+		$urlbut = site_url().'/report/exportRawDataReport/'.str_replace('/','_',$_POST['sdate']).'/'.str_replace('/','_',$_POST['edate']);
+		if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
+			$urlbut .= '?kpal='.$_POST['kpal'].'&agnt='.$_POST['agnt'];
+		} else if ($_POST['kpal'] != null) {
+			$urlbut .= '?kpal='.$_POST['kpal'];
+		} else if ($_POST['agnt'] != null) {
+			$urlbut .= '?agnt='.$_POST['agnt'];
+		}
+		$result['btn_export'] = '<a class="btn btn-info" href="'.$urlbut.'"><i class="fa fa-file-excel-o"></i> Export Row Data</a>';
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
