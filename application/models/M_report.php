@@ -207,9 +207,9 @@ class M_report extends CI_Model{
 	public function qty($oid, $wid){
 		$query = "
 			SELECT 
-				REQUEST_QTY AS REQUEST,
-				TONGKANG_QTY AS TONGKANG,
-				TRUCKING_QTY AS TRUCKING
+				SUM(REQUEST_QTY) AS REQUEST,
+				SUM(TONGKANG_QTY) AS TONGKANG,
+				SUM(TRUCKING_QTY) AS TRUCKING
 			FROM PWMS_TX_SHIP_WASTE_IN
 			WHERE WARTA_KAPAL_IN_ID = ".$oid." AND WASTE_ID = ".$wid;
 		$runQuery = $this->db->query($query);
