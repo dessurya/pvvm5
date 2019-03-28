@@ -144,16 +144,8 @@
 			</div>
 		</div>
 		<div class="ln_solid"></div>
-		<div id="action" class="nav navbar-right panel_toolbox">
-			<?php if ($head['STATUS_ID'] == 1) {?>
-			<button type="button" class="btn btn-warning" title="Lihat Surat Perintah Kerja Pengambilan"><i class="fa fa-file-text-o"></i> <b>SPK Pengambilan</b></button>
-			<?php } else if ($head['STATUS_ID'] == 2) {?>
-			<button type="button" class="btn btn-warning" title="Lihat Surat Perintah Kerja Pengeluaran"><i class="fa fa-file-text-o"></i> <b>SPK Pengeluaran</b></button>
-			<?php } ?>
-		</div>
 	</div>
 </div>
-
 <div class="x_panel">
 	<div class="x_title">
 		<h2 style="width: 30%;">Order Waste Detail</h2>

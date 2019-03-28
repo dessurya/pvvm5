@@ -126,3 +126,74 @@
             }
         });
     }
+
+    $(document).ready(function () {
+    	$("#agent").select2({
+    		placeholder: "Pilih Agent"
+    	});
+
+    	$("#kapal").select2({
+    		placeholder: "Pilih Kapal"
+    	});
+    	
+    });
+
+    $("#agent").on("change",function(){
+    	$("#kapal").select2({
+    		placeholder: "Pilih Kapal",
+    		minimumInputLength: 2,
+    		tags: [],
+    		ajax: {
+    			url: "<?PHP echo site_url().'/report/index2' ?>",
+    			dataType: 'json',
+    			type: "POST",
+    			quietMillis: 50,
+    			data: function (term) {
+    				return {
+    					term: term
+    				};
+    			},
+    			results: function (data) {
+    				return {
+    					results: $.map(data, function (item) {
+    						return {
+    							text: item.completeName,
+    							slug: item.slug,
+    							id: item.id
+    						}
+    					})
+    				};
+    			}
+    		}
+    	});
+    	asd = $("#agent").val();
+
+    });
+
+    $(function(){
+       $('.test').select2({
+           minimumInputLength: 2,
+           placeholder: 'masukkan nama kapal',
+           ajax: {
+              dataType: 'JSON',
+              url: "<?PHP echo site_url().'/report/test' ?>",
+              delay: 500,
+              data: function(params) {
+                return {
+                  search: params.term
+                }
+              },
+              processResults: function (data, page) {
+              return {
+                results: data
+              };
+            },
+          }
+      }).on('select2:select', function (evt) {
+         var data = $(".test option:selected").text();
+         alert("Data yang dipilih adalah "+data);
+      });
+ });
+
+
+

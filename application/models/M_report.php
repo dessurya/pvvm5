@@ -217,5 +217,54 @@ class M_report extends CI_Model{
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
 	}
+
+	public function get_agent() {
+		$query = "SELECT DISTINCT (NAMA_PERUSAHAAN) FROM ORDER_WARTA_KAPAL ";
+		if ($this->session->userdata('ROLL_ID') == 3) {
+			$query .= "WHERE VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_PERUSAHAAN ASC";
+		}
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function get_kapal($vendor_id) {
+		$query = "SELECT DISTINCT (NAMA_KAPAL) FROM ORDER_WARTA_KAPAL ";
+
+		if ($this->session->userdata('ROLL_ID') == 3) {
+			$query .= "WHERE VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_KAPAL ASC";
+		}
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function get_test($search) {
+		$query = "
+			SELECT DISTINCT (NAMA_KAPAL) 
+			FROM ORDER_WARTA_KAPAL
+			WHERE NAMA_KAPAL LIKE '%".$search."%' 
+			";
+
+		if ($this->session->userdata('ROLL_ID') == 3) {
+			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY NAMA_KAPAL ASC";
+		} else {
+			$query .= "ORDER BY NAMA_KAPAL ASC";
+		}
+
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		// var_dump($arrdata);
+		$lists = array();
+		$key = 0;
+		$temp_id = 1;
+		foreach ($arrdata as $row) {
+			$lists[$key]['id'] = $temp_id;
+			$lists[$key]['text'] = $row['NAMA_KAPAL'];
+			$key++;$temp_id++;
+		}
+		return $lists;
+		// var_dump($lists);
+		// var_dump($arrdata);
+		// exit();
+	}
 }
 ?>

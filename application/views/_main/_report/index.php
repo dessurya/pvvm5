@@ -10,9 +10,36 @@
 							<span></span> <b class="caret"></b>
 						</div>
 						<div id="btn-export" class="pull-right"></div>
+						
 					</div>
-				<div class="clearfix"></div>
+					<div class="clearfix"></div>
+				</div>
 			</div>
+			<div class="custom-search col-lg-8 col-lg-offset-2">
+				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+					<label>Agent</label>
+					<select id="agent" name="agent" class="form-control">
+						<option value=""></option>
+						<?php foreach ($list_agent as $key ) { ?>
+							<option value="<?php echo $key['NAMA_PERUSAHAAN'] ?>"><?php echo $key['NAMA_PERUSAHAAN'] ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+					<label>Kapal</label>
+					<select id="kapal" name="kapal" class="form-control">
+						<option value=""></option>
+						<?php foreach ($list_kapal as $key ) { ?>
+							<option value="<?php echo $key['NAMA_KAPAL'] ?>"><?php echo $key['NAMA_KAPAL'] ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+					<label>Test</label>
+					<select name="kapal" class="form-control test">
+						<option value="">- test -</option>
+					</select>
+				</div>
 			</div>
 			<br>
 			<div class="x_judul">

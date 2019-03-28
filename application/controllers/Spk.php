@@ -129,7 +129,7 @@ class Spk extends CI_Controller {
         $this->div($pdf);
         $this->kop2($pdf);
         $this->header2($pdf,$status);
-        $this->isi2($pdf,$status,$find);
+        $this->isi2($pdf,$status,$find,$detail);
         $this->footer2($pdf,$status);
 
         $pdf->Output();
@@ -211,7 +211,7 @@ class Spk extends CI_Controller {
     		$pdf->setFont('Arial','',10);
     		$pdf->Cell(10,0.5,'Estimasi Volume Pengeluaran Minyak',0,0,'L');
     		$pdf->setFont('Arial','',10);
-    		$pdf->Cell(6,0.5,''.$tab.': '.$volume,0,1, 'L');
+    		$pdf->Cell(6,0.5,''.$tab.': '.$volume.' TON',0,1, 'L');
 
     		$pdf->setFont('Arial','',10);
     		$pdf->Cell(10,10,'Truk yang Digunakan',0,0,'L');
@@ -259,7 +259,16 @@ class Spk extends CI_Controller {
 
     }
 
-    private function isi2($pdf,$status,$find){
+    private function isi2($pdf,$status,$find,$detail){
+    	foreach ($detail as $key => $value) {
+        		if ($value['WASTE_NAME'] == 'OILY SLUDGE' and $value['UM_NAME'] == 'M3') {
+    			// convert m3 to ton
+        			$v_sludgeoil = $value['REQUEST_QTY'] * 0.3531466672;
+        		} else if ($value['WASTE_NAME'] == 'OILY SLUDGE' and $value['UM_NAME'] == 'KG') {
+    			// connvert kg to ton
+        			$v_sludgeoil = $value['REQUEST_QTY'] / 1000;
+        		}
+        	}
     	$tab = '                                                       ';
     	if ($status == 1) {
     		$pdf->setFont('Arial','',10);
@@ -293,12 +302,13 @@ class Spk extends CI_Controller {
     		$pdf->setFont('Arial','',10);
     		$pdf->Cell(45,5,'1. Sludge Oil :',0,0,'R');
     		$pdf->setFont('Arial','',10);
-    		$pdf->Cell(25,5,'..............TON',0,0,'R');
+    		$pdf->Cell(35,5,$v_sludgeoil.' TON',0,0,'R');
     		$pdf->setFont('Arial','',10);
     		$pdf->Cell(60,5,'(......................................................)',0,0,'R');
     		$pdf->ln(15);
 
         } else if ($status == 2) {
+        	
         	$tab = '                                          ';
 
         	$pdf->setX(25);
@@ -327,7 +337,7 @@ class Spk extends CI_Controller {
     		$pdf->setFont('Arial','',9);
     		$pdf->Cell(10,5,'Estimasi Volume Pengambilan',0,0,'L');
     		$pdf->setFont('Arial','',9);
-    		$pdf->Cell(6,5,''.$tab.': '.$find['KAPAL_NAMA'],0,1, 'L');
+    		$pdf->Cell(6,5,''.$tab.': '.$v_sludgeoil.' TON',0,1, 'L');
         	$pdf->setFont('Arial','',9);
 
     		$pdf->setFont('Arial','',9);

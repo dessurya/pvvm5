@@ -19,15 +19,34 @@ class Report extends CI_Controller {
 
 	public function index($data = null){
 		$roll_id = $this->session->userdata('ROLL_ID');
+		$vendor_id = $this->session->userdata('VENDOR_ID');
 		$urlview = '_main/_report/index.php';
 
 		$viewComp = array();
 		$viewComp['_tittle_'] = "PWMS | Report";
 		$viewComp['_link_css_'] = "";
 		$viewComp['_link_js_'] = "";
-		$viewComp['_contents_'] = $this->load->view($urlview, '', true);
 
+		$list_agent = $this->m_report->get_agent();
+		$list_kapal = $this->m_report->get_kapal($vendor_id);
+        $arrdata = array();
+        $arrdata['list_agent'] = $list_agent;
+        $arrdata['list_kapal'] = $list_kapal;
+		$viewComp['_contents_'] = $this->load->view($urlview, $arrdata, true);
 		$this->parser->parse('_main/index', $viewComp);
+	}
+
+	public function test(){
+		$search = $_GET['search'];
+
+		$list_test = $this->m_report->get_test($search);
+
+		// $result['response'] = true;
+		// $result['msg'] = "Success get Report...";
+  //       $result['list_test'] = $list_test;
+
+		header('Content-Type: application/json');
+		echo json_encode($list_test);
 	}
 
 	public function getReport(){
@@ -36,8 +55,7 @@ class Report extends CI_Controller {
 			$sdate = $_POST['sdate'];
 			$edate = $_POST['edate'];
 		}
-		// echo json_encode($_POST);
-		// die;
+
 		if(!$this->session->userdata('LOGGED')) {
 			$result['response'] = false;
 			$result['msg'] = "You Log Out...";
