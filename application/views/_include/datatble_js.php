@@ -69,6 +69,20 @@
 					if(data.STATUS == null){ return 'AVAILABLE'; }
 					else{ return data.STATUS; }
 				}}
+				<?php } else if(in_array($this->uri->segment(1), array('approve', 'report'))) { ?>
+				{name: "NO", data: "ID", orderable: false, searchable:false},
+				{name: "WARTA_KAPAL_IN_DATE", data: "WARTA_KAPAL_IN_DATE"},
+				{name: "ORDER_DATE", data: "ORDER_DATE"},
+				{name: "PKK_NO", data: "PKK_NO"},
+				{name: "NO_LAYANAN", data: "NO_LAYANAN"},
+				{name: "NAMA_PERUSAHAAN", data: "NAMA_PERUSAHAAN"},
+				{name: "NAMA_KAPAL", data: "NAMA_KAPAL"},
+				{name: "KODE_PELABUHAN", data: "KODE_PELABUHAN"},
+				{name: "VENDOR_NAMA", data: "VENDOR_NAMA"},
+				{name: "STATUS", data: function(data) { //name
+					if(data.STATUS == null){ return 'AVAILABLE'; }
+					else{ return data.STATUS; }
+				}}
 				<?php }else if(in_array($this->uri->segment(1), array('spk')) and $this->uri->segment(3) == 'list') { ?>
 				{name: "NO", data: "ID", width: "10%", orderable: false, searchable:false},
 				{name: "ORDER_DATE", data: "ORDER_DATE", width: "10%"},
@@ -159,7 +173,7 @@
 				$(row).attr('id', data.VENDOR_ID);
 				<?php } else if($this->uri->segment(1) == 'admin') { ?>
 				$(row).attr('id', data.ADMIN_ID);
-				<?php } else if(in_array($this->uri->segment(1), array('order', 'report', 'spk'))) { ?>
+				<?php } else if(in_array($this->uri->segment(1), array('order', 'approve', 'report', 'spk'))) { ?>
 				$(row).attr('id', data.ID);
 				<?php } else if(in_array($this->uri->segment(1), array('role'))) { ?>
 				$(row).attr('id', data.AUTH_TYPE_ID);
@@ -227,7 +241,7 @@
 	    return false;
 	});
 
-	<?php if(in_array($this->uri->segment(1), array('order', 'report', 'admin', 'role', 'vendor'))) { ?>
+	<?php if(in_array($this->uri->segment(1), array('order', 'approve', 'report', 'admin', 'role', 'vendor'))) { ?>
 	$(document).on('dblclick', '#datatable tbody tr td', function(){
 		if(!$(this).hasClass('not')){
 			var idshow = $(this).closest('tr').attr('id');

@@ -27,7 +27,8 @@
 		});
 
 		$(document).on('keypress', 'input.number', function (event) {    
-			if ((event.which < 48 || event.which > 57)) { return false; }
+			if (event.which > 31 && (event.which < 48 || event.which > 57)){ return false; }
+			else { return true; }
 		});
 
 		function logout(url){
@@ -198,16 +199,16 @@
 		}
 		<?php } 
 
-		if( in_array($this->uri->segment(1), array('vendor', 'order', 'history', 'profile', 'admin', 'role', 'spk'))){
+		if( in_array($this->uri->segment(1), array('vendor', 'order', 'approve', 'history', 'profile', 'admin', 'role', 'spk'))){
 			echo substr($this->load->view('_include/datatble_js.php', '', true), 31 );
 		}
-		if( in_array($this->uri->segment(1), array('order', 'spk'))){
+		if( in_array($this->uri->segment(1), array('order', 'approve', 'spk'))){
 			echo substr($this->load->view('_include/order_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('report', 'dashboard'))){
 			echo substr($this->load->view('_include/report_js.php', '', true), 31 );
 		}
-		if( in_array($this->uri->segment(1), array('order', 'history', 'spk'))){
+		if( in_array($this->uri->segment(1), array('order', 'approve', 'history', 'spk'))){
 			echo substr($this->load->view('_include/datatble_daterange_js.php', '', true), 31 );
 		}
 		if( in_array($this->uri->segment(1), array('profile'))){

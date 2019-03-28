@@ -151,7 +151,7 @@
 						<th>Activity</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody style="max-height: 350px; overflow-y: auto;">
 					<?php foreach ($history as $list) { ?>
 					<tr>
 						<td><?php echo $list['CREATED_DATE'] ?></td>

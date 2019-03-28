@@ -61,6 +61,8 @@ class Order extends CI_Controller {
 			$find = $find[0];
 			$send['head'] = $find;
 			$send['detail'] = $this->m_order->finddatadetail($roll_id, $data);
+			$send['attachment_tongkang'] = $this->m_order->getAttachment($roll_id, $data, 'TONGKANG');
+			$send['attachment_trucking'] = $this->m_order->getAttachment($roll_id, $data, 'TRUCKING');
 			$send['history'] = $this->m_order->history($roll_id, $data);
 			$send['all_status'] = $this->m_order->getallstatus();
 			$response['response'] = true;
@@ -76,53 +78,65 @@ class Order extends CI_Controller {
 	public function tools($data = null){
 		$response = array();
 		$response['response'] = true;
-		$response['url'] = site_url().'/order/show/'.$_GET['warta_kapal_in_id'];
 		$response['msg'] = 'Success...';
 		$response['type'] = 'orderrecalldetail';
 		$response['reload'] = true;
 		$send = array();
 		$send['post'] = $_POST;
 		$send['get'] = $_GET;
+		$roll_id = $this->session->userdata('ROLL_ID');
 		$this->load->model('m_order');
 		if ($data == 'store') {
-			$fbck = $this->m_order->store($this->session->userdata('ROLL_ID'), $send);
+			$response['url'] = site_url().'/order/show/'.$_GET['warta_kapal_in_id'];
+			$this->m_order->store($roll_id, $send);
 		}else if($data == 'pickupordersubmit') {
-			$fbck = $this->m_order->pickupordersubmit($this->session->userdata('ROLL_ID'), $send);
+			$response['url'] = site_url().'/order/show/'.$_GET['warta_kapal_in_id'];
+			$this->m_order->pickupordersubmit($roll_id, $send);
+		}else if($data == 'upload_dokumen'){
+			$response['type'] = '';
+			$response['reload'] = false;
+			$response['status'] = $_POST['status'];
+			$response['url'] = site_url().'/order/show/'.$_POST['id'];
+
+			$orig_name = preg_replace('/-+/', "-", preg_replace('/[^a-z0-9-]/', '-', strtolower($_FILES['file']['name'])));
+			$file_type = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+			$change_name = $orig_name.date("His").".".$file_type;
+			$uploads_dir = './upload/order_attachment/'.$_POST['id'];
+            if (!is_dir($uploads_dir)){
+                $old = umask(0);
+                mkdir($uploads_dir,0777);
+                umask($old);
+            }
+            $uploads_dir .= "/";
+            $path = 'upload/order_attachment/'.$_POST['id']."/".$change_name;
+            $response['file_location'] = $path;
+            $response['file_type'] = $file_type;
+            $response['file_name'] = $orig_name;
+
+            $config['allowed_types'] = 'jpg|jpeg|png|pdf';
+            $config['remove_spaces'] = TRUE;
+            $config['upload_path'] = $uploads_dir;
+            $config['file_name'] = $change_name;
+            $this->load->library('upload', $config);
+            if(!$this->upload->do_upload("file")){
+                $response['response'] = false;
+                $response['msg'] = 'Fail...'.$this->upload->display_errors();
+            }else{
+                $myfile = fopen($uploads_dir . "/index.php", "w");
+                fwrite($myfile, null);
+                fclose($myfile);
+	            $send['file_location'] = $path;
+	            $send['file_type'] = $file_type;
+	            $send['file_name'] = $orig_name;
+	            $response['append'] = $this->m_order->upload_dokumen($roll_id, $send);
+            }
+		}else{
+			$response['response'] = true;
+			$response['msg'] = 'Fail...';
 		}
 
-		if ($fbck == null) {
-			header('Content-Type: application/json');
-			echo json_encode( $response );
-		}else if ($fbck == 'sendapi') {
-			$response['id'] = $_GET['warta_kapal_in_id'];
-			$this->sendapi($response);
-		}
-	}
-
-	private function sendapi($dataPost){
-		$curl = curl_init();
-		$data = array();
-		// $data[CURLOPT_URL] = "http://localhost/pwms_api/devlop/index.php/inaport/sendapi";
-		$data[CURLOPT_URL] = "http://10.10.33.56/_pwms_api/devlop/index.php/inaport/sendapi";
-		$data[CURLOPT_RETURNTRANSFER] = true;
-		$data[CURLOPT_SSL_VERIFYPEER] = false;
-		$data[CURLOPT_ENCODING] = "";
-		$data[CURLOPT_MAXREDIRS] = 10;
-		$data[CURLOPT_TIMEOUT] = 30;
-		$data[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
-		$data[CURLOPT_CUSTOMREQUEST] = "POST";
-		$data[CURLOPT_POSTFIELDS] = $dataPost['id'];
-		curl_setopt_array($curl,$data);
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-		curl_close($curl);
-		if ($err) {
-			$dataPost['apires'] = "cURL Error #:" . $err;
-		} else {
-			$dataPost['apires'] = $response;
-		}
 		header('Content-Type: application/json');
-		echo json_encode($dataPost);
+		echo json_encode( $response );
 	}
 
 }

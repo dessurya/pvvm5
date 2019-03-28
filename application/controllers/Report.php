@@ -169,23 +169,13 @@ class Report extends CI_Controller {
         $new->createSheet(0)
 	        ->setTitle('Report')
 	        ->setCellValue('A1', 'Order Date')
-	        ->mergeCells('A1:A3')
 	        ->setCellValue('B1', 'Pick Up Date')
-	        ->mergeCells('B1:B3')
 	        ->setCellValue('C1', 'PKK NO')
-	        ->mergeCells('C1:C3')
 	        ->setCellValue('D1', 'NO Layanan')
-	        ->mergeCells('D1:D3')
 	        ->setCellValue('E1', 'Agent')
-	        ->mergeCells('E1:E3')
 	        ->setCellValue('F1', 'Pelabuhan')
-	        ->mergeCells('F1:F3')
 	        ->setCellValue('G1', 'Vendor')
-	        ->mergeCells('G1:G3')
-	        ->setCellValue('H1', 'Status')
-	        ->mergeCells('H1:H3')
-	        ->setCellValue('I1', 'Order Waste Detail')
-	        ->mergeCells('I1:'.$cellArray[(COUNT($wastelist)*3)+7].'1' );
+	        ->setCellValue('H1', 'Status');
 
 	    $startcell = 8;
 	    $addcell = 0;
@@ -194,11 +184,9 @@ class Report extends CI_Controller {
 	    	$margecell2 = $oncell+2;
 	    	$margecell1 = $oncell+1;
 	    	$new->setActiveSheetIndex(0)
-	    		->setCellValue($cellArray[$oncell].'2', $list['WASTE_NAME'])
-	    		->mergeCells($cellArray[$oncell].'2:'.$cellArray[$margecell2].'2')
-	    		->setCellValue($cellArray[$oncell].'3', 'Request')
-	    		->setCellValue($cellArray[$margecell1].'3', 'Tongkang')
-	    		->setCellValue($cellArray[$margecell2].'3', 'Trucking');
+	    		->setCellValue($cellArray[$oncell].'1', $list['WASTE_NAME'].' Request')
+	    		->setCellValue($cellArray[$margecell1].'1', $list['WASTE_NAME'].' Tongkang')
+	    		->setCellValue($cellArray[$margecell2].'1', $list['WASTE_NAME'].' Trucking');
 	    	$addcell += 3;
 	    }
 
@@ -208,7 +196,7 @@ class Report extends CI_Controller {
 			$fileName .= '_'.$this->session->userdata('NAME');
 		}
 	    $lists = $this->m_report->lists($roll_id, str_replace('_','/',$start), str_replace('_','/',$end));
-	    $row = 4;
+	    $row = 2;
 
 	    foreach ($lists as $list) {
 	    	$new->setActiveSheetIndex(0)
