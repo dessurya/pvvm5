@@ -50,7 +50,7 @@ class M_order extends CI_Model{
 	    if($_POST['startDate'] != null and $_POST['endDate'] != null) {
 		    if ($data == 'pickup') {
 		    	$finddate = 'TO_DATE(TO_CHAR("WARTA_KAPAL_IN_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
-		    } else if ($data == 'list') {
+		    } else if ($data == 'list' or $data == 'approve') {
 		    	$finddate = 'TO_DATE(TO_CHAR("ORDER_DATE", \'DD/MM/YYYY\'), \'DD/MM/YYYY\')';
 		    }
 
@@ -59,6 +59,10 @@ class M_order extends CI_Model{
 		    
 	    	$this->datatables->where($finddate." >= ", $start, false);
 	    	$this->datatables->where($finddate." <= ", $end, false);
+	    }
+
+	    if ($data == "approve") {
+	    	$this->datatables->where('STATUS_ID', 3);
 	    }
 
         if (count($newpost) >= 1) {
@@ -149,6 +153,7 @@ class M_order extends CI_Model{
 				TO_CHAR(HL.CREATED_DATE, 'YYYY/MM/DD HH24:MI:SS ') AS CREATED_DATE,
 				HL.AUTH_ID AS AUTH_ID, 
 				ACTION_TYPE,
+				DESCRIPTION,
 				WU.NAMA||WV.NAMA||' - '||USERNAME||' - '||AUTH_TYPE_NAME AS NAMA,
 				TABLE_ID
 			FROM PWMS_TX_HISTORY_LOG HL
@@ -159,6 +164,37 @@ class M_order extends CI_Model{
 			WHERE ".$queryadd;
 		$runQuery = $this->db->query($query);
 		return $arrdata = $runQuery->result_array();
+	}
+
+	public function getAttachment($roll_id, $id, $type){
+		$query = "SELECT * FROM PWMS_TX_ORDER_ATTACHMENT WHERE TYPE = '".$type."' AND WARTA_KAPAL_IN_ID = ".$id;
+		$runQuery = $this->db->query($query);
+		return $arrdata = $runQuery->result_array();
+	}
+
+	public function upload_dokumen($roll_id, $data){
+		$this->load->model('m_sequences');
+		$ATTACHMENT_ID = $this->m_sequences->getNextVal("ATTACHMENT_ID");
+		if ($data['post']['status'] == 1 or $data['post']['status'] == 0) {
+			$status = "TONGKANG";
+		} else if ($data['post']['status'] == 2) {
+			$status = "TRUCKING";
+		}
+		if (strtolower($data['file_type']) == 'pdf') {
+			$file_type = 'pdf';
+		} else{
+			$file_type = 'picture';
+		}
+		
+		$this->db->set('ATTACHMENT_ID',  $ATTACHMENT_ID);
+		$this->db->set('WARTA_KAPAL_IN_ID',  $data['post']['id']);
+		$this->db->set('FILE_LOCATION',  $data['file_location']);
+		$this->db->set('FILE_NAME',  $data['file_name']);
+		$this->db->set('TYPE',  $status);
+		$this->db->set('FILE_TYPE',  $file_type);
+		$this->db->insert('PWMS_TX_ORDER_ATTACHMENT');
+
+		return '<a href="'.base_url().$data['file_location'].'" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-file-'.$file_type.'-o"></i> '.$data['file_name'].'</a>&nbsp;';
 	}
 
 	public function store($roll_id, $data){
@@ -172,13 +208,13 @@ class M_order extends CI_Model{
 			}
 		}
 		$status_id = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
-		if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 1) {
+		if ($data['get']['type'] == 'save' and ($status_id['0']['STATUS_ID'] == 1 or $status_id['0']['STATUS_ID'] == 0)) {
 			$this->db->set('STATUS_ID',  1);
 			$act = "save actual tongkang";
 		}else if ($data['get']['type'] == 'save' and $status_id['0']['STATUS_ID'] == 2) {
 			$this->db->set('STATUS_ID',  2);
 			$act = "save actual trucking";
-		}else if ($data['get']['type'] == 'submit' and $status_id['0']['STATUS_ID'] == 1) {
+		}else if ($data['get']['type'] == 'submit' and ($status_id['0']['STATUS_ID'] == 1 or $status_id['0']['STATUS_ID'] == 0)) {
 			$this->db->set('STATUS_ID',  2);
 			$act = "submit actual tongkang";
 			$response = 'sendapi';
@@ -198,6 +234,38 @@ class M_order extends CI_Model{
 		// record history
 
 		return $response;
+	}
+
+	public function revised($roll_id, $data){
+		$this->db->set('STATUS_ID',  0);
+		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
+		$this->db->update('PWMS_TR_WASTE_ORDER');
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
+			$json = json_encode($object);
+			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'revised', 'Success revised on order PKK : '.$object['head'][0]['PKK_NO'].'<br> Command : '.$data['post']['command'], $data['get']['warta_kapal_in_id'], $json);
+		// record history
+		return null;
+	}
+
+	public function approved($roll_id, $data){
+		$this->db->set('STATUS_ID',  4);
+		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
+		$this->db->update('PWMS_TR_WASTE_ORDER');
+		// record history
+			$object = array();
+			$object['head'] = $this->finddata($roll_id, $data['get']['warta_kapal_in_id']);
+			$object['detail'] = $this->finddatadetail($roll_id, $data['get']['warta_kapal_in_id']);
+			$json = json_encode($object);
+			$command = "";
+			if ($data['post']['command'] != "") {
+				$command .= '<br> Command : '.$data['post']['command'];
+			}
+			$this->recordhistory('PWMS_TR_WARTA_KAPAL_IN', 'approved', 'Success approved on order PKK : '.$object['head'][0]['PKK_NO'].$command, $data['get']['warta_kapal_in_id'], $json);
+		// record history
+		return 'sendapi';
 	}
 
 	public function pickupordersubmit($roll_id, $data){
@@ -225,6 +293,8 @@ class M_order extends CI_Model{
 	public function getallstatus(){
 		$this->db->select("*");
 		$this->db->from("PWMS_TR_ORDER_STATUS");
+		$this->db->order_by('STATUS_ID', 'ASC');
+
 		$query = $this->db->get();
 	    return $arrdata = $query->result_array();
 	}

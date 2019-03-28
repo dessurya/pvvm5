@@ -6,6 +6,40 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
+				<?php if ($this->session->userdata('ROLL_ID') == 3) { ?>
+				<div class="modal fade modal-add" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-md">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button 
+									type="button" 
+									class="close" 
+									data-dismiss="modal" 
+									aria-label="Close"
+								>
+									<span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title">
+									Upload Dokumen
+								</h4>
+							</div>
+							<div class="modal-body">
+								<form 
+									action="<?php echo site_url().'/'.$this->uri->segment(1).'/tools/upload_dokumen' ?>"
+									method="post" 
+									enctype="multipart/form-data" 
+									class="dropzone" 
+									id="my-dropzone"
+								>
+								<input type="hidden" name="id">
+								<input type="hidden" name="status">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+				
 				<div class="" role="tabpanel" data-example-id="togglable-tabs">
 					<ul class="nav nav-tabs bar_tabs" role="tablist">
 						<li role="presentation" class="active">
@@ -37,7 +71,7 @@
 														<tr>
 															<th>No</th>
 															<th>Order Date</th>
-															<?php if ($tittle == 'Order List') { ?>
+															<?php if (in_array($tittle, array('Order List', 'Approval'))) { ?>
 															<th>Pick Up Date</th>
 															<?php } ?>
 															<th>PKK</th>
@@ -45,7 +79,7 @@
 															<th>Agent</th>
 															<th>Kapal</th>
 															<th>Pelabuhan</th>
-															<?php if ($tittle == 'Order List') { ?>
+															<?php if (in_array($tittle, array('Order List', 'Approval'))) { ?>
 															<th>Vendor</th>
 															<th>Status</th>
 															<?php } ?>
@@ -55,7 +89,7 @@
 														<tr>
 															<th></th>
 															<th></th>
-															<?php if ($tittle == 'Order List') { ?>
+															<?php if (in_array($tittle, array('Order List', 'Approval'))) { ?>
 															<th></th>
 															<?php } ?>
 															<th class="search">PKK</th>
@@ -63,7 +97,7 @@
 															<th class="search">Agent</th>
 															<th class="search">Kapal</th>
 															<th class="search autoComplete">Pelabuhan</th>
-															<?php if ($tittle == 'Order List') { ?>
+															<?php if (in_array($tittle, array('Order List', 'Approval'))) { ?>
 															<th class="search">Vendor</th>
 															<th class="search autoComplete">Status</th>
 															<?php } ?>

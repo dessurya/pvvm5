@@ -27,6 +27,10 @@ class M_admin extends CI_Model{
 				return true;
 			}
 			$url = "order/index/".$this->uri->segment(3);
+		}else if ($url == 'approve') {
+			if (in_array($this->uri->segment(2), array('getdata', 'show', 'tools'))) {
+				return true;
+			}
 		}else if($url == 'spk'){
 			return true;
 		}else if($url == 'history'){
