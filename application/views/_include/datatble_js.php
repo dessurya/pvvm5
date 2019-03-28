@@ -138,7 +138,8 @@
 		                var input = $('<input type="text" class="form-control" placeholder="Search '+$(column.footer()).text()+'" />');
 		                input.appendTo( $(column.footer()).empty() ).on('change', function (keypress) {
 		                    if (column.search() !== this.value) {
-		                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+		                        // var val = $.fn.dataTable.util.escapeRegex($(this).val());
+		                        var val = this.value;
 		                        column.search(val ? val : '', true, false).draw();
 		                    }
 		                });
