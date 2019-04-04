@@ -112,7 +112,7 @@ class M_spk extends CI_Model{
 		$query = "
 			SELECT ".$select."
 			FROM PWMS_TR_WARTA_KAPAL_IN WK
-			LEFT JOIN PWMS_TR_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
+			LEFT JOIN PWMS_TX_WASTE_ORDER WO ON WK.WARTA_KAPAL_IN_ID = WO.WARTA_KAPAL_IN_ID
 			LEFT JOIN PWMS_TR_WASTE_VENDOR WV ON WO.VENDOR_ID = WV.VENDOR_ID
 			LEFT JOIN PWMS_TR_ORDER_STATUS OS ON WO.STATUS_ID = OS.STATUS_ID
 			WHERE ".$where;
@@ -212,7 +212,7 @@ class M_spk extends CI_Model{
 			$act = "submit actual trucking";
 		}
 		$this->db->where('WARTA_KAPAL_IN_ID', $data['get']['warta_kapal_in_id']);
-		$this->db->update('PWMS_TR_WASTE_ORDER');
+		$this->db->update('PWMS_TX_WASTE_ORDER');
 
 		// record history
 			$object = array();
@@ -235,7 +235,7 @@ class M_spk extends CI_Model{
 		$this->db->set('TONGKANG_PICKUP_DATE', "TO_DATE('".$data['post']['TONGKANG_PICKUP_DATE']."','DD/MM/YYYY')", false);
 		$this->db->set('TRUCKING_PICKUP_DATE', "TO_DATE('".$data['post']['TRUCKING_PICKUP_DATE']."','DD/MM/YYYY')", false);
 
-		$this->db->insert('PWMS_TR_WASTE_ORDER');
+		$this->db->insert('PWMS_TX_WASTE_ORDER');
 
 		// record history
 			$object = array();

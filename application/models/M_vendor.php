@@ -126,7 +126,7 @@ class M_vendor extends CI_Model{
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				PWMS_TR_WASTE_ORDER
+				PWMS_TX_WASTE_ORDER
 			WHERE
 				STATUS_ID NOT LIKE 3
 				AND VENDOR_ID = ".$id;
@@ -137,7 +137,7 @@ class M_vendor extends CI_Model{
 			SELECT
 				COUNT(STATUS_ID) AS COUNTVAL
 			FROM
-				PWMS_TR_WASTE_ORDER
+				PWMS_TX_WASTE_ORDER
 			WHERE
 				STATUS_ID = 3
 				AND VENDOR_ID = ".$id;

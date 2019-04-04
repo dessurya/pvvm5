@@ -26,9 +26,9 @@
 			return false;
 		});
 
-		$(document).on('keypress', 'input.number', function (event) {    
-			if (event.which > 31 && (event.which < 48 || event.which > 57)){ return false; }
-			else { return true; }
+		$(document).on('keypress', 'input.number', function (event) {
+			if (event.which > 31 &&  (event.which < 48 || event.which > 57) && event.which!=46 ){ return false; }
+			return true;
 		});
 
 		function logout(url){

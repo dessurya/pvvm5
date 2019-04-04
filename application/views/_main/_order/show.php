@@ -253,14 +253,14 @@
 						</td>
 						<td>
 							<input 
-								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 2) echo 'readonly="" tabindex="-1"'; ?>
+								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 2 or $head['STATUS_ID'] == 4) echo 'readonly="" tabindex="-1"'; ?>
 								type="text" name="TONGKANG" class="form-control number" 
 								value="<?php echo $list['TONGKANG_QTY'] ?>"
 								>
 						</td>
 						<td>
 							<input 
-								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 1 or $head['STATUS_ID'] == 0) echo 'readonly="" tabindex="-1"'; ?>
+								<?php if($this->session->userdata('ROLL_ID') != 3 or $head['ORDER_ID'] == null or $head['STATUS_ID'] == 3 or $head['STATUS_ID'] == 1 or $head['STATUS_ID'] == 0 or $head['STATUS_ID'] == 4) echo 'readonly="" tabindex="-1"'; ?>
 								type="text" name="TRUCKING" class="form-control number" 
 								value="<?php echo $list['TRUCKING_QTY'] ?>"
 								>
