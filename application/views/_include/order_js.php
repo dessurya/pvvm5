@@ -63,7 +63,7 @@
 			input['command'] = $("textarea[name=command]").val();
 			data['input'] = input;
 		} else if ($(this).hasClass('revised')) {
-			var text = "Are you sure to revised this data?"; 
+			var text = "Are you sure to revised this data? And send back this document to vendor?";
 			var type ="revised";
 			var input = {};
 			input['command'] = $("textarea[name=command]").val();

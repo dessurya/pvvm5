@@ -345,11 +345,11 @@
 			<button 
 			data-action="<?php echo site_url().'/approve/tools/revised?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>"
 			type="submit" 
-			class="btn btn-danger storedata revised"><i class="fa fa-ban"></i> Revised</button>
+			class="btn btn-danger storedata revised"><i class="fa fa-ban"></i> Revise</button>
 			<button 
 			data-action="<?php echo site_url().'/approve/tools/approved?warta_kapal_in_id='.$head['WARTA_KAPAL_IN_ID'] ?>"
 			type="submit" 
-			class="btn btn-success storedata approved"><i class="fa fa-check-square-o"></i> Approved</button>
+			class="btn btn-success storedata approved"><i class="fa fa-check-square-o"></i> Approve</button>
 		</div>
 		<?php } ?>
 	</div>
