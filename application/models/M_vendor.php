@@ -178,6 +178,10 @@ class M_vendor extends CI_Model{
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct NPWP number";
 		}
+		if ($this->uniqNPWP($post['npwp'], $result['type'], $AUTH_ID) == false) {
+			$result['response'] = false;
+			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause npwp is exist...!";
+		}
 		if (strpos($post['email'], '@') === false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct email address";
@@ -236,10 +240,27 @@ class M_vendor extends CI_Model{
 		return $result;
 	}
 
-	public function uniqUsername($usrnm, $type, $authid){
+	private function uniqUsername($usrnm, $type, $authid){
 		$query = "
 			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
 			WHERE USERNAME = '".strtolower($usrnm)."'";
+		if ($type == "update") {
+			$query .= " AND AUTH_ID <> ".$authid;
+		}
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		
+		if ( count($arrdata) >= 1 ) {
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	private function uniqNPWP($npwp, $type, $authid){
+		$query = "
+			SELECT NPWP FROM PWMS_TR_WASTE_VENDOR
+			WHERE NPWP = '".strtolower($npwp)."'";
 		if ($type == "update") {
 			$query .= " AND AUTH_ID <> ".$authid;
 		}

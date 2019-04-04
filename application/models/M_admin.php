@@ -201,9 +201,11 @@ class M_admin extends CI_Model{
 			$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		}
 		else{ $result['type'] = "add"; }
-		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
-			$result['response'] = false;
-			$result['msg'] = "Sorry!, Please correct NPWP number";
+		if ($post['npwp'] != null and $post['npwp'] != '' and $post['npwp'] != '000000000000000') {
+			if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct NPWP number";
+			}
 		}
 		if (strpos($post['email'], '@') === false) {
 			$result['response'] = false;

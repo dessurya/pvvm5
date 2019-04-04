@@ -55,7 +55,7 @@
 								name="npwp" 
 								value="<?php if(isset($data)) { echo $data['NPWP']; } ?>"
 								type="text" 
-								class="form-control number maskNPWP" 
+								class="form-control number maskNPWP"
 								placeholder="Enter NPWP"
 								required="">
 						</div>

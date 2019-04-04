@@ -153,10 +153,16 @@ class M_profile extends CI_Model{
 		$AUTH_ID = $AUTH_ID[0]['AUTH_ID'];
 		$post['npwp'] = str_replace('.','',$post['npwp']);
 		$post['npwp'] = str_replace('-','',$post['npwp']);
-		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
-			$result['response'] = false;
-			$result['msg'] = "Sorry!, Please correct NPWP number";
-			$result['type'] = "error";
+		if ($roll_id == 3 or ($post['npwp'] != null and $post['npwp'] != '' and $post['npwp'] != '000000000000000')) {
+			if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, Please correct NPWP number";
+				$result['type'] = "error";
+			}
+			if ($this->uniqNPWP($post['npwp'], 'update', $AUTH_ID) == false) {
+				$result['response'] = false;
+				$result['msg'] = "Sorry!, update your profile fail cause npwp is exist...!";
+			}
 		}
 		if (strpos($post['email'], '@') === false) {
 			$result['response'] = false;
@@ -307,11 +313,28 @@ class M_profile extends CI_Model{
 		return $result;
 	}
 
-	public function uniqUsername($usrnm, $type, $authid){
+	private function uniqUsername($usrnm, $type, $authid){
 		$query = "
 			SELECT USERNAME FROM PWMS_TX_SYSTEM_AUTH
 			WHERE USERNAME = '".$usrnm."' 
 			AND AUTH_ID <> ".$authid;
+		$runQuery = $this->db->query($query);
+		$arrdata = $runQuery->result_array();
+		
+		if ( count($arrdata) >= 1 ) {
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	private function uniqNPWP($npwp, $type, $authid){
+		$query = "
+			SELECT NPWP FROM PWMS_TR_WASTE_VENDOR
+			WHERE NPWP = '".strtolower($npwp)."'";
+		if ($type == "update") {
+			$query .= " AND AUTH_ID <> ".$authid;
+		}
 		$runQuery = $this->db->query($query);
 		$arrdata = $runQuery->result_array();
 		
