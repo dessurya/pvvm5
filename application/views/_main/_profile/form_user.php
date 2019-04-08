@@ -8,7 +8,7 @@
 			</div>
 			<div class="x_content">
 				<div class="row">
-					<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="col-md-4 col-sm-6 col-xs-12">
 						<div class="form-group">
 							<label>EMAIL</label>
 							<input 

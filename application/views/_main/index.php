@@ -31,8 +31,8 @@
 						<div class="navbar nav_title" style="border: 0;">
 							<a href="#" class="site_title">
 								<span>PWMS</span>
+								<small class="site_title">Port Waste Management System</small>
 							</a>
-							<small class="site_title">Port Waste Management System</small>
 							<div class="clearfix"></div>
 							<?php // menu profile quick info ?>
 							<div class="profile clearfix">

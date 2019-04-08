@@ -177,29 +177,35 @@ class M_vendor extends CI_Model{
 		if (strlen($post['npwp']) <= 14 or strlen($post['npwp']) >= 16 or is_numeric($post['npwp']) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct NPWP number";
+			$result['type'] = "error";
 		}
 		if ($this->uniqNPWP($post['npwp'], $result['type'], $AUTH_ID) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause npwp is exist...!";
+			$result['type'] = "error";
 		}
 		if (strpos($post['email'], '@') === false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct email address";
+			$result['type'] = "error";
 		}else{
 			$mail = explode('@', $post['email']);
 			$mail = $mail[1];
 			if (strpos($mail, '.') === false) {
 				$result['response'] = false;
 				$result['msg'] = "Sorry!, Please correct email address";
+				$result['type'] = "error";
 			}
 		}
 		if ($this->uniqUsername($post['email'], $result['type'], $AUTH_ID) == false) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, ".$result['type']." vendor ".$post['name']." fail cause email is exist...!";
+			$result['type'] = "error";
 		}
 		if (strlen($post['phone']) <= 5 or strlen($post['phone']) >= 21) {
 			$result['response'] = false;
 			$result['msg'] = "Sorry!, Please correct phone number";
+			$result['type'] = "error";
 		}
 
 		if ($result['response'] == false) {

@@ -111,11 +111,6 @@ class Spk extends CI_Controller {
 		$find = $this->m_spk->finddata($roll_id, $wki_id);
 		$find = $find[0];
 		$detail = $this->m_spk->finddatadetail($roll_id, $wki_id);
-		// echo "<pre>";
-		// var_dump($detail);
-		// echo "</pre>";
-		// exit();
-
 
     	$this->load->library('pdf');
 
@@ -123,7 +118,7 @@ class Spk extends CI_Controller {
         $pdf->AddPage();
         $pdf->SetFont('Arial','B',16);
         $this->kop($pdf);
-        $this->header($pdf,$status);
+        $this->header($pdf,$status,$find);
         $this->isi($pdf,$status,$find,$detail);
         $this->footer($pdf);
         $this->div($pdf);
@@ -395,13 +390,13 @@ class Spk extends CI_Controller {
     }
 
     // Judul
-    private function header($pdf,$status) {
+    private function header($pdf,$status,$find) {
         if ($status == 1) {
             $judul_bawah = "PENGELUARAN LIMBAH SLUDGE OIL";
-            $pdf->SetTitle('SPK PENGELUARAN LIMBAH');
+            $pdf->SetTitle('SPK PENGELUARAN LIMBAH - '.$find['PERUSAHAAN_NAMA'].'_'.date("d-m-Y"));
         } else if ($status == 2) {
             $judul_bawah = "PENGAMBILAN LIMBAH B3";
-            $pdf->SetTitle('SPK PENGAMBILAN LIMBAH');
+            $pdf->SetTitle('SPK PENGAMBILAN LIMBAH - '.$find['PERUSAHAAN_NAMA'].'_'.date("d-m-Y"));
         }
         $pdf->SetFont('Arial','B',12);
         $pdf->Cell(190,7,'SURAT PERINTAH KERJA (SPK)',0,1,'C');
