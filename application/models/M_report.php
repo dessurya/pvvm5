@@ -40,14 +40,14 @@ class M_report extends CI_Model{
 	    }
 	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
 	    	$where = array(
-	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
-	    		'NAMA_KAPAL' => $_POST['kpal']
+	    		'UPPER(NAMA_PERUSAHAAN)' => $_POST['agnt'],
+	    		'UPPER(NAMA_KAPAL)' => $_POST['kpal']
 	    	);
 	    	$this->db->where($where);
 		} else if ($_POST['kpal'] != null) {
-			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+			$this->db->where("UPPER(NAMA_KAPAL)", $_POST['kpal'] );
 		} else if ($_POST['agnt'] != null) {
-			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+			$this->db->where("UPPER(NAMA_PERUSAHAAN)", $_POST['agnt']);
 		}
 	    $query = $this->db->get();
 	    $arrdata = $query->result_array();
@@ -76,14 +76,14 @@ class M_report extends CI_Model{
 	    }
 	    if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
 	    	$where = array(
-	    		'NAMA_PERUSAHAAN' => $_POST['agnt'],
-	    		'NAMA_KAPAL' => $_POST['kpal']
+	    		'UPPER(NAMA_PERUSAHAAN)' => $_POST['agnt'],
+	    		'UPPER(NAMA_KAPAL)' => $_POST['kpal']
 	    	);
 	    	$this->db->where($where);
 		} else if ($_POST['kpal'] != null) {
-			$this->db->where("NAMA_KAPAL", $_POST['kpal'] );
+			$this->db->where("UPPER(NAMA_KAPAL)", $_POST['kpal'] );
 		} else if ($_POST['agnt'] != null) {
-			$this->db->where("NAMA_PERUSAHAAN", $_POST['agnt']);
+			$this->db->where("UPPER(NAMA_PERUSAHAAN)", $_POST['agnt']);
 		}
 	    $this->db->where('STATUS_ID', $status_id);
 	    $query = $this->db->get();
@@ -166,8 +166,8 @@ class M_report extends CI_Model{
 				SUM(REQUEST_QTY) AS REQUEST_QTY,
 				SUM(TONGKANG_QTY) AS TONGKANG_QTY,
 				SUM(TRUCKING_QTY) AS TRUCKING_QTY,
-				WK.NAMA_PERUSAHAAN AS NAMA_PERUSAHAAN,
-				WK.NAMA_KAPAL AS NAMA_KAPAL
+				UPPER(WK.NAMA_PERUSAHAAN) AS NAMA_PERUSAHAAN,
+				UPPER(WK.NAMA_KAPAL) AS NAMA_KAPAL
 			FROM 
 				PWMS_TX_SHIP_WASTE_IN SW
 			LEFT JOIN 
@@ -194,11 +194,11 @@ class M_report extends CI_Model{
 				$query .= "AND WO.VENDOR_ID = ".$this->session->userdata('VENDOR_ID');
 			}
 			if ($_POST['kpal'] != null and $_POST['agnt'] != null) {
-				$query .= " AND WK.NAMA_KAPAL = '".$_POST['kpal']."' AND WK.NAMA_PERUSAHAAN = '".$_POST['agnt']."'";
+				$query .= " AND UPPER(WK.NAMA_KAPAL) = '".$_POST['kpal']."' AND UPPER(WK.NAMA_PERUSAHAAN) = '".$_POST['agnt']."'";
 			} else if ($_POST['kpal'] != null) {
-				$query .= " AND WK.NAMA_KAPAL = '".$_POST['kpal']."'";
+				$query .= " AND UPPER(WK.NAMA_KAPAL) = '".$_POST['kpal']."'";
 			} else if ($_POST['agnt'] != null) {
-				$query .= " AND WK.NAMA_PERUSAHAAN = '".$_POST['agnt']."'";
+				$query .= " AND UPPER(WK.NAMA_PERUSAHAAN) = '".$_POST['agnt']."'";
 			}
 			$query .= " GROUP BY SW.WASTE_ID, WT.TYPE_NAME, WL.WASTE_NAME, WT.TYPE_ID, WU.UM_NAME, WK.NAMA_PERUSAHAAN, WK.NAMA_KAPAL ) ORDER BY TYPE_ID, WASTE_ID ASC";
 			
@@ -239,8 +239,8 @@ class M_report extends CI_Model{
 			FROM ORDER_WARTA_KAPAL
 			WHERE UPPER(NAMA_KAPAL) LIKE '%".strtoupper($search)."%' 
 			";
-		if ($_GET['agent'] != null) {
-			$query .= "AND NAMA_PERUSAHAAN = '".$_GET['agent']."' ";
+		if ($_GET['agent'] != null and $_GET['agent'] != 'null') {
+			$query .= "AND UPPER(NAMA_PERUSAHAAN) = '".$_GET['agent']."' ";
 		}
 		if ($this->session->userdata('ROLL_ID') == 3) {
 			$query .= "AND VENDOR_ID = ".$this->session->userdata('VENDOR_ID')." ORDER BY UPPER(NAMA_KAPAL) ASC";
