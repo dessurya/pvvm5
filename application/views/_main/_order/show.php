@@ -316,7 +316,7 @@
 			</div>
 		</div>
 
-		<?php } if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] != null and $head['STATUS_ID'] != 3) { ?>
+		<?php } if($this->session->userdata('ROLL_ID') == 3 and $head['ORDER_ID'] != null and $head['STATUS_ID'] <= 2) { ?>
 		<div class="ln_solid"></div>
 		<button data-id="<?php echo $head['WARTA_KAPAL_IN_ID'] ?>" type="button" class="btn btn-success refreshshow"><i class="fa fa-refresh"></i> Refresh Data</button>
 		<div class="pull-right">
