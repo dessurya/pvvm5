@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$config['api_endpoint'] = "http://10.10.33.56/cfs_dev/_pwms_api/devlop/index.php/inaport/sendapi";
 $config['base_url'] = '';
 $config['base_url'] .= ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http"); 
 $config['base_url'] .= "://".$_SERVER['HTTP_HOST']; 

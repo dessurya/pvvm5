@@ -15,7 +15,9 @@
 		    showPNotify(dataPN);
 		    return false;
 		}
-		if (tongkangdate > truckingdate) {
+		var t1 = new Date(tongkangdate);
+		var t2 = new Date(truckingdate);
+		if (t1 > t2) {
 			dataPN['model'] = 'info';
 		    dataPN['title'] = 'Error';
 		    dataPN['text'] = 'Tanggal Trucking Pick Up Must Higher Than Tanggal Tongkang Pick Up';
